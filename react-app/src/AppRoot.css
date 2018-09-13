@@ -1,0 +1,32 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font: 14px/19px  "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
+
+div.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+  background-color: #222222;
+}
+
+div.App-header {
+  padding: 10px 0;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}

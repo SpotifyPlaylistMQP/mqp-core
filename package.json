@@ -1,0 +1,9 @@
+{
+  "name": "mqp-core",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd node-server && yarn dev",
+    "install": "cd node-server && npm install && cd ../react-app && npm install"
+  }
+}

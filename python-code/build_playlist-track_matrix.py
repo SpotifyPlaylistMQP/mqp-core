@@ -17,17 +17,18 @@ authorization.get_auth_token_from_node_server()
 # Get each playlist_id's playlist, and a set of distinct songs in each playlist
 playlists = []
 tracks = []
-total_tracks = 0
+total_track_num = 0
 for playlist_id in playlist_ids:
     spotify_playlist = spotify_api.get_playlist(playlist_id)
     playlists.append(spotify_playlist)
     for track in spotify_playlist['tracks']:
-        total_tracks += 1
+        total_track_num += 1
         if track not in tracks:
             tracks.append(track)
 
 print("Total Playlists: " + str(len(playlists)))
-print("Total Tracks: " + str(total_tracks))
+print(playlists[0])
+print("Total Tracks: " + str(total_track_num))
 print("Distinct Tracks: " + str(len(tracks)))
 
 # Populate the matrix
@@ -42,4 +43,28 @@ for playlist in playlists:
     matrix.append(matrix_row)
 
 matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
+
+
+# Find which playlists are similar
+playlist_similarity = {}
+for i in range(len(playlists)):
+    similar = 0
+    for track in playlists[i]:
+        if track in playlists[i+1]:
+            similar=+1
+            playlist_similarity[(playlists[i], playlists[i+1])] = similar
+
+print(playlist_similarity)
+
+
+
+
+
+
+
+
+
+
+
+
 

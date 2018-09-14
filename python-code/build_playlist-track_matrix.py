@@ -1,5 +1,4 @@
-import authorization
-import spotify_api
+from Functions import authorization, spotify_api, matrix_visualizer
 
 playlist_ids = [
     '37i9dQZF1DX0XUsuxWHRQd', '37i9dQZF1DWY4xHQp97fN6',
@@ -37,7 +36,10 @@ for playlist in playlists:
     matrix_row = []
     for track in tracks:
         if track in playlist['tracks']:
-            matrix_row.append(1)
+            matrix_row.append(track['popularity'])
         else:
-            matrix_row.append(0)
+            matrix_row.append("--")
     matrix.append(matrix_row)
+
+matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
+

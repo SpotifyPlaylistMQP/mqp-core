@@ -1,5 +1,5 @@
 import requests
-import authorization
+from Functions import authorization
 import json
 
 def get_playlist(playlist_id):
@@ -21,8 +21,9 @@ def get_tracks_of_playlist_url(url):
         if not item['is_local']:
             tracks.append({
                 'track_id': item['track']['id'],
-                'name': item['track']['name'],
-                'artist': item['track']['artists'][0]['name']
+                'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
+                'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
+                'popularity': item['track']['popularity']
             })
     if playlist_tracks['next'] is not None:
         tracks.extend(get_tracks_of_playlist_url(playlist_tracks['next']))

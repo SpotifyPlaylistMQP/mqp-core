@@ -1,4 +1,5 @@
 from Functions import authorization, spotify_api, matrix_visualizer
+import random
 
 playlist_ids = [
     '37i9dQZF1DX0XUsuxWHRQd', '37i9dQZF1DWY4xHQp97fN6',
@@ -56,15 +57,18 @@ for i in range(len(playlists)):
 
 print(playlist_similarity)
 
-
-
-
-
-
-
-
-
-
-
-
-
+# split_playlist(array)
+#   Takes the entered playlist by the user and removes a randomly selected 20%
+#   for comparison. Stores the 20% and 80% split in two arrays locally accessible.
+# input_playlist = the playlist for comparison
+# array -> array, array
+playlist_80split = []
+playlist_20split = []
+def split_playlist(input_playlist):
+    print("split_playlist called")
+    shuffled_array = random.shuffle(input_playlist) ##Randomly shuffle the array
+    for song in (0, (len(shuffled_array)/5)): #Takes the first 20 (0 to 1/5 of the array)
+        playlist_20split.append(song)
+        shuffled_array.pop(song) #Removes the song from the shuffled_array after adding it to the 20% split array
+    for remaining_song in shuffled_array: #Adds the remaining songs to the comparison array
+        playlist_80split.append(remaining_song)

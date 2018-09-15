@@ -16,28 +16,30 @@ authorization.get_auth_token_from_node_server()
 #TODO: Test / refresh the auth token on the node server
 
 # Get each playlist_id's playlist, and a set of distinct songs in each playlist
-playlists = []
+playlists = {}
 tracks = []
 total_track_num = 0
 for playlist_id in playlist_ids:
     spotify_playlist = spotify_api.get_playlist(playlist_id)
-    playlists.append(spotify_playlist)
+    playlists[playlist_id] = spotify_playlist
     for track in spotify_playlist['tracks']:
         total_track_num += 1
         if track not in tracks:
             tracks.append(track)
 
 print("Total Playlists: " + str(len(playlists)))
-print(playlists[0])
 print("Total Tracks: " + str(total_track_num))
 print("Distinct Tracks: " + str(len(tracks)))
 
 # Populate the matrix
 matrix = []
-for playlist in playlists:
+
+for key in playlists.keys():
+    print(playlists[key]['tracks'])
     matrix_row = []
     for track in tracks:
-        if track in playlist['tracks']:
+
+        if track in playlists[key]['tracks']:
             matrix_row.append(track['popularity'])
         else:
             matrix_row.append("--")
@@ -48,12 +50,15 @@ matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 
 # Find which playlists are similar
 playlist_similarity = {}
-for i in range(len(playlists)):
-    similar = 0
-    for track in playlists[i]:
-        if track in playlists[i+1]:
-            similar=+1
-            playlist_similarity[(playlists[i], playlists[i+1])] = similar
+for key in playlists.keys():
+    for second_key in playlists.keys():
+        if key !=second_key:
+            similar = 0
+            for track in playlists[key]:
+                if track in playlists[second_key]:
+                    similar=+1
+                    playlist_similarity[key] = similar
+
 
 print(playlist_similarity)
 

@@ -35,9 +35,11 @@ def visualize_matrix(matrix, playlists, tracks):
 
     # Playlists
     matrix_file.write("\n--------PLAYLISTS\n")
-    for p in range(0, len(playlists)):
-        spacer = "\t" if p < 10 else ""
-        matrix_file.write("p" + str(p) + ":\t" + spacer + playlists[p]['name'] + "\n")
+    count=0
+    for key in playlists.keys():
+        count+=1
+        spacer = "\t" if count < 10 else ""
+        matrix_file.write("count" + str(count) + ":\t" + spacer + playlists[key]['name'] + "\n")
 
     # Tracks
     matrix_file.write("\n--------TRACKS\n")

@@ -35,10 +35,8 @@ print("Distinct Tracks: " + str(len(tracks)))
 matrix = []
 
 for key in playlists.keys():
-    print(playlists[key]['tracks'])
     matrix_row = []
     for track in tracks:
-
         if track in playlists[key]['tracks']:
             matrix_row.append(track['popularity'])
         else:

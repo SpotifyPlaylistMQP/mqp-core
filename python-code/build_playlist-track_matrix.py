@@ -49,12 +49,12 @@ matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 # Find which playlists are similar
 playlist_similarity = {}
 for key in playlists.keys():
+    similar = 0
     for second_key in playlists.keys():
         if key !=second_key:
-            similar = 0
-            for track in playlists[key]:
-                if track in playlists[second_key]:
-                    similar=+1
+            for track in playlists[key]['tracks']:
+                if track in playlists[second_key]['tracks']:
+                    similar+=1
                     playlist_similarity[key] = similar
 
 

@@ -46,19 +46,6 @@ for key in playlists.keys():
 matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 
 
-# Find which playlists are similar
-playlist_similarity = {}
-for key in playlists.keys():
-    similar = 0
-    for second_key in playlists.keys():
-        if key !=second_key:
-            for track in playlists[key]['tracks']:
-                if track in playlists[second_key]['tracks']:
-                    similar+=1
-                    playlist_similarity[(key, second_key)] = similar
-
-print(playlist_similarity)
-
 # split_playlist(array)
 #   Takes the entered playlist by the user and removes a randomly selected 20%
 #   for comparison. Stores the 20% and 80% split in two arrays locally accessible.
@@ -74,3 +61,23 @@ def split_playlist(input_playlist):
         shuffled_array.pop(song) #Removes the song from the shuffled_array after adding it to the 20% split array
     for remaining_song in shuffled_array: #Adds the remaining songs to the comparison array
         playlist_80split.append(remaining_song)
+
+
+playlist_similarity = {}
+
+# Takes in a dictionary of playlists and counts how many songs are similar between every
+# combination of 2 playlists
+# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), num_similar_songs}
+def count_similar(playlists):
+
+    # Find which playlists are similar
+    for key in playlists.keys():
+        similar = 0
+        for second_key in playlists.keys():
+            if key !=second_key:
+                for track in playlists[key]['tracks']:
+                    if track in playlists[second_key]['tracks']:
+                        similar+=1
+                        playlist_similarity[(key, second_key)] = similar
+
+    print(playlist_similarity)

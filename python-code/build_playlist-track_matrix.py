@@ -55,8 +55,7 @@ for key in playlists.keys():
             for track in playlists[key]['tracks']:
                 if track in playlists[second_key]['tracks']:
                     similar+=1
-                    playlist_similarity[key] = similar
-
+                    playlist_similarity[(key, second_key)] = similar
 
 print(playlist_similarity)
 

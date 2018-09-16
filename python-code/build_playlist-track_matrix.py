@@ -50,18 +50,32 @@ matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 #   Takes the entered playlist by the user and removes a randomly selected 20%
 #   for comparison. Stores the 20% and 80% split in two arrays locally accessible.
 # input_playlist = the playlist for comparison
+#   the format of {key: playlist_id, value: [track_list]}
+#   each elements is {playlist_id: tracklist[]}
 # array -> array, array
-playlist_80split = []
-playlist_20split = []
-def split_playlist(input_playlist):
-    print("split_playlist called")
-    shuffled_array = random.shuffle(input_playlist) ##Randomly shuffle the array
-    for song in (0, (len(shuffled_array)/5)): #Takes the first 20 (0 to 1/5 of the array)
-        playlist_20split.append(song)
-        shuffled_array.pop(song) #Removes the song from the shuffled_array after adding it to the 20% split array
-    for remaining_song in shuffled_array: #Adds the remaining songs to the comparison array
-        playlist_80split.append(remaining_song)
+split_dictionary = {}
+def split_playlist(input_playlist_id):
+    # print("split_playlist called")
+    all_tracks = [] #local lists for playlist tracks
+    list_80split = [] #80% of the songs
+    list_20split = [] #20% of the songs (for removal, non-inclusive)
+    spotify_playlist = spotify_api.get_playlist(input_playlist_id) #Get the given playlist
 
+    for track in spotify_playlist['tracks']:
+        if track not in tracks:
+            all_tracks.append(track)
+
+    shuffled_array = random.shuffle(all_tracks) ##Randomly shuffle the array
+    for song in (0, (len(shuffled_array)/5)): #Takes the first 20 (0 to 1/5 of the array)
+        list_20split.append(song)
+        shuffled_array.pop(song) #Removes the song from the shuffled_array after adding it to the 20% split array
+
+    for remaining_song in shuffled_array: #Adds the remaining songs to the comparison array
+        list_80split.append(remaining_song)
+
+    split_dictionary['input_playlist_id']['80'] = list_80split
+    split_dictionary['input_playlist_id']['20'] = list_20split
+    print("Input Playlist ID: " + input_playlist_id + ", " + split_dictionary[])
 
 playlist_similarity = {}
 

@@ -112,8 +112,6 @@ def count_similar(input_playlist_id):
 
 
 
-
-
 ###### START JACKSON CODE #######
 
 # square root helper function to find denominator of cosine_similarity function
@@ -126,22 +124,19 @@ def square_rooted(x):
 def cosine_similarity(playlist_dictionary):
     similarity_metric_array = []
 
-    for key in playlist_dictionary.keys():
-        spotify_playlist = spotify_api.get_playlist(input_playlist_id)
-
-
-
-    for i in len(list_of_sim_songs):
+    for 
+    for i in len():
         numerator = sum(a*b for a,b in zip(x,y))
         denominator = square_rooted(x)*square_rooted(y)
 
         similarity_metric = round(numerator/float(denominator),3)
+
         similarity_metric_array.append(similarity_metric)
 
     best_similarity = max([similarity_metric_array])
     #find which playlist has the best similarity = most_similar_playlistID
 
-    print ("The playlist: " most_similar_playlistID "is the most similar with a cosine similarity of: " best_similarity".")
+    return most_similar_playlistID, best_similarity
 
 
 # Takes in playlistID of most similar aplylist to the input, along with the 80 and 20% splits of the original playlist
@@ -149,20 +144,23 @@ def cosine_similarity(playlist_dictionary):
 def recommended_songs(most_similar_playlistID, 80_split, 20_split):
     # Take 20% of songs from most similar playlist & print out their values
 
+
+
 # Takes in 20% split from original playlist and compares it to the 20% equivalent of recommended songs
 # returns the R-precision metric between the omitted songs and the recommended songs
 def r_precision(20_split, recommended_songs):
     # compare the 20% of most similar suggestions to actual 20% ommitted from selected playlist
     # using r-precision
 
-    number_songs_to_recommend = len(20_split)
+    size_of_20_split = len(20_split)
+    set_matches = set(20_split).intersection(recommended_songs)
 
-
-    num_similar_songs = 
-    eval_metric = num_similar_songs / number_songs_to_recommend
+    for i in matches:
+        int_matches = i
+    
+    eval_metric = int_matches / size_of_20_split
 
     return (eval_metric)
-
 
 # Master function that handles all other function calls
 # Takes in a playlist ID and returns:

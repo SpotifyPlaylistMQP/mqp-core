@@ -149,18 +149,15 @@ def recommended_songs(most_similar_playlistID, 80_split, 20_split):
 # Takes in 20% split from original playlist and compares it to the 20% equivalent of recommended songs
 # returns the R-precision metric between the omitted songs and the recommended songs
 def r_precision(20_split, recommended_songs):
-    # compare the 20% of most similar suggestions to actual 20% ommitted from selected playlist
-    # using r-precision
 
     size_of_20_split = len(20_split)
-    set_matches = set(20_split).intersection(recommended_songs)
+    matches = set(20_split).intersection(recommended_songs)
 
-    for i in matches:
-        int_matches = i
-    
-    eval_metric = int_matches / size_of_20_split
+    eval_metric = len(matches) / size_of_20_split
 
     return (eval_metric)
+
+
 
 # Master function that handles all other function calls
 # Takes in a playlist ID and returns:
@@ -174,14 +171,19 @@ def r_precision(20_split, recommended_songs):
 
 def masterFunction(playlistID):
 
+    # Obtain 80 and 20 split of songs from input playlist
     80_split, 20_split = split_playlist(playlistID)
     
+    # Get a dictionary of playlistID's and their similar tracks with the input playlist
     playlist_similarity_dict = count_similar(playlistID)
 
+    # Find most similar playlist in cluster to input playlist and obtain cosine metric for the pair
     most_similar_playlistID, highest_cosine_metric = cosine_similarity(playlist_similarity_dict)
 
+    # Recommend songs totalling 20% of input playlist from most similar playlist
     list_of_recommended_songs = recommended_songs(most_similar_playlistID, 80_split, 20_split)
 
+    # Evaluate the precision of the recommend songs versus the omitted 20% of songs at the beginning of the test
     eval_metric = r_precision(20_split, list_of_recommended_songs)
 
     print ("The 20 percent of songs omitted from recommendation processing from the input playlist are: " 20_split)

@@ -76,23 +76,25 @@ def split_playlist(input_playlist_id):
     #   print("The 80'%' of songs kept: '" + split_dictionary['input_playlist_id']['20'])
 
 
-# Takes in a dictionary of playlists and counts how many songs are similar between every
+# Takes in a playlist id and counts how many songs are similar between every
 # combination of 2 playlists
-# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), num_similar_songs}
+# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), list_of_similar_songs}
 playlist_similarity = {}
-def count_similar(playlists):
-
+def count_similar(input_playlist_id):
     # Find which playlists are similar
-    for key in playlists.keys():
-        similar = 0
-        for second_key in playlists.keys():
-            if key !=second_key:
-                for track in playlists[key]['tracks']:
-                    if track in playlists[second_key]['tracks']:
-                        similar+=1
-                        playlist_similarity[(key, second_key)] = similar
+
+    similar_tracks = []
+
+    for second_key in playlists.keys():
+        similar_tracks.clear()
+        if input_playlist_id != second_key:
+            for track in playlists[input_playlist_id]['tracks']:
+                if track in playlists[second_key]['tracks']:
+                    similar_tracks.append(track)
+                    playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
 
     print(playlist_similarity)
+
 
 # Function to get a list of unique song names in a playlist
 # string -> list

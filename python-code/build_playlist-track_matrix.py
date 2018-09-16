@@ -56,14 +56,10 @@ matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 split_dictionary = {}
 def split_playlist(input_playlist_id):
     # print("split_playlist called")
-    all_tracks = [] #local lists for playlist tracks
+    all_tracks = get_unique_songs(input_playlist_id) #local lists for playlist tracks
     list_80split = [] #80% of the songs
     list_20split = [] #20% of the songs (for removal, non-inclusive)
     spotify_playlist = spotify_api.get_playlist(input_playlist_id) #Get the given playlist
-
-    for track in spotify_playlist['tracks']:
-        if track not in tracks:
-            all_tracks.append(track)
 
     shuffled_array = random.shuffle(all_tracks) ##Randomly shuffle the array
     for song in (0, (len(shuffled_array)/5)): #Takes the first 20 (0 to 1/5 of the array)
@@ -75,13 +71,15 @@ def split_playlist(input_playlist_id):
 
     split_dictionary['input_playlist_id']['80'] = list_80split
     split_dictionary['input_playlist_id']['20'] = list_20split
-    print("Input Playlist ID: " + input_playlist_id + ", " + split_dictionary[])
+    #   print("Input Playlist ID: " + input_playlist_id)
+    #   print("The 20'%' of songs removed: '" + split_dictionary['input_playlist_id']['20'])
+    #   print("The 80'%' of songs kept: '" + split_dictionary['input_playlist_id']['20'])
 
-playlist_similarity = {}
 
 # Takes in a dictionary of playlists and counts how many songs are similar between every
 # combination of 2 playlists
 # Output: playlist_similarity = {(playlist_id_1, playlist_id_2), num_similar_songs}
+playlist_similarity = {}
 def count_similar(playlists):
 
     # Find which playlists are similar
@@ -95,3 +93,13 @@ def count_similar(playlists):
                         playlist_similarity[(key, second_key)] = similar
 
     print(playlist_similarity)
+
+# Function to get a list of unique song names in a playlist
+# string -> list
+def get_unique_songs(input_playlist):
+    tracks = []
+    spotify_playlist = spotify_api.get_playlist(input_playlist)
+    for track in spotify_playlist['tracks']:
+        if track not in tracks:
+            tracks.append(track)
+    return tracks

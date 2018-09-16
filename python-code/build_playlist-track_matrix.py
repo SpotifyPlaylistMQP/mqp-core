@@ -105,3 +105,51 @@ def get_unique_songs(input_playlist):
         if track not in tracks:
             tracks.append(track)
     return tracks
+
+
+###### START JACKSON CODE #######
+
+# square root helper function to find denominator of cosine_similarity function
+def square_rooted(x):
+    return round(sqrt(sum([a*a for a in x])),3)
+
+# Takes in a dictionary object containing the input playlist and all other playlists along with
+# a list of similar songs between the input playlist & all other playlists
+# Output: similarity_metric = number representing the similarity between input playlist and other playlists
+def cosine_similarity(playlist_dictionary):
+    similarity_metric_array = []
+
+    for key in playlist_dictionary.keys():
+        spotify_playlist = spotify_api.get_playlist(input_playlist_id)
+
+
+
+    for i in len(list_of_sim_songs):
+        numerator = sum(a*b for a,b in zip(x,y))
+        denominator = square_rooted(x)*square_rooted(y)
+
+        similarity_metric = round(numerator/float(denominator),3)
+        similarity_metric_array.append(similarity_metric)
+
+    best_similarity = max([similarity_metric_array])
+    #find which playlist has the best similarity = most_similar_playlistID
+
+    print ("The playlist: " most_similar_playlistID "is the most similar with a cosine similarity of: " best_similarity".")
+
+
+# Takes in an input playlist to 
+def recommended_songs(input_playlistID, most_similar_playlistID):
+    # Take 20% of songs from most similar playlist & print out their values
+
+
+def r_precision(20percent_songs, recommended_songs):
+    # compare the 20% of most similar suggestions to actual 20% ommitted from selected playlist
+    # using r-precision
+
+    number_songs_to_recommend = len(20percent_songs)
+
+
+    num_similar_songs = 
+    eval_metric = num_similar_songs / number_songs_to_recommend
+
+    print (eval_metric)

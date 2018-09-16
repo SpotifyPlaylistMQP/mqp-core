@@ -46,6 +46,17 @@ for key in playlists.keys():
 matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 
 
+# Function to get a list of unique song names in a playlist
+# string -> list
+def get_unique_songs(input_playlist):
+    tracks = []
+    spotify_playlist = spotify_api.get_playlist(input_playlist)
+    for track in spotify_playlist['tracks']:
+        if track not in tracks:
+            tracks.append(track)
+    return tracks
+
+
 # split_playlist(array)
 #   Takes the entered playlist by the user and removes a randomly selected 20%
 #   for comparison. Stores the 20% and 80% split in two arrays locally accessible.
@@ -75,6 +86,8 @@ def split_playlist(input_playlist_id):
     #   print("The 20'%' of songs removed: '" + split_dictionary['input_playlist_id']['20'])
     #   print("The 80'%' of songs kept: '" + split_dictionary['input_playlist_id']['20'])
 
+    return list_80split, list_20split
+
 
 # Takes in a playlist id and counts how many songs are similar between every
 # combination of 2 playlists
@@ -94,17 +107,11 @@ def count_similar(input_playlist_id):
                     playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
 
     print(playlist_similarity)
+    
+    return playlist_similarity
 
 
-# Function to get a list of unique song names in a playlist
-# string -> list
-def get_unique_songs(input_playlist):
-    tracks = []
-    spotify_playlist = spotify_api.get_playlist(input_playlist)
-    for track in spotify_playlist['tracks']:
-        if track not in tracks:
-            tracks.append(track)
-    return tracks
+
 
 
 ###### START JACKSON CODE #######
@@ -137,19 +144,49 @@ def cosine_similarity(playlist_dictionary):
     print ("The playlist: " most_similar_playlistID "is the most similar with a cosine similarity of: " best_similarity".")
 
 
-# Takes in an input playlist to 
-def recommended_songs(input_playlistID, most_similar_playlistID):
+# Takes in playlistID of most similar aplylist to the input, along with the 80 and 20% splits of the original playlist
+# returns (and prints) list of recommended songs that total 20% of original playlist
+def recommended_songs(most_similar_playlistID, 80_split, 20_split):
     # Take 20% of songs from most similar playlist & print out their values
 
-
-def r_precision(20percent_songs, recommended_songs):
+# Takes in 20% split from original playlist and compares it to the 20% equivalent of recommended songs
+# returns the R-precision metric between the omitted songs and the recommended songs
+def r_precision(20_split, recommended_songs):
     # compare the 20% of most similar suggestions to actual 20% ommitted from selected playlist
     # using r-precision
 
-    number_songs_to_recommend = len(20percent_songs)
+    number_songs_to_recommend = len(20_split)
 
 
     num_similar_songs = 
     eval_metric = num_similar_songs / number_songs_to_recommend
 
-    print (eval_metric)
+    return (eval_metric)
+
+
+# Master function that handles all other function calls
+# Takes in a playlist ID and returns:
+#   - 20% of the input playlist that was omitted during recommendation processing
+#   - Songs from the most similar playlist the system recommended equaling 20% 
+#     of the input playlist
+#   - The cosine-similarity metric determined between the input playlist and most similar
+#     playlist used for recommendation
+#   - The R-precision evluation metric calculated by finding the similarity between 
+#     the omitted 20% of songs from the input playlist and the recommended songs
+
+def masterFunction(playlistID):
+
+    80_split, 20_split = split_playlist(playlistID)
+    
+    playlist_similarity_dict = count_similar(playlistID)
+
+    most_similar_playlistID, highest_cosine_metric = cosine_similarity(playlist_similarity_dict)
+
+    list_of_recommended_songs = recommended_songs(most_similar_playlistID, 80_split, 20_split)
+
+    eval_metric = r_precision(20_split, list_of_recommended_songs)
+
+    print ("The 20 percent of songs omitted from recommendation processing from the input playlist are: " 20_split)
+    print ("The recommended songs totalling 20 percent of the input playlist are: " list_of_recommended_songs)
+    print ("The cosine similarity metric determined between the input playlist and the most similar playlist used for recommendation was: " highest_cosine_metric)
+    print ("The R-precision evaluation metric for the recommended songs was: " eval_metric)

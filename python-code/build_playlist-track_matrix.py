@@ -111,9 +111,6 @@ def count_similar(input_playlist_id):
     return playlist_similarity
 
 
-
-###### START JACKSON CODE #######
-
 # square root helper function to find denominator of cosine_similarity function
 def square_rooted(x):
     return round(sqrt(sum([a*a for a in x])),3)
@@ -124,7 +121,7 @@ def square_rooted(x):
 def cosine_similarity(playlist_dictionary):
     similarity_metric_array = []
 
-    for 
+
     for i in len():
         numerator = sum(a*b for a,b in zip(x,y))
         denominator = square_rooted(x)*square_rooted(y)
@@ -139,11 +136,32 @@ def cosine_similarity(playlist_dictionary):
     return most_similar_playlistID, best_similarity
 
 
-# Takes in playlistID of most similar aplylist to the input, along with the 80 and 20% splits of the original playlist
-# returns (and prints) list of recommended songs that total 20% of original playlist
+# Takes in playlistID of most similar playlist to the input, along with the 80% and 20% splits of the original playlist
+# returns list of recommended songs that total 20% of original playlist
 def recommended_songs(most_similar_playlistID, 80_split, 20_split):
-    # Take 20% of songs from most similar playlist & print out their values
+    similar_playlist = spotify_api.get_playlist(most_similar_playlistID)
+    count = 0
 
+    recommend_songs_list = []
+
+    set_80 = set(80_split)
+    set_20 = set(80_split)
+    set_spotify_playlist = set(similar_playlist)
+
+    length_of_20 = len(set_20)
+
+    symmetric_difference = (set_spotify_playlist ^ set_80)
+
+    for i in symmetric_difference:
+        if (count < length_of_20):
+            recommend_songs_list.append(i)
+            count = count + 1
+        else:
+            break
+    
+
+
+    return recommend_songs_list
 
 
 # Takes in 20% split from original playlist and compares it to the 20% equivalent of recommended songs
@@ -156,6 +174,7 @@ def r_precision(20_split, recommended_songs):
     eval_metric = len(matches) / size_of_20_split
 
     return (eval_metric)
+
 
 
 

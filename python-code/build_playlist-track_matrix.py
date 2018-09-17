@@ -142,12 +142,16 @@ def cosine_similarity(playlist_dictionary):
 def recommended_songs(most_similar_playlistID, 80_split, 20_split):
     similar_playlist = spotify_api.get_playlist(most_similar_playlistID)
     count = 0
-
     recommend_songs_list = []
+    tracks = []
+
+    for track in similar_playlist['tracks']:
+            tracks.append(track)
+
 
     set_80 = set(80_split)
     set_20 = set(80_split)
-    set_spotify_playlist = set(similar_playlist)
+    set_spotify_playlist = set(tracks)
 
     length_of_20 = len(set_20)
 

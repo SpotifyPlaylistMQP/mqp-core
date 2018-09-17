@@ -115,17 +115,22 @@ def count_similar(input_playlist_id):
 def square_rooted(x):
     return round(sqrt(sum([a*a for a in x])),3)
 
+
 # Takes in a dictionary object containing the input playlist and all other playlists along with
 # a list of similar songs between the input playlist & all other playlists
-# Output: similarity_metric = number representing the similarity between input playlist and other playlists
+# Output:most_similar_playlistID  similarity_metric = playlistID for most similar playlist, number representing the similarity between input playlist and other playlists
 def cosine_similarity(playlist_dictionary):
     similarity_metric_array = []
 
-    #x = list of popularity values for 
+    
+    # y = number of playlist song columns being compared
 
-    for i in len():
-        numerator = sum(a*b for a,b in zip(x,x))
-        denominator = square_rooted(x)*square_rooted(x)
+    for i in len(y):
+        #popularity_values = list of popularity values for a given 'column' of similar songs shared with the input playlist
+        popularity_values = [] #fill this list with popularity values of all similar tracks for each different playlist in dictionary
+
+        numerator = sum(a*b for a,b in zip(popularity_values,popularity_values))
+        denominator = square_rooted(popularity_values)*square_rooted(popularity_values)
 
         similarity_metric = round(numerator/float(denominator),3)
 
@@ -158,7 +163,7 @@ def recommended_songs(most_similar_playlistID, 80_split, 20_split):
     #symmetric difference
     symmetric_difference = (set_spotify_playlist ^ set_80)
     # set difference
-    possible_songs_to_recommend = symmetric_difference - set_80
+    possible_songs_to_recommend = (symmetric_difference - set_80)
 
     for i in symmetric_difference:
         if (count < length_of_20):

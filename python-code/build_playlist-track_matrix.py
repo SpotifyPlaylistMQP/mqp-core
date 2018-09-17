@@ -121,10 +121,11 @@ def square_rooted(x):
 def cosine_similarity(playlist_dictionary):
     similarity_metric_array = []
 
+    #x = list of popularity values for 
 
     for i in len():
-        numerator = sum(a*b for a,b in zip(x,y))
-        denominator = square_rooted(x)*square_rooted(y)
+        numerator = sum(a*b for a,b in zip(x,x))
+        denominator = square_rooted(x)*square_rooted(x)
 
         similarity_metric = round(numerator/float(denominator),3)
 
@@ -150,7 +151,10 @@ def recommended_songs(most_similar_playlistID, 80_split, 20_split):
 
     length_of_20 = len(set_20)
 
+    #symmetric difference
     symmetric_difference = (set_spotify_playlist ^ set_80)
+    # set difference
+    possible_songs_to_recommend = symmetric_difference - set_80
 
     for i in symmetric_difference:
         if (count < length_of_20):
@@ -159,7 +163,6 @@ def recommended_songs(most_similar_playlistID, 80_split, 20_split):
         else:
             break
     
-
 
     return recommend_songs_list
 
@@ -174,8 +177,6 @@ def r_precision(20_split, recommended_songs):
     eval_metric = len(matches) / size_of_20_split
 
     return (eval_metric)
-
-
 
 
 # Master function that handles all other function calls

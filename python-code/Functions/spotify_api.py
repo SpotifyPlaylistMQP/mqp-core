@@ -17,13 +17,16 @@ def get_tracks_of_playlist_url(url):
     tracks = []
     playlist_tracks_response = requests.get(url, headers=authorization.auth_header)
     playlist_tracks = json.loads(playlist_tracks_response.text)
+    track_num = 0
     for item in playlist_tracks["items"]:
         if not item['is_local']:
+            track_num += 1
             tracks.append({
                 'track_id': item['track']['id'],
                 'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
                 'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
-                'popularity': item['track']['popularity']
+                'popularity': item['track']['popularity'],
+                'position': track_num
             })
     if playlist_tracks['next'] is not None:
         tracks.extend(get_tracks_of_playlist_url(playlist_tracks['next']))

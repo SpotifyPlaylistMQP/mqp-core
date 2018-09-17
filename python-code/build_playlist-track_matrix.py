@@ -1,4 +1,5 @@
 from Functions import authorization, spotify_api, matrix_visualizer
+from math import *
 import random
 
 playlist_ids = [
@@ -10,6 +11,8 @@ playlist_ids = [
     '37i9dQZF1DWYfVy6zzMSPv', '3ZSq7rHkmA5m0suVh5z8lM',
     '37i9dQZF1DXcA6dRp8rwj6', '2HmppYpekiuOMZaS4xxubl'
 ]
+
+playlist_to_split = '37i9dQZF1DX0XUsuxWHRQd'
 
 # Get the auth_token from the node server and test it
 authorization.get_auth_token_from_node_server()
@@ -30,10 +33,66 @@ for playlist_id in playlist_ids:
 print("Total Playlists: " + str(len(playlists)))
 print("Total Tracks: " + str(total_track_num))
 print("Distinct Tracks: " + str(len(tracks)))
+print("\n\n\n")
+
+
+# Takes in a playlist id and counts how many songs are similar between every
+# combination of 2 playlists
+# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), list_of_similar_songs}
+playlist_similarity = {}
+def count_similar(input_playlist_id):
+    # Find which playlists are similar
+
+    similar_tracks = []
+
+    for second_key in playlists.keys():
+        similar_tracks.clear()
+        if input_playlist_id != second_key:
+            for track in playlists[input_playlist_id]['tracks']:
+                if track in playlists[second_key]['tracks']:
+                    similar_tracks.append(track)
+                    playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
+
+    #print(playlist_similarity)
+
+count_similar(playlist_to_split)
+#print(playlist_similarity.keys())
+
+# square root helper function to find denominator of cosine_similarity function
+def square_rooted(x):
+    return round(sqrt(sum([a*a for a in x])),3)
+
+similarity_metric_array = []
+print(playlist_similarity)
+for key in playlist_similarity.keys():
+    popularity_values_playlist_0 = []
+    popularity_values_playlist_1 = []
+    print(playlist_similarity[key])
+    for track in playlist_similarity[key]:
+        for full_track in playlists[key[0]]['tracks']:
+            if track['track_id'] == full_track['track_id']:
+                popularity_values_playlist_0.append(full_track['position'] * full_track['popularity'])
+        for full_track in playlists[key[1]]['tracks']:
+            if track['track_id'] == full_track['track_id']:
+                popularity_values_playlist_1.append(full_track['position'] * full_track['popularity'])
+
+    print(popularity_values_playlist_0)
+    print(popularity_values_playlist_1)
+
+    numerator = sum(a * b for a, b in zip(popularity_values_playlist_0, popularity_values_playlist_1))
+    denominator = square_rooted(popularity_values_playlist_0) * square_rooted(popularity_values_playlist_1)
+
+    similarity_metric = round(numerator / float(denominator), 3)
+
+    similarity_metric_array.append((key[1], similarity_metric))
+
+print(similarity_metric_array)
+
+
 
 # Populate the matrix
+'''
 matrix = []
-
 for key in playlists.keys():
     matrix_row = []
     for track in tracks:
@@ -87,28 +146,6 @@ def split_playlist(input_playlist_id):
     #   print("The 80'%' of songs kept: '" + split_dictionary['input_playlist_id']['20'])
 
     return list_80split, list_20split
-
-
-# Takes in a playlist id and counts how many songs are similar between every
-# combination of 2 playlists
-# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), list_of_similar_songs}
-playlist_similarity = {}
-def count_similar(input_playlist_id):
-    # Find which playlists are similar
-
-    similar_tracks = []
-
-    for second_key in playlists.keys():
-        similar_tracks.clear()
-        if input_playlist_id != second_key:
-            for track in playlists[input_playlist_id]['tracks']:
-                if track in playlists[second_key]['tracks']:
-                    similar_tracks.append(track)
-                    playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
-
-    print(playlist_similarity)
-    
-    return playlist_similarity
 
 
 # square root helper function to find denominator of cosine_similarity function
@@ -218,4 +255,6 @@ def masterFunction(playlistID):
     print ("The 20 percent of songs omitted from recommendation processing from the input playlist are: " 20_split)
     print ("The recommended songs totalling 20 percent of the input playlist are: " list_of_recommended_songs)
     print ("The cosine similarity metric determined between the input playlist and the most similar playlist used for recommendation was: " highest_cosine_metric)
-    print ("The R-precision evaluation metric for the recommended songs was: " eval_metric)
+    print ("The R-precision evaluation metric for the recommended songs was: " + eval_metric)
+    
+'''

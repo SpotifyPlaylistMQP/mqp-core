@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 from Functions import authorization, spotify_api, matrix_visualizer
 import random
+=======
+from Functions import similarity_functions, authorization, spotify_api, matrix_visualizer
+#import numpy as np
+>>>>>>> 4ed8b029e923e2410686f9e07778f5435fe220c1
 
 playlist_ids = [
     '37i9dQZF1DX0XUsuxWHRQd', '37i9dQZF1DWY4xHQp97fN6',
@@ -45,6 +50,7 @@ for key in playlists.keys():
 
 matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
 
+<<<<<<< HEAD
 
 # Function to get a list of unique song names in a playlist
 # string -> list
@@ -107,6 +113,10 @@ def count_similar(input_playlist_id):
     print(playlist_similarity)
     
     return playlist_similarity
+=======
+#Call stove and sams for testing
+similarity_functions.count_similar('37i9dQZF1DX0XUsuxWHRQd', playlists)
+>>>>>>> 4ed8b029e923e2410686f9e07778f5435fe220c1
 
 
 # square root helper function to find denominator of cosine_similarity function

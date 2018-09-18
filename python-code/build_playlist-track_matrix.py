@@ -8,7 +8,8 @@ playlist_ids = [
     '7kdOsNnHtzwncTBnI3J17w', '5HYnMEFnXw6j9Xj8DIth0f',
     '5dmLJqg5TVfbvQFiTpyxxN', '37i9dQZF1DXaxIqwkEGFEh',
     '37i9dQZF1DWYfVy6zzMSPv', '3ZSq7rHkmA5m0suVh5z8lM',
-    '37i9dQZF1DXcA6dRp8rwj6', '2HmppYpekiuOMZaS4xxubl'
+    '37i9dQZF1DXcA6dRp8rwj6', '2HmppYpekiuOMZaS4xxubl',
+    '37i9dQZF1DX7YCknf2jT6s'
 ]
 
 # Playlist to be split and given recommendations
@@ -33,10 +34,11 @@ playlist_similarity = similarity_functions.count_similar(playlist_to_split, play
 # Create the similarity metrics for each similar playlist
 #   similarity_metrics: key = playlist_id, value = similarity_metric
 similarity_metrics = similarity_functions.calculate_similarity_metrics(playlist_dict, playlist_similarity)
-print(similarity_metrics)
+for metric in similarity_metrics:
+    print(playlist_dict[metric[0]]['name'] + ": " + str(metric[1]))
 
 # Recommend tracks to be added to playlist_to_be_split based on the similarity_metrics
-recommended_tracks = track_recommendation.recommend_tracks(similarity_metrics, playlist_dict, split_dict, playlist_to_split)
+#recommended_tracks = track_recommendation.recommend_tracks(similarity_metrics, playlist_dict, split_dict, playlist_to_split)
 
 
 

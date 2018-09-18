@@ -28,7 +28,7 @@ def get_playlist(playlist_id):
     return {
         'name': json.loads(playlist_response.text)['name'],
         'playlist_id': playlist_id,
-        'tracks': get_tracks_of_playlist_url('https://api.spotify.com/v1/playlists/{0}/tracks'.format(playlist_id))
+        'tracks': give_track_value(get_tracks_of_playlist_url('https://api.spotify.com/v1/playlists/{0}/tracks'.format(playlist_id)))
     }
 
 def get_tracks_of_playlist_url(url):
@@ -36,15 +36,36 @@ def get_tracks_of_playlist_url(url):
     tracks = []
     playlist_tracks_response = requests.get(url, headers=authorization.auth_header)
     playlist_tracks = json.loads(playlist_tracks_response.text)
+    track_num = 0
     for item in playlist_tracks['items']:
         if not item['is_local']:
+            track_num += 1
             tracks.append({
                 'track_id': item['track']['id'],
                 'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
                 'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
-                'popularity': item['track']['popularity'],
-                'value': item['track']['popularity']
+                'popularity': item['track']['popularity']
             })
     if playlist_tracks['next'] is not None:
         tracks.extend(get_tracks_of_playlist_url(playlist_tracks['next']))
     return tracks
+
+def give_track_value(list_of_tracks):
+    # Use this function to define a track's value in the playlist
+    # Today we will be using the index as value
+    index = 0
+    total_tracks = len(list_of_tracks)
+    for track in list_of_tracks:
+        index += 1
+        if index < total_tracks / 5:
+            track['value'] = 5
+        elif index < 2 * (total_tracks / 5):
+            track['value'] = 4
+        elif index < 3 * (total_tracks / 5):
+            track['value'] = 3
+        elif index < 4 * (total_tracks / 5):
+            track['value'] = 2
+        else:
+            track['value'] = 1
+
+    return list_of_tracks

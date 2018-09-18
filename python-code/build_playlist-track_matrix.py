@@ -1,4 +1,4 @@
-from Functions import similarity_functions, authorization, spotify_api, matrix_visualizer, split_playlist, track_recommendation
+from Functions import similarity_functions, authorization, spotify_api, matrix_functions, split_playlist, track_recommendation
 
 # Playlist IDs to be examined
 playlist_ids = [
@@ -16,11 +16,22 @@ playlist_ids = [
 playlist_to_split = '37i9dQZF1DX0XUsuxWHRQd'
 
 # Get the auth_token from the node server and test it
-authorization.get_auth_token_from_node_server()
+authorization.initialize()
+
+playlist_dict, unique_track_dict = spotify_api.make_playlist_and_track_dict(playlist_ids)
+
+matrix = matrix_functions.make_matrix(playlist_dict, unique_track_dict)
+
+matrix_functions.visualize(matrix, playlist_dict, unique_track_dict)
+
+
+
+'''
+#TODO: sparsity : cells filled / unique_tracks * num_playlists
 
 # Make the playlist dictionary from the playlist_ids, and find the unique tracks
 #   playlist_dict: key = playlist_id, value = playlist
-playlist_dict, unique_track_dict = spotify_api.make_playlist_dictionary(playlist_ids)
+playlist_dict, unique_track_dict = 
 
 # Visualize the matrix
 matrix_visualizer.visualize_matrix(playlist_dict, unique_track_dict)
@@ -44,7 +55,7 @@ for metric in similarity_metrics:
 
 
 
-'''
+
 # Master function that handles all other function calls
 # Takes in a playlist ID and returns:
 #   - 20% of the input playlist that was omitted during recommendation processing

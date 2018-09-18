@@ -1,7 +1,7 @@
 import requests
 import json
 
-def get_auth_token_from_node_server():
+def initialize():
     # Connect to the node server and return the auth token.
     #  -If there is no auth token on the server, you need to login to the spotify API through the react-app
     #  -If there is an error connecting to the node server, make sure it is running

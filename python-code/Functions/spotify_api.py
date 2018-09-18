@@ -2,70 +2,45 @@ import requests
 from Functions import authorization
 import json
 
-def make_playlist_dictionary(playlist_ids):
-    playlist_dict = {}
-    unique_track_dict = {}
-    total_track_num = 0
+playlist_dict = {} # key = playlist_id, value = playlist
+unique_track_dict = {}  # key = track_id, value = track
+
+def make_playlist_and_track_dict(playlist_ids):
+    total_tracks = 0
     for playlist_id in playlist_ids:
-        spotify_playlist = get_playlist(playlist_id)
-        playlist_dict[playlist_id] = spotify_playlist
-        for track in spotify_playlist['tracks']:
-            total_track_num += 1
-            if track['track_id'] not in unique_track_dict.keys():
-                unique_track_dict[track['track_id']] = track
+        spotify_playlist_response = requests.get('https://api.spotify.com/v1/playlists/{0}'.format(playlist_id),
+                                                 headers=authorization.auth_header)
+        playlist_dict[playlist_id] = {
+            'name': json.loads(spotify_playlist_response.text)['name'],
+            'playlist_id': playlist_id,
+            'tracks': get_tracks_of_playlist_url('https://api.spotify.com/v1/playlists/{0}/tracks'.format(playlist_id))
+        }
+        total_tracks += len(playlist_dict[playlist_id]['tracks'])
 
     print("Total Playlists: " + str(len(playlist_dict)))
-    print("Total Tracks: " + str(total_track_num))
+    print("Total Tracks: " + str(total_tracks))
     print("Distinct Tracks: " + str(len(unique_track_dict)))
     print("\n\n")
 
     return playlist_dict, unique_track_dict
 
-def get_playlist(playlist_id):
-    # Returns a playlist built from the data of 2 different Spotify api calls
-    playlist_url = 'https://api.spotify.com/v1/playlists/{0}'.format(playlist_id)
-    playlist_response = requests.get(playlist_url, headers=authorization.auth_header)
-    return {
-        'name': json.loads(playlist_response.text)['name'],
-        'playlist_id': playlist_id,
-        'tracks': give_track_value(get_tracks_of_playlist_url('https://api.spotify.com/v1/playlists/{0}/tracks'.format(playlist_id)))
-    }
-
 def get_tracks_of_playlist_url(url):
     # Run through the playlist's tracks recursively and return a list of all of it's tracks
     tracks = []
-    playlist_tracks_response = requests.get(url, headers=authorization.auth_header)
-    playlist_tracks = json.loads(playlist_tracks_response.text)
-    track_num = 0
+    spotify_playlist_tracks_response = requests.get(url, headers=authorization.auth_header)
+    playlist_tracks = json.loads(spotify_playlist_tracks_response.text)
     for item in playlist_tracks['items']:
         if not item['is_local']:
-            track_num += 1
-            tracks.append({
-                'track_id': item['track']['id'],
-                'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
-                'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
-                'popularity': item['track']['popularity']
-            })
+            track_id = item['track']['id']
+            tracks.append(track_id)
+            if track_id not in unique_track_dict.keys():
+                unique_track_dict[track_id] = {
+                    'track_id': item['track']['id'],
+                    'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
+                    'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
+                    'popularity': item['track']['popularity']
+                }
     if playlist_tracks['next'] is not None:
         tracks.extend(get_tracks_of_playlist_url(playlist_tracks['next']))
     return tracks
 
-def give_track_value(list_of_tracks):
-    # Use this function to define a track's value in the playlist
-    # Today we will be using the index as value
-    index = 0
-    total_tracks = len(list_of_tracks)
-    for track in list_of_tracks:
-        index += 1
-        if index < total_tracks / 5:
-            track['value'] = 5
-        elif index < 2 * (total_tracks / 5):
-            track['value'] = 4
-        elif index < 3 * (total_tracks / 5):
-            track['value'] = 3
-        elif index < 4 * (total_tracks / 5):
-            track['value'] = 2
-        else:
-            track['value'] = 1
-
-    return list_of_tracks

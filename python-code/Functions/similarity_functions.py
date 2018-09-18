@@ -1,65 +1,39 @@
-# Function to get a list of unique song names in a playlist
-# string -> list
-def get_unique_songs(playlist):
-    tracks = []
-    for track in playlist['tracks']:
-        if track not in tracks:
-            tracks.append(track)
-    return tracks
-
-
-# split_playlist(array)
-#   Takes the entered playlist by the user and removes a randomly selected 20%
-#   for comparison. Stores the 20% and 80% split in two arrays locally accessible.
-# input_playlist = the playlist for comparison
-#   the format of {key: playlist_id, value: [track_list]}
-#   each elements is {playlist_id: tracklist[]}
-# array -> array, array
-split_dictionary = {}
-def split_playlist(input_playlist_id, playlist_dict):
-    all_tracks = get_unique_songs(input_playlist_id, playlist_dict) #local lists for playlist tracks
-    list_80split = [] #80% of the songs
-    list_20split = [] #20% of the songs (for removal, non-inclusive)
-    spotify_playlist = playlist_dict[input_playlist_id] #Get the given playlist
-
-
-    #shuffled_array = np.random.shuffle(all_tracks) ##Randomly shuffle the array
-    all_tracks_length = len(all_tracks)/5
-    count = 0
-    for song in all_tracks: #Takes the first 20 (0 to 1/5 of the array)
-            count+=1
-            if (count <= all_tracks_length):
-                list_20split.append(song)
-                all_tracks.pop(count) #Removes the song from the shuffled_array after adding it to the 20% split array
-
-    for remaining_song in all_tracks: #Adds the remaining songs to the comparison array
-        list_80split.append(remaining_song)
-
-
-    split_dictionary[(input_playlist_id, '80')]= list_80split
-    split_dictionary[(input_playlist_id, '20')] = list_20split
-    #   print("Input Playlist ID: " + input_playlist_id)
-    #   print("The 20'%' of songs removed: '" + split_dictionary[(input_playlist_id, '20')])
-    #   print("The 80'%' of songs kept: '" + split_dictionary[(input_playlist_id, '80')])
-
-    return list_80split, list_20split
-
+from math import *
 
 # Takes in a playlist id and counts how many songs are similar between every
 # combination of 2 playlists
-# Output: playlist_similarity = {(playlist_id_1, playlist_id_2), list_of_similar_songs}
-playlist_similarity = {}
-def count_similar(input_playlist_id, playlists):
-    # Find which playlists are similar
-    split_playlist(input_playlist_id, playlists)
-    similar_tracks = []
-
-    for second_key in playlists.keys():
-        similar_tracks.clear()
+# Output: playlist_similarity = {(playlist_id_1, playlist_id_2): [(similar_songs_from_playlist_1, similar_songs_from_playlist_2)]}
+def count_similar(input_playlist_id, playlist_dict, split_dictionary):
+    playlist_similarity = {}
+    for second_key in playlist_dict.keys():
+        similar_tracks = []
         if input_playlist_id != second_key:
-            for track in split_dictionary[(input_playlist_id, '80')]:
-                if track in playlists[second_key]['tracks']:
-                    similar_tracks.append(track)
-                    playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
+            for key_0_track in split_dictionary[(input_playlist_id, '80')]:
+                for key_1_track in playlist_dict[second_key]['tracks']:
+                    if key_0_track['track_id'] == key_1_track['track_id']:
+                        similar_tracks.append((key_0_track, key_1_track))
+            playlist_similarity[(input_playlist_id, second_key)] = similar_tracks
+            print(playlist_dict[second_key]['name'] + " similar tracks: " + str(len(similar_tracks)))
 
     return playlist_similarity
+
+# square root helper function to find denominator of cosine_similarity function
+def square_rooted(x):
+    return round(sqrt(sum([a*a for a in x])),3)
+
+# Calculates the similarity_metric using the cosine similarity math shit for each similar playlist
+def calculate_similarity_metrics(playlist_dict, playlist_similarity):
+    similarity_metrics = []
+    for key in playlist_similarity.keys():
+        popularity_values_key_0 = []
+        popularity_values_key_1 = []
+        for key_0_track in playlist_dict[key[0]]['tracks']:
+            popularity_values_key_0.append(key_0_track['value'])
+        for key_1_track in playlist_dict[key[1]]['tracks']:
+            popularity_values_key_1.append(key_1_track['value'])
+
+        numerator = sum(a * b for a, b in zip(popularity_values_key_0, popularity_values_key_1))
+        denominator = square_rooted(popularity_values_key_0) * square_rooted(popularity_values_key_1)
+        similarity_metrics.append((key[1], round(numerator / float(denominator), 3)))
+
+    return similarity_metrics

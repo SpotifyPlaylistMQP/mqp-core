@@ -1,5 +1,4 @@
-from Functions import similarity_functions, authorization, spotify_api, matrix_visualizer
-from math import *
+from Functions import similarity_functions, authorization, spotify_api, matrix_visualizer, split_playlist, track_recommendation
 
 # Playlist IDs to be examined
 playlist_ids = [
@@ -17,131 +16,32 @@ playlist_to_split = '37i9dQZF1DX0XUsuxWHRQd'
 
 # Get the auth_token from the node server and test it
 authorization.get_auth_token_from_node_server()
-#TODO: Test / refresh the auth token on the node server
 
 # Make the playlist dictionary from the playlist_ids, and find the unique tracks
 #   playlist_dict: key = playlist_id, value = playlist
-playlist_dict, unique_tacks = spotify_api.make_playlist_dictionary(playlist_ids)
+playlist_dict, unique_track_dict = spotify_api.make_playlist_dictionary(playlist_ids)
 
+# Visualize the matrix
+matrix_visualizer.visualize_matrix(playlist_dict, unique_track_dict)
 
-# square root helper function to find denominator of cosine_similarity function
-def square_rooted(x):
-    return round(sqrt(sum([a*a for a in x])),3)
+# Split the playlist_to_be_split into 80 20 and return the split dictionary
+split_dict = split_playlist.split_playlist(playlist_to_split, playlist_dict)
 
-similarity_metric_array = []
-print(playlist_similarity)
-for key in playlist_similarity.keys():
-    popularity_values_playlist_0 = []
-    popularity_values_playlist_1 = []
-    print(playlist_similarity[key])
-    for track in playlist_similarity[key]:
-        for full_track in playlists[key[0]]['tracks']:
-            if track['track_id'] == full_track['track_id']:
-                popularity_values_playlist_0.append(full_track['position'] * full_track['popularity'])
-        for full_track in playlists[key[1]]['tracks']:
-            if track['track_id'] == full_track['track_id']:
-                popularity_values_playlist_1.append(full_track['position'] * full_track['popularity'])
+# Find the similarity (same songs) between playlist_to_split and every other playlist
+playlist_similarity = similarity_functions.count_similar(playlist_to_split, playlist_dict, split_dict)
 
-    print(popularity_values_playlist_0)
-    print(popularity_values_playlist_1)
+# Create the similarity metrics for each similar playlist
+#   similarity_metrics: key = playlist_id, value = similarity_metric
+similarity_metrics = similarity_functions.calculate_similarity_metrics(playlist_dict, playlist_similarity)
+print(similarity_metrics)
 
-    numerator = sum(a * b for a, b in zip(popularity_values_playlist_0, popularity_values_playlist_1))
-    denominator = square_rooted(popularity_values_playlist_0) * square_rooted(popularity_values_playlist_1)
-
-    similarity_metric = round(numerator / float(denominator), 3)
-
-    similarity_metric_array.append((key[1], similarity_metric))
-
-print(similarity_metric_array)
+# Recommend tracks to be added to playlist_to_be_split based on the similarity_metrics
+recommended_tracks = track_recommendation.recommend_tracks(similarity_metrics, playlist_dict, split_dict, playlist_to_split)
 
 
 
-# Populate the matrix
-matrix = []
-for key in playlists.keys():
-    matrix_row = []
-    for track in tracks:
-        if track in playlists[key]['tracks']:
-            matrix_row.append(track['popularity'])
-        else:
-            matrix_row.append("--")
-    matrix.append(matrix_row)
-
-matrix_visualizer.visualize_matrix(matrix, playlists, tracks)
-
-#Call stove and sams for testing
-similarity_functions.count_similar('37i9dQZF1DX0XUsuxWHRQd', playlists)
 
 '''
-# Takes in a dictionary object containing the input playlist and all other playlists along with
-# a list of similar songs between the input playlist & all other playlists
-# Output:most_similar_playlistID  similarity_metric = playlistID for most similar playlist, number representing the similarity between input playlist and other playlists
-def cosine_similarity(playlist_dictionary):
-    similarity_metric_array = []
-
-    for i in len(y):
-        #popularity_values = list of popularity values for a given 'column' of similar songs shared with the input playlist
-        popularity_values = [] #fill this list with popularity values of all similar tracks for each different playlist in dictionary
-
-        numerator = sum(a*b for a,b in zip(popularity_values,popularity_values))
-        denominator = square_rooted(popularity_values)*square_rooted(popularity_values)
-
-        similarity_metric = round(numerator/float(denominator),3)
-
-        similarity_metric_array.append(similarity_metric)
-
-    best_similarity = max([similarity_metric_array])
-    #find which playlist has the best similarity = most_similar_playlistID
-
-    return most_similar_playlistID, best_similarity
-
-
-# Takes in playlistID of most similar playlist to the input, along with the 80% and 20% splits of the original playlist
-# returns list of recommended songs that total 20% of original playlist
-def recommended_songs(most_similar_playlistID, split80, split20):
-    similar_playlist = spotify_api.get_playlist(most_similar_playlistID)
-    count = 0
-    recommend_songs_list = []
-    tracks = []
-
-    for track in similar_playlist['tracks']:
-            tracks.append(track)
-
-
-    set_80 = set(split80)
-    set_20 = set(split20)
-    set_spotify_playlist = set(tracks)
-
-    length_of_20 = len(set_20)
-
-    #symmetric difference
-    symmetric_difference = (set_spotify_playlist ^ set_80)
-    # set difference
-    possible_songs_to_recommend = (symmetric_difference - set_80)
-
-    for i in symmetric_difference:
-        if (count < length_of_20):
-            recommend_songs_list.append(i)
-            count = count + 1
-        else:
-            break
-    
-
-    return recommend_songs_list
-
-
-# Takes in 20% split from original playlist and compares it to the 20% equivalent of recommended songs
-# returns the R-precision metric between the omitted songs and the recommended songs
-def r_precision(split20, recommended_songs):
-
-    size_of_20_split = len(split20)
-    matches = set(split20).intersection(recommended_songs)
-
-    eval_metric = len(matches) / size_of_20_split
-
-    return (eval_metric)
-
-
 # Master function that handles all other function calls
 # Takes in a playlist ID and returns:
 #   - 20% of the input playlist that was omitted during recommendation processing

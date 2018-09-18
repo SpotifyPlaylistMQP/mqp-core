@@ -2,6 +2,25 @@ import requests
 from Functions import authorization
 import json
 
+def make_playlist_dictionary(playlist_ids):
+    playlist_dict = {}
+    unique_tracks = []
+    total_track_num = 0
+    for playlist_id in playlist_ids:
+        spotify_playlist = get_playlist(playlist_id)
+        playlist_dict[playlist_id] = spotify_playlist
+        for track in spotify_playlist['tracks']:
+            total_track_num += 1
+            if track not in unique_tracks:
+                unique_tracks.append(track)
+
+    print("Total Playlists: " + str(len(playlist_dict)))
+    print("Total Tracks: " + str(total_track_num))
+    print("Distinct Tracks: " + str(len(unique_tracks)))
+    print("\n\n")
+
+    return playlist_dict, unique_tracks
+
 def get_playlist(playlist_id):
     # Returns a playlist built from the data of 2 different Spotify api calls
     playlist_url = 'https://api.spotify.com/v1/playlists/{0}'.format(playlist_id)

@@ -34,6 +34,7 @@ playlist_similarity = similarity_functions.count_similar(playlist_to_split, play
 # Create the similarity metrics for each similar playlist
 #   similarity_metrics: key = playlist_id, value = similarity_metric
 similarity_metrics = similarity_functions.calculate_similarity_metrics(playlist_dict, playlist_similarity)
+print("Similarity Metrics for each playlsit Vs. Rap Caviar: ")
 for metric in similarity_metrics:
     print(playlist_dict[metric[0]]['name'] + ": " + str(metric[1]))
 

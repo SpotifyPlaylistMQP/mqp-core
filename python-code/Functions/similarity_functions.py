@@ -32,16 +32,14 @@ def calculate_similarity_metrics(playlist_dict, playlist_similarity):
         for similar_track in playlist_similarity[key]:
             popularity_values_key_0.append(similar_track[0]['value'])
             popularity_values_key_1.append(similar_track[1]['value'])
+
+        distance = round(sqrt(sum((a-b)*(a-b) for a,b in zip(popularity_values_key_0, popularity_values_key_1))))
         print('------------------------------------------------------------------------------')
         print(playlist_dict[key[0]]['name'] + " VS " + playlist_dict[key[1]]['name'])
         print(popularity_values_key_0)
         print(popularity_values_key_1)
-        numerator = sum(a * b for a, b in zip(popularity_values_key_0, popularity_values_key_1))
-        print("Numerator: " + str(numerator))
-        denominator = square_rooted(popularity_values_key_0) * square_rooted(popularity_values_key_1)
-        print("Denominator: " + str(denominator))
-        cosine_sim = round(numerator / float(denominator), 3)
-        print("Cosine Similarity: " + str(cosine_sim))
-        similarity_metrics.append((key[1], cosine_sim))
+        print("Distance: " + str(distance))
+        similarity_metrics.append((key[1], distance / len(popularity_values_key_1)))
 
+    print('------------------------------------------------------------------------------\n')
     return similarity_metrics

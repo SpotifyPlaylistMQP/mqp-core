@@ -1,4 +1,4 @@
-from Functions import similarity_functions, authorization, spotify_api, matrix_functions, split_playlist, track_recommendation
+from Functions import sparsity_functions, authorization, spotify_api, matrix_functions, split_playlist, track_recommendation
 
 # Playlist IDs to be examined
 playlist_ids = [
@@ -18,11 +18,15 @@ playlist_to_split = '37i9dQZF1DX0XUsuxWHRQd'
 # Get the auth_token from the node server and test it
 authorization.initialize()
 
+# Get the playlist_dict and unique_track_dict from the spotify API
 playlist_dict, unique_track_dict = spotify_api.make_playlist_and_track_dict(playlist_ids)
 
+# Create the matrix (visualized in matrix.txt)
 matrix = matrix_functions.make_matrix(playlist_dict, unique_track_dict)
 
-matrix_functions.visualize(matrix, playlist_dict, unique_track_dict)
+# Calculate the sparsity of the matrix
+sparsity = sparsity_functions.calculate_sparsity(matrix)
+print(sparsity)
 
 
 
@@ -45,7 +49,7 @@ playlist_similarity = similarity_functions.count_similar(playlist_to_split, play
 # Create the similarity metrics for each similar playlist
 #   similarity_metrics: key = playlist_id, value = similarity_metric
 similarity_metrics = similarity_functions.calculate_similarity_metrics(playlist_dict, playlist_similarity)
-print("Similarity Metrics for each playlsit Vs. Rap Caviar: ")
+print("Similarity Metrics for each playlist Vs. Rap Caviar: ")
 for metric in similarity_metrics:
     print(playlist_dict[metric[0]]['name'] + ": " + str(metric[1]))
 

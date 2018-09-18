@@ -9,6 +9,7 @@ def make_matrix(playlist_dict, unique_track_dict):
             else:
                 row.append(0)
         matrix.append(row)
+    visualize(matrix, playlist_dict, unique_track_dict)
     return matrix
 
 def visualize(matrix, playlist_dict, unique_track_dict):

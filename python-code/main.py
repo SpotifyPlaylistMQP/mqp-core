@@ -1,4 +1,4 @@
-from Functions import sparsity_functions, authorization, spotify_api, matrix_functions, split_playlist, track_recommendation
+from Functions import sparsity_functions, authorization, spotify_api, matrix_functions, playlist_splitter_functions, track_recommendation
 
 # Playlist IDs to be examined
 playlist_ids = [
@@ -13,7 +13,7 @@ playlist_ids = [
 ]
 
 # Playlist to be split and given recommendations
-playlist_to_split = '37i9dQZF1DX0XUsuxWHRQd'
+playlist_being_recommended_to = '37i9dQZF1DX0XUsuxWHRQd'
 
 # Get the auth_token from the node server and test it
 authorization.initialize()
@@ -21,14 +21,15 @@ authorization.initialize()
 # Get the playlist_dict and unique_track_dict from the spotify API
 playlist_dict, unique_track_dict = spotify_api.make_playlist_and_track_dict(playlist_ids)
 
+# Remove 20% of playlist_being_recommended_to's tracks and save the original 20% that were removed
+original_20_percent = playlist_splitter_functions.split_playlist(playlist_being_recommended_to, playlist_dict)
+
 # Create the matrix (visualized in matrix.txt)
 matrix = matrix_functions.make_matrix(playlist_dict, unique_track_dict)
 
 # Calculate the sparsity of the matrix
 sparsity = sparsity_functions.calculate_sparsity(matrix)
 print(sparsity)
-
-
 
 '''
 #TODO: sparsity : cells filled / unique_tracks * num_playlists

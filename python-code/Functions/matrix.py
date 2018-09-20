@@ -1,6 +1,6 @@
-def make_matrix(playlist_dict, unique_track_dict):
-    # Matrix: rows = tracks, columns = playlists, cells = 1 if track in playlist else 0
-    matrix = []
+# Returns the playlist X track matrix
+def create(playlist_dict, unique_track_dict):
+    matrix = [] # rows = tracks, columns = playlists, cells = 1 if track in playlist else 0
     for track_id in unique_track_dict.keys():
         row = []
         for playlist_id in playlist_dict.keys():
@@ -12,7 +12,33 @@ def make_matrix(playlist_dict, unique_track_dict):
     visualize(matrix, playlist_dict, unique_track_dict)
     return matrix
 
+# Returns the sparsity value of the matrix
+def sparsity(playlist_track_matrix):
+    playlist_track_matches = 0
+    total_cells = 0
+    for row in playlist_track_matrix:
+        for cell in row:
+            total_cells += 1
+            if cell == 1:
+                playlist_track_matches += 1
+    return round(playlist_track_matches / total_cells, 5)
+
+# Visualizes the matrix to matrix.txt
 def visualize(matrix, playlist_dict, unique_track_dict):
+    def format_cell(data):
+        if len(data) == 1:
+            return "   " + data + "  "
+        if len(data) == 2:
+            return "  " + data + "  "
+        if len(data) == 3:
+            return "  " + data + " "
+        if len(data) == 4:
+            return " " + data + " "
+        if len(data) == 5:
+            return " " + data
+        if len(data) == 6:
+            return data
+
     # Prints out the matrix into visual_matrix.txt
     matrix_file = open("matrix.txt", "w")
 
@@ -48,19 +74,3 @@ def visualize(matrix, playlist_dict, unique_track_dict):
         t += 1
 
     matrix_file.close()
-
-    print("Matrix has been visualized in matrix.txt")
-
-def format_cell(data):
-    if len(data) == 1:
-        return "   " + data + "  "
-    if len(data) == 2:
-        return "  " + data + "  "
-    if len(data) == 3:
-        return "  " + data + " "
-    if len(data) == 4:
-        return " " + data + " "
-    if len(data) == 5:
-        return " " + data
-    if len(data) == 6:
-        return data

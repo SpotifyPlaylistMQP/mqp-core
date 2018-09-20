@@ -1,4 +1,4 @@
-from Functions import sparsity_functions, authorization, spotify_api, matrix_functions, playlist_splitter_functions, track_recommendation
+from Functions import spotify_api, matrix, playlist, cosine_similarity, evaluation
 
 # Playlist IDs to be examined
 playlist_ids = [
@@ -13,80 +13,34 @@ playlist_ids = [
 ]
 
 # Playlist to be split and given recommendations
-playlist_being_recommended_to = '37i9dQZF1DX0XUsuxWHRQd'
+playlist_id_of_interest = '37i9dQZF1DX0XUsuxWHRQd'
 
 # Get the auth_token from the node server and test it
-authorization.initialize()
+spotify_api.authorize()
 
 # Get the playlist_dict and unique_track_dict from the spotify API
 playlist_dict, unique_track_dict = spotify_api.make_playlist_and_track_dict(playlist_ids)
+spotify_api.print_statistics(playlist_dict, unique_track_dict)
 
 # Remove 20% of playlist_being_recommended_to's tracks and save the original 20% that were removed
-original_20_percent = playlist_splitter_functions.split_playlist(playlist_being_recommended_to, playlist_dict)
+original_20_percent = playlist.split(playlist_id_of_interest, playlist_dict)
 
 # Create the matrix (visualized in matrix.txt)
-matrix = matrix_functions.make_matrix(playlist_dict, unique_track_dict)
+playlist_track_matrix = matrix.create(playlist_dict, unique_track_dict)
 
 # Calculate the sparsity of the matrix
-sparsity = sparsity_functions.calculate_sparsity(matrix)
-print(sparsity)
+sparsity = matrix.sparsity(playlist_track_matrix)
 
-'''
-#TODO: sparsity : cells filled / unique_tracks * num_playlists
+# Calculate the cosine sim of each playlist that's not playlist_id_of_interest
+cosine_sim_dict = cosine_similarity.create(playlist_ids, playlist_id_of_interest, playlist_track_matrix)
+cosine_similarity.pretty_print(cosine_sim_dict, playlist_dict)
 
-# Make the playlist dictionary from the playlist_ids, and find the unique tracks
-#   playlist_dict: key = playlist_id, value = playlist
-playlist_dict, unique_track_dict = 
+# Find the playlist that is most similar to playlist_id_of_interest
+most_similar_playlist_id = cosine_similarity.most_similar(cosine_sim_dict)
 
-# Visualize the matrix
-matrix_visualizer.visualize_matrix(playlist_dict, unique_track_dict)
+# Recommend tracks to playlist_id_of_interest based on the most_similar_playlist_id
+recommended_tracks = playlist.recommend_tracks(playlist_dict, playlist_id_of_interest, most_similar_playlist_id, len(original_20_percent))
 
-# Split the playlist_to_be_split into 80 20 and return the split dictionary
-split_dict = split_playlist.split_playlist(playlist_to_split, playlist_dict)
-
-# Find the similarity (same songs) between playlist_to_split and every other playlist
-playlist_similarity = similarity_functions.count_similar(playlist_to_split, playlist_dict, split_dict)
-
-# Create the similarity metrics for each similar playlist
-#   similarity_metrics: key = playlist_id, value = similarity_metric
-similarity_metrics = similarity_functions.calculate_similarity_metrics(playlist_dict, playlist_similarity)
-print("Similarity Metrics for each playlist Vs. Rap Caviar: ")
-for metric in similarity_metrics:
-    print(playlist_dict[metric[0]]['name'] + ": " + str(metric[1]))
-
-# Recommend tracks to be added to playlist_to_be_split based on the similarity_metrics
-#recommended_tracks = track_recommendation.recommend_tracks(similarity_metrics, playlist_dict, split_dict, playlist_to_split)
-
-
-
-
-
-# Master function that handles all other function calls
-# Takes in a playlist ID and returns:
-#   - 20% of the input playlist that was omitted during recommendation processing
-#   - Songs from the most similar playlist the system recommended equaling 20% 
-#     of the input playlist
-#   - The cosine-similarity metric determined between the input playlist and most similar
-#     playlist used for recommendation
-#   - The R-precision evluation metric calculated by finding the similarity between 
-#     the omitted 20% of songs from the input playlist and the recommended songs
-
-def masterFunction(playlistID):
- 
-    # Get a dictionary of playlistID's and their similar tracks with the input playlist
-    playlist_similarity_dict = count_similar(playlistID)
-
-    # Find most similar playlist in cluster to input playlist and obtain cosine metric for the pair
-    most_similar_playlistID, highest_cosine_metric = cosine_similarity(playlist_similarity_dict)
-
-    # Recommend songs totalling 20% of input playlist from most similar playlist
-    list_of_recommended_songs = recommended_songs(most_similar_playlistID, split_dictionary['input_playlist_id']['80'], split_dictionary['input_playlist_id']['20'])
-
-    # Evaluate the precision of the recommend songs versus the omitted 20% of songs at the beginning of the test
-    eval_metric = r_precision(split_dictionary['input_playlist_id']['20'], list_of_recommended_songs)
-
-    print ("The 20 percent of songs omitted from recommendation processing from the input playlist are: " split_dictionary['input_playlist_id']['20'])
-    print ("The recommended songs totalling 20 percent of the input playlist are: " list_of_recommended_songs)
-    print ("The cosine similarity metric determined between the input playlist and the most similar playlist used for recommendation was: " highest_cosine_metric)
-    print ("The R-precision evaluation metric for the recommended songs was: " + eval_metric)
-'''
+# Evaluate the recommended_tracks vs the original_20_percent
+matching_tracks, r_precision = evaluation.r_precision(recommended_tracks, original_20_percent)
+evaluation.pretty_print(matching_tracks, unique_track_dict, r_precision)

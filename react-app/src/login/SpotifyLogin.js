@@ -9,7 +9,7 @@ class SpotifyLogin extends Component {
   render() {
     return (
       <div className="spotify-login dark">
-        <a href='http://localhost:8888/spotifyAuth/login'>
+        <a href='http://localhost:8888/spotify/auth/login'>
           <img id="spotify-logo" alt="spotifyLogo" src={require('./Spotify_Logo_RGB_Green.png')}/>
         </a>
         <h1>Login to Spotify</h1>

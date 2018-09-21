@@ -1,5 +1,5 @@
-from Functions import spotify_api, matrix, playlist, cosine_similarity, evaluation
-
+from functions import matrix, playlist, cosine_similarity, evaluation
+from spotify_api import spotify_api
 # Playlist IDs to be examined
 playlist_ids = [
     '37i9dQZF1DX0XUsuxWHRQd', '37i9dQZF1DWY4xHQp97fN6',

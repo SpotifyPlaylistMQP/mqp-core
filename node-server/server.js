@@ -1,17 +1,27 @@
-let express = require('express');
-let cors = require('cors');
-let bodyParser = require('body-parser');
+const server = require('express')();
+const bodyParser = require('body-parser');
 
-let app = express();
+require('dotenv').load();
 
-let SpotifyAuth = require('./SpotifyAuth');
-let config = require('../config/config.json');
+server.use(require('cors')());
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+server.use(function(req, res, next) {
+  const timestamp = new Date();
+  console.log('%s-%s: %s %s %s',
+    timestamp.toLocaleDateString(),
+    timestamp.toLocaleTimeString(),
+    req.method,
+    req.originalUrl,
+    req.method === "GET" ? JSON.stringify(req.query) : JSON.stringify(req.body)
+  );
+  next();
+});
 
-app.use('/spotifyAuth', SpotifyAuth);
+server.use('/spotify', require('./spotify'));
+server.use('/mongodb', require('./mongodb'));
 
-console.log(`Listening on ${config["node-server"].port}`);
-app.listen(config["node-server"].port);
+server.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
+});

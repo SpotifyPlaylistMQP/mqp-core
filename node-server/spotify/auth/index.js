@@ -1,13 +1,9 @@
-let express = require('express');
-let request = require('request');
-let querystring = require('querystring');
-let cookieParser = require('cookie-parser');
-
-let config = require('../config/config.json');
-let spotifyConfig = config.spotify;
-
-let stateKey = 'spotify_auth_state';
-let router = express.Router();
+const express = require('express');
+const request = require('request');
+const querystring = require('querystring');
+const cookieParser = require('cookie-parser');
+const stateKey = 'spotify_auth_state';
+const router = express.Router();
 
 /**
  * Generates a random string containing numbers and letters
@@ -31,22 +27,20 @@ router.use(function timeLog (req, res, next) {
 });
 
 router.get('/login', function(req, res) {
-  console.log('GET /spotifyAuth/login');
   let state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
-      client_id: spotifyConfig.client_id,
-      scope: spotifyConfig.scope,
-      redirect_uri: spotifyConfig.redirect_uri,
+      client_id: process.env.SPOTIFY_CLIENT_ID,
+      scope: process.env.SPOTIFY_SCOPE,
+      redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
       state: state
     }));
 });
 
 router.get('/callback', function(req, res) {
-  console.log('GET /spotifyAuth/callback');
   let code = req.query.code || null;
   let state = req.query.state || null;
   let storedState = req.cookies ? req.cookies[stateKey] : null;
@@ -62,11 +56,11 @@ router.get('/callback', function(req, res) {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: spotifyConfig.redirect_uri,
+        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(spotifyConfig.client_id + ':' + spotifyConfig.client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
       },
       json: true
     };
@@ -107,13 +101,11 @@ router.get('/callback', function(req, res) {
 });
 
 router.get('/refresh_token', function(req, res) {
-  console.log('GET /spotifyAuth/refresh_token');
-
   // requesting access token from refresh token
   let refresh_token = req.query.refresh_token;
   let authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(spotifyConfig.client_id + ':' + spotifyConfig.client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -132,12 +124,8 @@ router.get('/refresh_token', function(req, res) {
   });
 });
 
-router.get('/tokens', function(req, res) {
-  console.log('GET /spotifyAuth/tokens');
-  res.send({
-    authToken: global.authToken,
-    refreshToken: global.refreshToken
-  });
-});
+console.log('GET \t/spotify/auth/login');
+console.log('GET \t/spotify/auth/callback');
+console.log('GET \t/spotify/auth/refresh_token');
 
 module.exports = router;

@@ -38,10 +38,9 @@ def make_playlist_and_track_dict(playlist_ids):
                 tracks.append(track_id)
                 if track_id not in unique_track_dict.keys():
                     unique_track_dict[track_id] = {
-                        'track_id': item['track']['id'],
+                        'trackId': item['track']['id'],
                         'name': item['track']['name'].encode('ascii', errors='ignore').decode(),
-                        'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode(),
-                        'popularity': item['track']['popularity']
+                        'artist': item['track']['artists'][0]['name'].encode('ascii', errors='ignore').decode()
                     }
         if playlist_tracks['next'] is not None:
             tracks.extend(get_tracks_of_playlist_url(playlist_tracks['next']))
@@ -52,7 +51,7 @@ def make_playlist_and_track_dict(playlist_ids):
                                                  headers=auth_header)
         playlist_dict[playlist_id] = {
             'name': json.loads(spotify_playlist_response.text)['name'],
-            'playlist_id': playlist_id,
+            'playlistId': playlist_id,
             'tracks': get_tracks_of_playlist_url('https://api.spotify.com/v1/playlists/{0}/tracks'.format(playlist_id))
         }
 

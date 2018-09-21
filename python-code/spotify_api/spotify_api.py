@@ -6,11 +6,9 @@ def authorize():
     #  -If there is no auth token on the server, you need to login to the spotify API through the react-app
     #  -If there is an error connecting to the node server, make sure it is running
     global auth_token, auth_header
-    with open('../config/config.json') as json_file:
-        config = json.load(json_file)
-        port = config['node-server']['port']
+    port = 8888
     try:
-        node_server_response = requests.get('http://localhost:{}/spotifyAuth/tokens'.format(port))
+        node_server_response = requests.get('http://localhost:{}/spotify/auth/tokens'.format(port))
         try:
             auth_token = json.loads(node_server_response.text)['authToken']
             auth_header = {'Authorization': 'Bearer {0}'.format(auth_token)}

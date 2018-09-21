@@ -124,8 +124,16 @@ router.get('/refresh_token', function(req, res) {
   });
 });
 
+router.get('/tokens', function(req, res) {
+  res.send({
+    authToken: global.authToken,
+    refreshToken: global.refreshToken
+  });
+});
+
 console.log('GET \t/spotify/auth/login');
 console.log('GET \t/spotify/auth/callback');
 console.log('GET \t/spotify/auth/refresh_token');
+console.log('GET \t/spotify/auth/tokens');
 
 module.exports = router;

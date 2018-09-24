@@ -1,35 +1,64 @@
-# Takes in a set of playlists and returns a dictionary of relevant songs based
-# on predefined properties
-def masterCount():
-    # Creates a dictionary of TrackName:Score, where Score is the number of
-    # occurences across all playlists
-    unique_track_scores = {} # Dictionary of TrackName:Score
-    for playlist in all_playlists:
-        for track in playlist:
-            if track not in unique_track_scores:
-                unique_track_scores[track] = 1
+import json
+from glob import glob
+import os.path
+
+
+def json_reader():
+    all_playlists = {}
+    #Open 10 json files, loop and add each playlist to a dictionary
+    path_to_json = "C:/Users/s7sal/Documents/MQP/mqp-core/python-code/mongodb/JSONs/"
+
+    json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
+
+    for file in json_files:
+        file_path = path_to_json + file
+        with open(file_path) as f:
+            data = json.load(f)["playlists"]
+        for playlist in data:
+             all_playlists[playlist["pid"]] = playlist["tracks"]
+
+    masterCount(all_playlists)
+
+
+def masterCount(all_playlists):
+    # Gets dictionary of all unique tracks and total count of occurence
+    unique_track_scores = {}
+    for playlist_id in all_playlists.keys():
+        for track in all_playlists[playlist_id]:
+            if track['track_uri'] not in unique_track_scores:
+                unique_track_scores[track['track_uri']] = 1
             else:
-                unique_track_scores[track] = ++unique_track_scores[track]
 
-    # Takes in the unique_track_scores dictionary
-    # Creates a new list of tracks that exceed a predefined threshhold
-    unique_track_threshhold = 1 # Number of times a track needs to appear to be considered relevant
-    top_tracks = [] # List of tracks that meet the threshhold
+                unique_track_scores[track['track_uri']] += 1
+
+    unique_track_threshhold = 1
+
+    top_tracks = []
     for key in unique_track_scores.keys():
-        if key.value() > unique_track_threshhold:
+        if unique_track_scores[key] > unique_track_threshhold:
             top_tracks.append(key)
-        else
-            continue
 
-    # From the set of playlists, creates a dictionary of PlaylistName:Score
-    # where score based on the number of top tracks that appear in the playlist.
-    playlist_scores = {} # Dictionary of PlaylistName:Score
-    for playlist in all_playlists:
+    playlist_scores = {}
+    for playlist_id in all_playlists.keys():
         score = 0
-        for track in playlist:
+        for track in all_playlists[playlist_id]:
             if track in top_tracks:
-                ++score
-        playlist_scores[playlist] = score
+                score = score + 1
+        playlist_scores[playlist_id] = score
 
-    # Returns a dictionary of PlaylistName:Score
-    return playlist_scores
+    to_final_json(playlist_scores, all_playlists)
+
+
+def to_final_json(playlist_scores, all_playlists) {
+    final_json = {}
+    for pid in playlist_scores.keys():
+        #test string to see how it looks
+        final_json[pid] = all_playlists["tracks"]["name"]
+        #janky string to return
+        #final_json = {"pid": pid, "tracks":[{"name": all_playlists[pid]["tracks"]["name"], "artist": all_playlists[pid]["tracks"]["artist"], "tid": all_playlists[pid]["tracks"]["track_uri"]}]}
+
+print(final_json)
+
+
+#test running it
+json_reader()

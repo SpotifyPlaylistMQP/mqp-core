@@ -1,5 +1,6 @@
 def masterCount():
-    # Gets dictionary of all unique tracks and total count of occurence
+    # Creates a dictionary of TrackName:Score, where Score is the number of
+    # occurences across all playlists
     unique_track_scores = {}
     for playlist in all_playlists:
         for track in playlist:
@@ -8,6 +9,8 @@ def masterCount():
             else:
                 unique_track_scores[track] = ++unique_track_scores[track]
 
+    # Takes in the unique_track_scores dictionary
+    # Creates a new list of tracks that exceed a predefined threshhold
     unique_track_threshhold = 1
     top_tracks = []
     for key in unique_track_scores.keys():
@@ -16,6 +19,8 @@ def masterCount():
         else
             continue
 
+    # From the set of playlists, creates a dictionary of PlaylistName:Score
+    # where score based on the number of top tracks that appear in the playlist. 
     playlist_scores = {}
     for playlist in all_playlists:
         score = 0
@@ -24,4 +29,5 @@ def masterCount():
                 ++score
         playlist_scores[playlist] = score
 
+    # Returns a dictionary of PlaylistName:Score
     return playlist_scores

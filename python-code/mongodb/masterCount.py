@@ -1,6 +1,6 @@
 import json
-from glob import glob
 import os.path
+import requests
 
 
 def json_reader():
@@ -71,9 +71,12 @@ def get_final_playlists(playlist_scores, all_playlists):
             final_playlists.append(all_playlists[pid])
 
     print("Number of playlists above threshold:", len(final_playlists))
-    return final_playlists
+    send_to_server(final_playlists)
 
-
+def send_to_server(final_playlists):
+    for i in range(10):
+        r = requests.post('http://localhost:8888/mongodb/playlists/mpd', json=final_playlists[i])
+        print(r.status_code)
 
 
 #test running it

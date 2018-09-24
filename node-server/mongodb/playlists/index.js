@@ -8,7 +8,7 @@ routes.post('/:collection', (request, response) => {
   if (Array.isArray(request.body)){
     request.body.forEach(playlist => {
       if (validation.playlist(playlist)){
-        playlist._id = playlist.playlistId;
+        playlist._id = playlist.pid;
         playlistsToInsert.push(playlist)
       } else {
         response.status(400).send()
@@ -16,7 +16,7 @@ routes.post('/:collection', (request, response) => {
     })
   } else {
     if (validation.playlist(request.body)){
-      request.body._id = request.body.playlistId;
+      request.body._id = request.body.pid;
       playlistsToInsert.push(request.body)
     } else {
       response.status(400).send()

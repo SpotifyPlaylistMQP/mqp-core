@@ -5,7 +5,7 @@ module.exports = {
       if (Array.isArray(list)){
         result = true;
         list.forEach(track => {
-          if (track.trackId == null || typeof track.trackId !== "string" ||
+          if (track.tid == null || typeof track.tid !== "string" ||
               track.name == null || typeof track.name !== "string" ||
               track.artist == null || typeof track.artist !== "string"){
             result = false;
@@ -18,7 +18,7 @@ module.exports = {
 
     return (
       playlist.name != null && typeof playlist.name === "string" &&
-      playlist.playlistId != null && typeof playlist.playlistId === "string" &&
+      playlist.pid != null && typeof playlist.pid === "string" &&
       playlist.tracks !== null && isListOfTracks(playlist.tracks)
     )
   }

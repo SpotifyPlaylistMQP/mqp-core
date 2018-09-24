@@ -15,49 +15,65 @@ def json_reader():
         with open(file_path) as f:
             data = json.load(f)["playlists"]
         for playlist in data:
-             all_playlists[playlist["pid"]] = playlist["tracks"]
+            tracks = []
+            for track in playlist["tracks"]:
+                tracks.append({
+                    "tid": track["track_uri"].replace('spotify:track:', ''),
+                    "name": track["track_name"],
+                    "artist": track["artist_name"]
+                })
+            all_playlists[playlist["pid"]] = {
+                "pid": playlist["pid"],
+                "name": playlist["name"],
+                "tracks": tracks
+            }
 
     masterCount(all_playlists)
 
 
 def masterCount(all_playlists):
-    # Gets dictionary of all unique tracks and total count of occurence
+    # Gets dictionary of all unique tracks and total count of ocurrence
     unique_track_scores = {}
     for playlist_id in all_playlists.keys():
-        for track in all_playlists[playlist_id]:
-            if track['track_uri'] not in unique_track_scores:
-                unique_track_scores[track['track_uri']] = 1
+        for track in all_playlists[playlist_id]["tracks"]:
+            if track["tid"] not in unique_track_scores:
+                unique_track_scores[track['tid']] = 1
             else:
+                unique_track_scores[track['tid']] += 1
 
-                unique_track_scores[track['track_uri']] += 1
 
-    unique_track_threshhold = 1
+    unique_track_threshold = 25
 
     top_tracks = []
-    for key in unique_track_scores.keys():
-        if unique_track_scores[key] > unique_track_threshhold:
-            top_tracks.append(key)
+    for tid in unique_track_scores.keys():
+        if unique_track_scores[tid] > unique_track_threshold:
+            #print(unique_track_scores[tid])
+            top_tracks.append(tid)
+    print("Length of top tracks: ", len(top_tracks))
 
     playlist_scores = {}
     for playlist_id in all_playlists.keys():
         score = 0
-        for track in all_playlists[playlist_id]:
-            if track in top_tracks:
+        for track in all_playlists[playlist_id]["tracks"]:
+            if track["tid"] in top_tracks:
                 score = score + 1
         playlist_scores[playlist_id] = score
 
-    to_final_json(playlist_scores, all_playlists)
 
+    get_final_playlists(playlist_scores, all_playlists)
 
-def to_final_json(playlist_scores, all_playlists) {
-    final_json = {}
+playlist_threshold = 100
+def get_final_playlists(playlist_scores, all_playlists):
+    final_playlists = []
     for pid in playlist_scores.keys():
-        #test string to see how it looks
-        final_json[pid] = all_playlists["tracks"]["name"]
-        #janky string to return
-        #final_json = {"pid": pid, "tracks":[{"name": all_playlists[pid]["tracks"]["name"], "artist": all_playlists[pid]["tracks"]["artist"], "tid": all_playlists[pid]["tracks"]["track_uri"]}]}
+        if playlist_scores[pid] > playlist_threshold:
+            print(playlist_scores[pid])
+            final_playlists.append(all_playlists[pid])
 
-print(final_json)
+    print("Number of playlists above threshold:", len(final_playlists))
+    return final_playlists
+
+
 
 
 #test running it

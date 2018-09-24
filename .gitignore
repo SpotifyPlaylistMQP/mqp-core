@@ -6,3 +6,5 @@ node_modules/
 **/._.DS_Store
 
 **/.env
+
+yarn.lock

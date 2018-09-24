@@ -1,6 +1,6 @@
 const routes = require('express').Router();
 const MongoClient = require('mongodb').MongoClient;
-const validation = require('../validation');
+const validation = require('../validate');
 
 routes.post('/:collection', (request, response) => {
   // Validate the request body and if OK, set (each) playlist._id to the playlist's id
@@ -8,7 +8,7 @@ routes.post('/:collection', (request, response) => {
   if (Array.isArray(request.body)){
     request.body.forEach(playlist => {
       if (validation.playlist(playlist)){
-        playlist._id = playlist.pid;
+        playlist._id = playlist.playlistId;
         playlistsToInsert.push(playlist)
       } else {
         response.status(400).send()
@@ -16,7 +16,7 @@ routes.post('/:collection', (request, response) => {
     })
   } else {
     if (validation.playlist(request.body)){
-      request.body._id = request.body.pid;
+      request.body._id = request.body.playlistId;
       playlistsToInsert.push(request.body)
     } else {
       response.status(400).send()
@@ -51,6 +51,32 @@ routes.post('/:collection', (request, response) => {
   }
 });
 
+routes.get('/:collection', (request, response) => {
+  MongoClient.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
+    if (err) throw err;
+    const dbo = db.db('playlists');
+    dbo.listCollections().toArray((err, collections) => {
+      if (err) throw err;
+      let collectionParamExists = false;
+      collections.forEach(collection => {
+        if (collection.name === request.params.collection){
+          collectionParamExists = true;
+        }
+      });
+      if (!collectionParamExists) {
+        response.status(404).send();
+      } else {
+        dbo.collection(request.params.collection).find({}).toArray((err, res) => {
+          if (err) throw err;
+          response.status(200).send(res);
+          db.close();
+        });
+      }
+    });
+  });
+});
+
 console.log('POST \t/mongodb/playlists/:collection');
+console.log('GET \t/mongodb/playlists/:collection');
 
 module.exports = routes;

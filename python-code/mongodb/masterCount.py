@@ -2,6 +2,8 @@ import json
 import os.path
 import requests
 
+track_relevancy_threshold = 50
+playlist_relevancy_percent_threshold = 0.8
 
 def json_reader():
     all_playlists = {}
@@ -41,12 +43,9 @@ def masterCount(all_playlists):
             else:
                 unique_track_scores[track['tid']] += 1
 
-
-    unique_track_threshold = 25
-
     top_tracks = []
     for tid in unique_track_scores.keys():
-        if unique_track_scores[tid] > unique_track_threshold:
+        if unique_track_scores[tid] > track_relevancy_threshold:
             #print(unique_track_scores[tid])
             top_tracks.append(tid)
     print("Length of top tracks: ", len(top_tracks))
@@ -62,11 +61,10 @@ def masterCount(all_playlists):
 
     get_final_playlists(playlist_scores, all_playlists)
 
-playlist_threshold = 100
 def get_final_playlists(playlist_scores, all_playlists):
     final_playlists = []
     for pid in playlist_scores.keys():
-        if playlist_scores[pid] > playlist_threshold:
+        if playlist_scores[pid] / len(all_playlists[pid]['tracks']) > playlist_relevancy_percent_threshold:
             final_playlists.append(all_playlists[pid])
 
     print("Number of playlists above threshold:", len(final_playlists))
@@ -80,10 +78,9 @@ def send_to_server(final_playlists):
         chunk.append(final_playlists[i])
         if len(chunk) == chunk_size or i == len(final_playlists) - 1:
             num_chunks_sent += 1
-            r = requests.post('http://localhost:8888/mongodb/playlists/mpd', json=chunk)
+            r = requests.post('http://localhost:8888/mongodb/playlists/mpd_' + str(track_relevancy_threshold) + "_" + str(playlist_relevancy_percent_threshold), json=chunk)
             print("Chunk #" + str(num_chunks_sent) + " sent with status code:", r.status_code)
             chunk = []
-
 
 #test running it
 json_reader()

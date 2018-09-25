@@ -1,11 +1,11 @@
 import requests
 import random
 
-def make_playlist_and_track_dict():
+def make_playlist_and_track_dict(mongo_collection):
     playlist_ids = []
     playlist_dict = {}
     unique_track_dict = {}
-    r = requests.get('http://localhost:8888/mongodb/playlists/mpd')
+    r = requests.get('http://localhost:8888/mongodb/playlists/' + str(mongo_collection))
     if r.status_code == 200:
         for playlist in r.json():
             playlist_ids.append(playlist['pid'])

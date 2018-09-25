@@ -6,7 +6,7 @@ import requests
 def json_reader():
     all_playlists = {}
     #Open 10 json files, loop and add each playlist to a dictionary
-    path_to_json = "C:/Users/s7sal/Documents/MQP/mqp-core/python-code/mongodb/JSONs/"
+    path_to_json = "./JSONs/"
 
     json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
 
@@ -19,12 +19,12 @@ def json_reader():
             for track in playlist["tracks"]:
                 tracks.append({
                     "tid": track["track_uri"].replace('spotify:track:', ''),
-                    "name": track["track_name"],
+                    "name": track["track_name"].encode('ascii', errors='ignore').decode(),
                     "artist": track["artist_name"]
                 })
             all_playlists[playlist["pid"]] = {
-                "pid": playlist["pid"],
-                "name": playlist["name"],
+                "pid": str(playlist["pid"]),
+                "name": playlist["name"].encode('ascii', errors='ignore').decode(),
                 "tracks": tracks
             }
 
@@ -67,16 +67,22 @@ def get_final_playlists(playlist_scores, all_playlists):
     final_playlists = []
     for pid in playlist_scores.keys():
         if playlist_scores[pid] > playlist_threshold:
-            print(playlist_scores[pid])
             final_playlists.append(all_playlists[pid])
 
     print("Number of playlists above threshold:", len(final_playlists))
     send_to_server(final_playlists)
 
 def send_to_server(final_playlists):
-    for i in range(10):
-        r = requests.post('http://localhost:8888/mongodb/playlists/mpd', json=final_playlists[i])
-        print(r.status_code)
+    chunk_size = 5
+    chunk = []
+    num_chunks_sent = 0
+    for i in range(len(final_playlists)):
+        chunk.append(final_playlists[i])
+        if len(chunk) == chunk_size or i == len(final_playlists) - 1:
+            num_chunks_sent += 1
+            r = requests.post('http://localhost:8888/mongodb/playlists/mpd', json=chunk)
+            print("Chunk #" + str(num_chunks_sent) + " sent with status code:", r.status_code)
+            chunk = []
 
 
 #test running it

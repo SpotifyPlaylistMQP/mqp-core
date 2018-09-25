@@ -1,3 +1,5 @@
+import codecs
+
 # Returns the playlist X track matrix
 def create(playlist_dict, unique_track_dict):
     matrix = [] # rows = tracks, columns = playlists, cells = 1 if track in playlist else 0
@@ -40,7 +42,7 @@ def visualize(matrix, playlist_dict, unique_track_dict):
             return data
 
     # Prints out the matrix into visual_matrix.txt
-    matrix_file = open("matrix.txt", "w")
+    matrix_file = codecs.open("matrix.txt", "w",encoding='utf8')
 
     # Playlist Header
     line = "       "

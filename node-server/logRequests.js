@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
         return (
           Array.isArray(req.body)
             ? JSON.stringify({"numberOfItems": req.body.length})
-            : JSON.stringify(req.body)
+            : JSON.stringify({"numberOfItems": 1})
         );
       default:
         return "The server does not know what to print for this HTTP method"

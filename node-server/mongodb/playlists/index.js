@@ -28,22 +28,9 @@ routes.post('/:collection', (request, response) => {
     MongoClient.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
       if (err) throw err;
       const dbo = db.db('playlists');
-      dbo.listCollections().toArray((err, collections) => {
-        if (err) throw err;
-        let collectionParamExists = false;
-        collections.forEach(collection => {
-          if (collection.name === request.params.collection){
-            collectionParamExists = true;
-          }
-        });
-        if (!collectionParamExists) {
-          response.status(404).send();
-        } else {
-          dbo.collection(request.params.collection).insertMany(playlistsToInsert, {ordered: false}, (err, res) => {
-            response.status(204).send();
-            db.close();
-          });
-        }
+      dbo.collection(request.params.collection).insertMany(playlistsToInsert, {ordered: false}, (err, res) => {
+        response.status(204).send();
+        db.close();
       });
     });
   } else {

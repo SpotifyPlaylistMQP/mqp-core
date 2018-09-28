@@ -1,7 +1,8 @@
-from functions import matrix, playlist, cosine_similarity, evaluation
-from mongodb import mongoPlaylists
+from .functions import matrix, playlist, cosine_similarity, evaluation
+from .mongodb import mongoPlaylists
 import pretty_prints
 import sys
+
 
 mongo_collection = sys.argv[1]
 

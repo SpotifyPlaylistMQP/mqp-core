@@ -65,15 +65,3 @@ def get_final_playlists(playlist_scores, all_playlists, playlist_relevancy_thres
             final_playlists.append(all_playlists[pid])
     print("Number of relevant playlists:", len(final_playlists))
     return final_playlists
-
-def send_to_server(final_playlists, track_relevancy_threshold, playlist_relevancy_threshold):
-    chunk_size = 5
-    chunk = []
-    num_chunks_sent = 0
-    for i in range(len(final_playlists)):
-        chunk.append(final_playlists[i])
-        if len(chunk) == chunk_size or i == len(final_playlists) - 1:
-            num_chunks_sent += 1
-            r = requests.post('http://localhost:8888/mongodb/playlists/mpd_' + str(track_relevancy_threshold) + "_" + str(playlist_relevancy_threshold), json=chunk)
-            print("Chunk #" + str(num_chunks_sent) + " sent with status code:", r.status_code)
-            chunk = []

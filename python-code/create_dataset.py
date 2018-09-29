@@ -1,4 +1,5 @@
 from dataset_creator import master_count
+from mongodb import mongodb_communicate
 import sys
 
 if len(sys.argv) <= 3 or not isinstance(int(float(sys.argv[1])), int) or not 0 <= float(sys.argv[2]) <= 1:
@@ -14,7 +15,7 @@ if len(sys.argv) <= 3 or not isinstance(int(float(sys.argv[1])), int) or not 0 <
 
 track_relevancy_threshold = int(float(sys.argv[1]))
 playlist_relevancy_threshold = float(sys.argv[2])
-min_playlist_len = 15
+min_playlist_len = 60
 
 all_playlists = master_count.json_reader()
 playlist_scores, all_playlists = master_count.master_count(all_playlists, track_relevancy_threshold, min_playlist_len)
@@ -22,4 +23,6 @@ final_playlists = master_count.get_final_playlists(playlist_scores, all_playlist
 
 # If the save flag was set, persist the playlists into mongo
 if len(sys.argv) == 4:
-    master_count.send_to_server(final_playlists, track_relevancy_threshold, playlist_relevancy_threshold)
+    mongo_collection = 'mpd_' + str(track_relevancy_threshold) + "_" + str(playlist_relevancy_threshold)
+    mongodb_communicate.delete(mongo_collection)
+    mongodb_communicate.post(final_playlists, mongo_collection)

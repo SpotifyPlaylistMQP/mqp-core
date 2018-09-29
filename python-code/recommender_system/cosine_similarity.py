@@ -1,0 +1,68 @@
+from math import *
+
+# Returns cosine_sim_dict, the cosine_sim of each playlist_id compared to the playlist_id_of_interest
+def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
+    def calculate(col1, col2):
+        numerator = sum(a * b for a, b in zip(col1, col2))
+        denominator = sqrt(sum(a * a for a in col1)) * sqrt(sum(b * b for b in col2))
+        return round(numerator / denominator, 5)
+
+    cosine_similarities = [] # List of tuples (playlist_id, cosine_sim)
+    index_of_interest = playlist_ids.index(playlist_id_of_interest)
+    for playlist_id in playlist_ids:
+        if playlist_id != playlist_id_of_interest:
+            column_of_interest = []
+            column_being_compared = []
+            for t in range(len(playlist_track_matrix)):
+                column_of_interest.append(playlist_track_matrix[t][index_of_interest])
+                column_being_compared.append(playlist_track_matrix[t][playlist_ids.index(playlist_id)])
+            cosine_similarities.append((playlist_id, calculate(column_of_interest, column_being_compared)))
+    return cosine_similarities
+
+# Helper function for sorting a list of tuples
+def sort_by_second_tuple(input):
+    return input[1]
+
+# Returns a list of palylist_ids of the top k most similar playlists
+def find_top_k(cosine_similarities, k):
+    cosine_similarities.sort(key=sort_by_second_tuple)
+
+    top_k = []
+    for i in range(k):
+        top_k.append(cosine_similarities[i][0])
+    return top_k
+
+# Returns the a list of each unique track's score in the top_k playlists
+def top_k_track_scores(top_k, playlist_dict):
+    def get_unique_tracks(top_k_list):
+        unique_track_list = []
+        for top_k_playlist_id in top_k_list:
+            for track_id in playlist_dict[top_k_playlist_id]['tracks']:
+                if track_id not in unique_track_list:
+                    unique_track_list.append(track_id)
+        return unique_track_list
+
+    track_scores = []
+    unique_tracks = get_unique_tracks(top_k)
+    for track_id in unique_tracks:
+        score = 0
+        for playlist_id in top_k:
+            if track_id in playlist_dict[playlist_id]['tracks']:
+                score += 1
+        track_scores.append((track_id, score))
+    return track_scores
+
+# Returns a list of n tracks that have been recommended to the input playlsit
+def recommend_n_tracks(unique_track_scores_in_top_k, n, input_playlist_tracks):
+    unique_track_scores_in_top_k.sort(key=sort_by_second_tuple)
+    recommended_tracks = []
+    index = 0
+    while len(recommended_tracks) < n:
+        if unique_track_scores_in_top_k[index][0] not in input_playlist_tracks:
+            recommended_tracks.append(unique_track_scores_in_top_k[index][0])
+        index += 1
+    return recommended_tracks
+
+
+
+

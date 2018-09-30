@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "clean": "^4.0.2",
     "concurrently": "^4.0.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -12,6 +13,7 @@
     "fetch": "^1.1.0",
     "mongodb": "^3.1.6",
     "nodemon": "^1.18.4",
+    "npm": "^6.4.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "^1.1.5",

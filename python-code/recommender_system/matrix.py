@@ -28,4 +28,6 @@ def update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, matr
     for index, track_id in enumerate(unique_track_dict.keys()):
         if track_id in new_playlist_tracks:
             matrix[index][input_playlist_index] = 1
+        else:
+            matrix[index][input_playlist_index] = 0
     return matrix

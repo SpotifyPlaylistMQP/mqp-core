@@ -1,4 +1,8 @@
 from math import *
+#%matplotlib inline
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
+import numpy as np
 
 # Returns cosine_sim_dict, the cosine_sim of each playlist_id compared to the playlist_id_of_interest
 def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
@@ -23,38 +27,48 @@ def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
 def sort_by_second_tuple(input):
     return input[1]
 
-# Returns a list of palylist_ids of the top k most similar playlists
-def find_top_k(cosine_similarities, k):
-    cosine_similarities.sort(key=sort_by_second_tuple)
+# Returns a list of playlist_ids of the top k most similar playlists
+def find_top_k(cosine_similarities, cosine_threshold):
+    cosine_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
     top_k = []
-    for i in range(k):
+    for i in range(len(cosine_similarities)):
         top_k.append(cosine_similarities[i][0])
     return top_k
+
+
 
 # Returns the a list of each unique track's score in the top_k playlists
 def top_k_track_scores(top_k, playlist_dict):
     def get_unique_tracks(top_k_list):
         unique_track_list = []
         for top_k_playlist_id in top_k_list:
-            for track_id in playlist_dict[top_k_playlist_id]['tracks']:
-                if track_id not in unique_track_list:
-                    unique_track_list.append(track_id)
+            for tid in playlist_dict[top_k_playlist_id]['tracks']:
+                if tid not in unique_track_list:
+                    unique_track_list.append(tid)
         return unique_track_list
 
     track_scores = []
     unique_tracks = get_unique_tracks(top_k)
-    for track_id in unique_tracks:
+    for tid in unique_tracks:
         score = 0
         for playlist_id in top_k:
-            if track_id in playlist_dict[playlist_id]['tracks']:
+            if tid in playlist_dict[playlist_id]['tracks']:
                 score += 1
-        track_scores.append((track_id, score))
+        track_scores.append((tid, score))
+
+    #createPlot(track_scores)
     return track_scores
+
+def createPlot(track_scores):
+    plt.plot([1,2,3,4], [1,4,9,16], 'ro')
+    plt.axis([0, 6, 0, 20])
+    plt.show()
+
 
 # Returns a list of n tracks that have been recommended to the input playlsit
 def recommend_n_tracks(unique_track_scores_in_top_k, n, input_playlist_tracks):
-    unique_track_scores_in_top_k.sort(key=sort_by_second_tuple)
+    unique_track_scores_in_top_k.sort(reverse=True, key=sort_by_second_tuple)
     recommended_tracks = []
     index = 0
     while len(recommended_tracks) < n:

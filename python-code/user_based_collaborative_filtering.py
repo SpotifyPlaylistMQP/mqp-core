@@ -1,4 +1,4 @@
-from recommender_system import playlist, matrix, evaluation, cosine_similarity
+from recommender_system import playlist, matrix, evaluation, cosine_similarity, jaccard_similarity
 from mongodb import mongodb_communicate
 from graphing import graph
 import sys
@@ -33,13 +33,22 @@ for input_playlist_index, input_playlist_id in enumerate(playlist_dict.keys()):
     T, new_playlist_tracks = playlist.split(input_playlist_id, playlist_dict) # List of tracks removed from the 20%
     playlist_track_matrix = matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, playlist_track_matrix, unique_track_dict)
     print("Number of tracks in 20%:", len(T))
-    cosine_similarities = cosine_similarity.create(playlist_ids, input_playlist_id, playlist_track_matrix)
 
-    top_k_most_similar_playlists, ranked_cosine_sims = cosine_similarity.find_top_k(cosine_similarities, K)
-    top_k_cosine_data.append(ranked_cosine_sims)
 
-    unique_track_scores_in_top_k = cosine_similarity.top_k_track_scores(top_k_most_similar_playlists, playlist_dict)
-    recommended_tracks = cosine_similarity.recommend_n_tracks(unique_track_scores_in_top_k, N, new_playlist_tracks)
+
+    ########### Cosine calls ##########################
+    # cosine_similarities = cosine_similarity.create(playlist_ids, input_playlist_id, playlist_track_matrix)
+    # top_k_most_similar_playlists, ranked_cosine_sims = cosine_similarity.find_top_k(cosine_similarities, K)
+    # top_k_cosine_data.append(ranked_cosine_sims)
+    # unique_track_scores_in_top_k = cosine_similarity.top_k_track_scores(top_k_most_similar_playlists, playlist_dict)
+    # recommended_tracks = cosine_similarity.recommend_n_tracks(unique_track_scores_in_top_k, N, new_playlist_tracks)
+
+    ########### Jaccard calls #########################
+    jaccard_similarities = jaccard_similarity.create(playlist_ids, input_playlist_id, playlist_track_matrix)
+    top_k_most_similar_playlists = jaccard_similarity.find_top_k(jaccard_similarities, K)
+    unique_track_scores_in_top_k = jaccard_similarity.top_k_track_scores(top_k_most_similar_playlists, playlist_dict)
+    recommended_tracks = jaccard_similarity.recommend_n_tracks(unique_track_scores_in_top_k, N, new_playlist_tracks)
+
 
     matching_tracks, r_precision = evaluation.r_precision(recommended_tracks, T, N, unique_track_dict)
     r_precision_results.append((input_playlist_id, r_precision))

@@ -1,5 +1,6 @@
 from recommender_system import playlist, matrix, evaluation, cosine_similarity
 from mongodb import mongodb_communicate
+from graphing import avg_cosine
 import sys
 
 if sys.argv[1] is None:
@@ -65,4 +66,5 @@ for i in range(len(top_k_cosine_data[0])):
     avg_cosine_data["x"].append(sum_of_row / len(top_k_cosine_data))
     avg_cosine_data["y"].append(i + 1)
 
-print(avg_cosine_data)
+#print(avg_cosine_data)
+avg_cosine(avg_cosine_data)

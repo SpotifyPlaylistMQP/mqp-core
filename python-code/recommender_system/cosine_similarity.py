@@ -32,9 +32,12 @@ def find_top_k(cosine_similarities, cosine_threshold):
     cosine_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
     top_k = []
+    ranked_cosine_sims = []
     for i in range(len(cosine_similarities)):
-        top_k.append(cosine_similarities[i][0])
-    return top_k
+        if i < cosine_threshold:
+            top_k.append(cosine_similarities[i][0])
+        ranked_cosine_sims.append(cosine_similarities[i][1])
+    return top_k, ranked_cosine_sims
 
 
 

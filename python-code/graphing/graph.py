@@ -9,16 +9,14 @@ def create_graph(graph_data, playlist_name):
     ubc_x = graph_data["cosine_sim"]["x"]
     ubc_y = graph_data["cosine_sim"]["y"]
     # Item Based Cosine
-    #TODO
     # ibc_x =
     # ibc_y =
     # User Based Jaccard
     ubj_x = graph_data["jaccard_sim"]["x"]
     ubj_y = graph_data["jaccard_sim"]["y"]
     # Item Based Jaccard
-    # TODO
-    # ibj_u =
-    # ibj_y =
+    # TODO ibj_u =
+    # TODO ibj_y =
 
     # Number of playlists/values sampled
     num_playlists = max(len(ubc_x), len(ubj_x))
@@ -38,7 +36,7 @@ def create_graph(graph_data, playlist_name):
     # Creating best fit lines
     z = np.polyfit(ubc_x, ubc_y, 1)
     p = np.poly1d(z)
-    plt.plot(ubc_x,p(ubc_x),"r--", label='User Based Cosine')
+    UBC_plot = plt.plot(ubc_x,p(ubc_x),"r--", label='User Based Cosine')
     #TODO
     # z = np.polyfit(ubj_x, ubc_y, 1)
     # p = np.poly1d(z)
@@ -46,7 +44,7 @@ def create_graph(graph_data, playlist_name):
     #TODO
     z = np.polyfit(ubj_x, ubj_y, 1)
     p = np.poly1d(z)
-    plt.plot(ubj_x,p(ubj_x),"g--", label='User Based Jaccard')
+    UBJ_plot = plt.plot(ubj_x,p(ubj_x),"g--", label='User Based Jaccard')
     # TODO
     # z = np.polyfit(ubc_x, ubc_y, 1)
     # p = np.poly1d(z)
@@ -55,6 +53,7 @@ def create_graph(graph_data, playlist_name):
 
     # Create and display the graph
     plt.axis([0, num_playlists+1, 0, max_y_val+0.1]) # [0, 1] y-axis, [0, number of playlists] x-axis
-    pylab.legend(loc='upper left')
+    plt.legend([UBC_plot, UBJ_plot], shadow=True)
+    fig = plt.gcf().set_size_inches(18,10)
     plt.savefig('./graphing/output_images/'+playlist_name + time.strftime("-%d-%m-%Y") + '.png')
     # plt.show()

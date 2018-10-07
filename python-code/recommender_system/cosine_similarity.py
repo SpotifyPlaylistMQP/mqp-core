@@ -28,15 +28,16 @@ def sort_by_second_tuple(input):
     return input[1]
 
 # Returns a list of playlist_ids of the top k most similar playlists
-def find_top_k(cosine_similarities, cosine_threshold):
+def find_top_k(cosine_similarities, K):
     cosine_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
     top_k = []
     ranked_cosine_sims = []
     for i in range(len(cosine_similarities)):
-        if i < cosine_threshold:
+        if i < K:
             top_k.append(cosine_similarities[i][0])
         ranked_cosine_sims.append(cosine_similarities[i][1])
+
     return top_k, ranked_cosine_sims
 
 

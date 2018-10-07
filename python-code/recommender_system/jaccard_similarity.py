@@ -38,13 +38,17 @@ def sort_by_second_tuple(input):
     return input[1]
 
 # Returns a list of playlist_ids of the top k most similar playlists
-def find_top_k(jaccard_similarities, jaccard_threshold):
+def find_top_k(jaccard_similarities, K):
     jaccard_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
     top_k = []
+    ranked_jaccard_sims = []
     for i in range(len(jaccard_similarities)):
-        top_k.append(jaccard_similarities[i][0])
-    return top_k
+        if i < K:
+            top_k.append(jaccard_similarities[i][0])
+        ranked_jaccard_sims.append(jaccard_similarities[i][1])
+
+    return top_k, ranked_jaccard_sims
 
 
 

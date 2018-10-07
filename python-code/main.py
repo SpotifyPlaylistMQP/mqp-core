@@ -4,16 +4,6 @@ from graphing import graph
 import user_based_collaborative_filtering
 import sys
 
-if sys.argv[1] is None:
-    print("Incorrect arguments!")
-    print("Execute the program like so:")
-    print("  py user_based_collaborative_filtering.py {mongodb_collection}")
-    print("Where:")
-    print("  -mongodb_collection is the mongodb collection you wish to read from")
-    print("    Mongo collections are formatted as so:")
-    print("      mpd_{track_relevancy_threshold}_{playlist_relevancy_threshold}")
-    exit()
-
 mongo_collection = sys.argv[1]
 K = 3 # Number of top similar playlists to the input playlist
 N = 10 # Number of recommended songs
@@ -57,8 +47,11 @@ jaccard_sim_avg_data = evaluation.avg_data(jaccard_sim_data)
 avg_data = {}
 avg_data["cosine_sim"] = cosine_sim_avg_data
 avg_data["jaccard_sim"] = jaccard_sim_avg_data
+<<<<<<< HEAD
 # print(avg_data)
 graph.create_graph(avg_data, mongo_collection)
+=======
+>>>>>>> 0808547361aa3061c3dd2cb1ae3787cf06990e01
 
 #print(avg_cosine_data)
 # graph.avg_cosine(avg_cosine_data)

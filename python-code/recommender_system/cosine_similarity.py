@@ -31,11 +31,11 @@ def sort_by_second_tuple(input):
 def find_top_k(cosine_similarities, K):
     cosine_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
-    top_k = []
+    top_k = [] # Tuple: (playlist_id, cosine_sim)
     ranked_cosine_sims = []
     for i in range(len(cosine_similarities)):
         if i < K:
-            top_k.append(cosine_similarities[i][0])
+            top_k.append(cosine_similarities[i])
         ranked_cosine_sims.append(cosine_similarities[i][1])
 
     return top_k, ranked_cosine_sims
@@ -46,8 +46,8 @@ def find_top_k(cosine_similarities, K):
 def top_k_track_scores(top_k, playlist_dict):
     def get_unique_tracks(top_k_list):
         unique_track_list = []
-        for top_k_playlist_id in top_k_list:
-            for tid in playlist_dict[top_k_playlist_id]['tracks']:
+        for top_k_tuple in top_k_list:
+            for tid in playlist_dict[top_k_tuple[0]]['tracks']:
                 if tid not in unique_track_list:
                     unique_track_list.append(tid)
         return unique_track_list
@@ -56,9 +56,9 @@ def top_k_track_scores(top_k, playlist_dict):
     unique_tracks = get_unique_tracks(top_k)
     for tid in unique_tracks:
         score = 0
-        for playlist_id in top_k:
-            if tid in playlist_dict[playlist_id]['tracks']:
-                score += 1
+        for top_k_tuple in top_k:
+            if tid in playlist_dict[top_k_tuple[0]]['tracks']:
+                score += top_k_tuple[1]
         track_scores.append((tid, score))
 
     #createPlot(track_scores)

@@ -41,11 +41,11 @@ def sort_by_second_tuple(input):
 def find_top_k(jaccard_similarities, K):
     jaccard_similarities.sort(reverse=True, key=sort_by_second_tuple)
 
-    top_k = []
+    top_k = [] # Tuple: (playinst_id, jaccard_sim)
     ranked_jaccard_sims = []
     for i in range(len(jaccard_similarities)):
         if i < K:
-            top_k.append(jaccard_similarities[i][0])
+            top_k.append(jaccard_similarities[i])
         ranked_jaccard_sims.append(jaccard_similarities[i][1])
 
     return top_k, ranked_jaccard_sims
@@ -56,8 +56,8 @@ def find_top_k(jaccard_similarities, K):
 def top_k_track_scores(top_k, playlist_dict):
     def get_unique_tracks(top_k_list):
         unique_track_list = []
-        for top_k_playlist_id in top_k_list:
-            for tid in playlist_dict[top_k_playlist_id]['tracks']:
+        for top_k_tuple in top_k_list:
+            for tid in playlist_dict[top_k_tuple[0]]['tracks']:
                 if tid not in unique_track_list:
                     unique_track_list.append(tid)
         return unique_track_list
@@ -66,9 +66,9 @@ def top_k_track_scores(top_k, playlist_dict):
     unique_tracks = get_unique_tracks(top_k)
     for tid in unique_tracks:
         score = 0
-        for playlist_id in top_k:
-            if tid in playlist_dict[playlist_id]['tracks']:
-                score += 1
+        for top_k_tuple in top_k:
+            if tid in playlist_dict[top_k_tuple[0]]['tracks']:
+                score += top_k_tuple[1]
         track_scores.append((tid, score))
 
     #createPlot(track_scores)

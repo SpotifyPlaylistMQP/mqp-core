@@ -47,11 +47,8 @@ jaccard_sim_avg_data = evaluation.avg_data(jaccard_sim_data)
 avg_data = {}
 avg_data["cosine_sim"] = cosine_sim_avg_data
 avg_data["jaccard_sim"] = jaccard_sim_avg_data
-<<<<<<< HEAD
 # print(avg_data)
 graph.create_graph(avg_data, mongo_collection)
-=======
->>>>>>> 0808547361aa3061c3dd2cb1ae3787cf06990e01
 
 #print(avg_cosine_data)
 # graph.avg_cosine(avg_cosine_data)

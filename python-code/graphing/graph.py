@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import figure
 import pylab
-import datetime
+import time
 
 def create_graph(graph_data, playlist_name):
     # User Based Cosine
@@ -56,5 +56,5 @@ def create_graph(graph_data, playlist_name):
     # Create and display the graph
     plt.axis([0, num_playlists+1, 0, max_y_val+0.1]) # [0, 1] y-axis, [0, number of playlists] x-axis
     pylab.legend(loc='upper left')
-    plt.savefig('./graphing/output_images/'+playlist_name + str(datetime.datetime.now()) + '.png')
+    plt.savefig('./graphing/output_images/'+playlist_name + time.strftime("-%d-%m-%Y") + '.png')
     # plt.show()

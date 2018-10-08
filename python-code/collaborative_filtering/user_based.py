@@ -1,5 +1,5 @@
-from collaborative_filtering.modules.shared import evaluation, playlist, matrix
-from collaborative_filtering.modules.user_based import cosine_similarity, jaccard_similarity, process
+from collaborative_filtering.modules.shared import evaluation, matrix
+from collaborative_filtering.modules.user_based import cosine_similarity, jaccard_similarity
 
 def run(playlist_dict, unique_track_dict, playlist_ids, playlist_track_matrix):
     K = 3  # Number of top similar playlists to the input playlist
@@ -14,7 +14,7 @@ def run(playlist_dict, unique_track_dict, playlist_ids, playlist_track_matrix):
     jaccard_sim_r_precision_results = []  # List of tuples: (input_playlist_id, r_precision)
 
     for input_playlist_index, input_playlist_id in enumerate(playlist_dict.keys()):
-        T, new_playlist_tracks = playlist.split(input_playlist_id, playlist_dict)
+        T, new_playlist_tracks = matrix.split_playlist(input_playlist_id, playlist_dict)
         playlist_track_matrix = matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, playlist_track_matrix, unique_track_dict)
 
         cosine_sim_recommendations, cosine_sim_results = cosine_similarity.run(playlist_dict, playlist_ids, input_playlist_id, playlist_track_matrix, new_playlist_tracks, K, N)

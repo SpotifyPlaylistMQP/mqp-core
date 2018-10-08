@@ -12,7 +12,6 @@ playlist_dict, unique_track_dict, playlist_ids = mongodb_communicate.get(mongo_c
 
 playlist_track_matrix = matrix.create(playlist_dict, unique_track_dict)
 
-
 graph_data["cosine_sim"], graph_data["jaccard_sim"] = user_based.run(playlist_dict, unique_track_dict, playlist_ids, playlist_track_matrix)
 
 graph.create_graph(graph_data, mongo_collection)

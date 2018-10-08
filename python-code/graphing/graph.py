@@ -57,4 +57,4 @@ def create_graph(graph_data, playlist_name):
     plt.savefig(graph_name)
     # plt.show()
 
-    print("\tGenerated the graph \"" + graph_name + "\"")
+    print("Generated the graph \"" + graph_name + "\"")

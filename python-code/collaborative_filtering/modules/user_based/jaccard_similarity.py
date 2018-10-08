@@ -1,7 +1,7 @@
 from .process import *
 
-def run(playlist_ids, playlist_dict, new_playlist_tracks, input_playlist_id, playlist_track_matrix, K, N):
-    jaccard_similarities = create(playlist_ids, input_playlist_id, playlist_track_matrix)
+def run(indexed_pids, playlist_dict, new_playlist_tracks, input_playlist_id, playlist_track_matrix, K, N):
+    jaccard_similarities = create(indexed_pids, input_playlist_id, playlist_track_matrix)
     top_k_most_similar_playlists, ranked_jaccard_sims = find_top_k(jaccard_similarities, K)
     unique_track_scores_in_top_k = top_k_track_scores(top_k_most_similar_playlists, playlist_dict)
     recommended_tracks = recommend_n_tracks(unique_track_scores_in_top_k, N, new_playlist_tracks)
@@ -9,7 +9,7 @@ def run(playlist_ids, playlist_dict, new_playlist_tracks, input_playlist_id, pla
     return recommended_tracks, ranked_jaccard_sims
 
 # Returns jaccard_sim_dict, the jaccard_sim of each playlist_id compared to the playlist_id_of_interest
-def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
+def create(indexed_pids, playlist_id_of_interest, playlist_track_matrix):
     def calculate(col1, col2):
         numerator = 0
         denominator = 0
@@ -26,14 +26,14 @@ def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
         return numerator / denominator
 
     jaccard_similarities = [] # List of tuples (playlist_id, jaccard_sim)
-    index_of_interest = playlist_ids.index(playlist_id_of_interest)
-    for playlist_id in playlist_ids:
+    index_of_interest = indexed_pids.index(playlist_id_of_interest)
+    for playlist_id in indexed_pids:
         if playlist_id != playlist_id_of_interest:
             column_of_interest = []
             column_being_compared = []
             for t in range(len(playlist_track_matrix)):
                 column_of_interest.append(playlist_track_matrix[t][index_of_interest])
-                column_being_compared.append(playlist_track_matrix[t][playlist_ids.index(playlist_id)])
+                column_being_compared.append(playlist_track_matrix[t][indexed_pids.index(playlist_id)])
                 # print("interest", column_of_interest)
                 # print("compared", column_being_compared)
             jaccard_similarities.append((playlist_id, calculate(column_of_interest, column_being_compared)))

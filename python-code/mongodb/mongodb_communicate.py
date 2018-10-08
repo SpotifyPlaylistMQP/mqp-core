@@ -2,18 +2,20 @@ import requests
 
 def get(mongo_collection):
     print("Playlist Statistics:")
-    playlist_ids = []
+    indexed_pids = []
+    indexed_tids = []
     playlist_dict = {}
     unique_track_dict = {}
     r = requests.get('http://localhost:8888/mongodb/playlists/' + str(mongo_collection))
     if r.status_code == 200:
         for playlist in r.json():
-            playlist_ids.append(playlist['pid'])
+            indexed_pids.append(playlist['pid'])
             tracks = []
             for track in playlist['tracks']:
                 tracks.append(track['tid'])
                 if track['tid'] not in unique_track_dict.keys():
                     unique_track_dict[track['tid']] = track
+                    indexed_tids.append(track['tid'])
             playlist['tracks'] = tracks
             playlist_dict[playlist['pid']] = playlist
 
@@ -25,7 +27,7 @@ def get(mongo_collection):
     print("\tTotal Tracks:", total_tracks)
     print("\tDistinct Tracks:", len(unique_track_dict))
 
-    return playlist_dict, unique_track_dict, playlist_ids
+    return playlist_dict, unique_track_dict, indexed_pids, indexed_tids
 
 def post(final_playlists, mongo_collection):
     chunk_size = 5

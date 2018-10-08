@@ -56,6 +56,10 @@ def run(playlist_dict, unique_track_dict, indexed_tids, matrix_rows, N):
         cosine_sim_r_precision_results.append(evaluation.r_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
         jaccard_sim_r_precision_results.append(evaluation.r_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
 
-    print("\tCosine Similarity Average Precision =", evaluation.avg_precision(cosine_sim_r_precision_results))
-    print("\tJaccard Similarity Average Precision =", evaluation.avg_precision(jaccard_sim_r_precision_results))
+    cosine_r_precision = evaluation.avg_precision(cosine_sim_r_precision_results)
+    jaccard_r_precision = evaluation.avg_precision(jaccard_sim_r_precision_results)
+    print("\tCosine Similarity Average Precision =", cosine_r_precision)
+    print("\tJaccard Similarity Average Precision =", jaccard_r_precision)
+
+    return cosine_r_precision, jaccard_r_precision
 

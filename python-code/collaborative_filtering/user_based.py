@@ -34,4 +34,4 @@ def run(playlist_dict, unique_track_dict, indexed_pids, playlist_track_matrix, N
     print("\tJaccard Similarity Average Precision =", jaccard_sim_avg_precision)
     jaccard_sim_avg_data = evaluation.avg_data(jaccard_sim_data)
 
-    return cosine_sim_avg_data, jaccard_sim_avg_data
+    return cosine_sim_avg_data, jaccard_sim_avg_data, cosine_sim_avg_precision, jaccard_sim_avg_precision

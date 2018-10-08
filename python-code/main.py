@@ -11,8 +11,15 @@ playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communica
 matrix = matrix.create(playlist_dict, unique_track_dict)
 
 graph_data = {}
-graph_data["cosine_sim"], graph_data["jaccard_sim"] = user_based.run(playlist_dict, unique_track_dict, indexed_pids, matrix, N)
-item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)
+graph_data["cosine_sim"], graph_data["jaccard_sim"], uc, uj = user_based.run(playlist_dict, unique_track_dict, indexed_pids, matrix, N)
+ic, ij = item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)
 graph.create_graph(graph_data, mongo_collection)
+
+# R-precision graph
+r_precision_graph_data = {}
+r_precision_graph_data["uc"] = uc
+r_precision_graph_data["uj"] = uj
+r_precision_graph_data["ic"] = ic
+r_precision_graph_data["ij"] = ij
 
 print("---------------------------------------------------------------------------------------------------------------")

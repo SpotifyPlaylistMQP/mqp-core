@@ -53,5 +53,8 @@ def create_graph(graph_data, playlist_name):
     plt.axis([0, num_playlists+1, 0, max_y_val+0.1]) # [0, 1] y-axis, [0, number of playlists] x-axis
     plt.legend([UBC_plot, UBJ_plot], shadow=True)
     fig = plt.gcf().set_size_inches(18,10)
-    plt.savefig('./graphing/output_images/'+playlist_name + time.strftime("-%d-%m-%Y") + '.png')
+    graph_name = './graphing/output_images/'+playlist_name + time.strftime("-%d-%m-%Y") + '.png'
+    plt.savefig(graph_name)
     # plt.show()
+
+    print("\tGenerated the graph \"" + graph_name + "\"")

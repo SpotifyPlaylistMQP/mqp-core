@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import figure
-import pylab
 import time
 
 def create_graph(graph_data, playlist_name):
@@ -23,8 +21,8 @@ def create_graph(graph_data, playlist_name):
     max_y_val = max(max(ubc_y), max(ubj_y))
 
     # creating the graph visual
-    plt.xlabel('Playlists', fontsize=14)
-    plt.ylabel('Average Cosine Similarity Value', fontsize=14)
+    plt.xlabel('Playlists (Ranked by Similarity)', fontsize=14)
+    plt.ylabel('Average Similarity Value', fontsize=14)
     plt.title('Comparison of Recommender System Techniques', fontsize=20)
 
     # Plotting the data

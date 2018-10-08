@@ -56,12 +56,17 @@ def master_count(all_playlists, track_relevancy_threshold, min_playlist_len):
                     score = score + 1
             playlist_scores[playlist_id] = score
             avg_relevancy += score
-    return playlist_scores, all_playlists
+    return playlist_scores, all_playlists, unique_track_scores
 
-def get_final_playlists(playlist_scores, all_playlists, playlist_relevancy_threshold):
+def get_final_playlists(playlist_scores, all_playlists, playlist_relevancy_threshold, unique_track_scores, min_track_appearance):
     final_playlists = []
     for pid in playlist_scores.keys():
         if playlist_scores[pid] / len(all_playlists[pid]['tracks']) > playlist_relevancy_threshold:
+            for track in all_playlists[pid]['tracks']:
+                if unique_track_scores[track['tid']] <= min_track_appearance:
+                    for index, track in enumerate(all_playlists[pid]['tracks']):
+                        if track['tid'] == track['tid']:
+                            del all_playlists[pid]['tracks'][index]
             final_playlists.append(all_playlists[pid])
     print("Number of relevant playlists:", len(final_playlists))
     return final_playlists

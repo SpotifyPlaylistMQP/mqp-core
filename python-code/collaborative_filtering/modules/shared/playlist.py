@@ -16,12 +16,3 @@ def split(input_playlist_id, playlist_dict):
         else:
             split_80_percent.append(playlist_dict[input_playlist_id]['tracks'][i])
     return split_20_percent, split_80_percent
-
-def pretty_print(playlist_dict, unique_track_dict):
-    total_tracks = 0
-    for playlist_id in playlist_dict.keys():
-        total_tracks += len(playlist_dict[playlist_id]['tracks'])
-    print("Playlist Statistics:")
-    print("  Total Playlists:", len(playlist_dict))
-    print("  Total Tracks:", total_tracks)
-    print("  Distinct Tracks:", len(unique_track_dict))

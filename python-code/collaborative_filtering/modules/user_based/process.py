@@ -1,28 +1,3 @@
-from math import *
-#%matplotlib inline
-import matplotlib.pyplot as plt
-plt.style.use('seaborn-whitegrid')
-import numpy as np
-
-# Returns cosine_sim_dict, the cosine_sim of each playlist_id compared to the playlist_id_of_interest
-def create(playlist_ids, playlist_id_of_interest, playlist_track_matrix):
-    def calculate(col1, col2):
-        numerator = sum(a * b for a, b in zip(col1, col2))
-        denominator = sqrt(sum(a * a for a in col1)) * sqrt(sum(b * b for b in col2))
-        return round(numerator / denominator, 5)
-
-    cosine_similarities = [] # List of tuples (playlist_id, cosine_sim)
-    index_of_interest = playlist_ids.index(playlist_id_of_interest)
-    for playlist_id in playlist_ids:
-        if playlist_id != playlist_id_of_interest:
-            column_of_interest = []
-            column_being_compared = []
-            for t in range(len(playlist_track_matrix)):
-                column_of_interest.append(playlist_track_matrix[t][index_of_interest])
-                column_being_compared.append(playlist_track_matrix[t][playlist_ids.index(playlist_id)])
-            cosine_similarities.append((playlist_id, calculate(column_of_interest, column_being_compared)))
-    return cosine_similarities
-
 # Helper function for sorting a list of tuples
 def sort_by_second_tuple(input):
     return input[1]
@@ -39,8 +14,6 @@ def find_top_k(cosine_similarities, K):
         ranked_cosine_sims.append(cosine_similarities[i][1])
 
     return top_k, ranked_cosine_sims
-
-
 
 # Returns the a list of each unique track's score in the top_k playlists
 def top_k_track_scores(top_k, playlist_dict):
@@ -61,14 +34,7 @@ def top_k_track_scores(top_k, playlist_dict):
                 score += top_k_tuple[1]
         track_scores.append((tid, score))
 
-    #createPlot(track_scores)
     return track_scores
-
-def createPlot(track_scores):
-    plt.plot([1,2,3,4], [1,4,9,16], 'ro')
-    plt.axis([0, 6, 0, 20])
-    plt.show()
-
 
 # Returns a list of n tracks that have been recommended to the input playlsit
 def recommend_n_tracks(unique_track_scores_in_top_k, n, input_playlist_tracks):

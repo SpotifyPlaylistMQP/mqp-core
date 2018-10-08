@@ -1,6 +1,7 @@
 import requests
 
 def get(mongo_collection):
+    print("Playlist Statistics:")
     playlist_ids = []
     playlist_dict = {}
     unique_track_dict = {}
@@ -15,6 +16,15 @@ def get(mongo_collection):
                     unique_track_dict[track['tid']] = track
             playlist['tracks'] = tracks
             playlist_dict[playlist['pid']] = playlist
+
+    total_tracks = 0
+    for playlist_id in playlist_dict.keys():
+        total_tracks += len(playlist_dict[playlist_id]['tracks'])
+
+    print("\tTotal Playlists:", len(playlist_dict))
+    print("\tTotal Tracks:", total_tracks)
+    print("\tDistinct Tracks:", len(unique_track_dict))
+
     return playlist_dict, unique_track_dict, playlist_ids
 
 def post(final_playlists, mongo_collection):

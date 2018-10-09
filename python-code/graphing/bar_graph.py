@@ -19,7 +19,7 @@ def create_graph(graph_data, playlist_name):
 
     objects = ('User Based Jaccard', 'User Based Cosine', 'Item Based Jaccard', 'Item Based Cosine')
     y_pos = np.arange(len(objects))
-    performance = [uj, ij, uc, ic]
+    performance = [uj, uc, ij, ic]
 
     plt.bar(y_pos, performance, align='center', alpha=0.5, color=['black', 'red', 'green', 'blue', 'cyan'])
     plt.xticks(y_pos, objects)

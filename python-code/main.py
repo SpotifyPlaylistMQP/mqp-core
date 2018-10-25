@@ -10,6 +10,7 @@ N = 10  # Number of songs to recommend
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 matrix = matrix.create(playlist_dict, unique_track_dict)
 
+# Graph to find K for user-user collaborative filtering (comparison of cosine & jaccard)
 graph_data = {}
 graph_data["cosine_sim"], graph_data["jaccard_sim"], uc, uj = user_based.run(playlist_dict, unique_track_dict, indexed_pids, matrix, N)
 ic, ij = item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)

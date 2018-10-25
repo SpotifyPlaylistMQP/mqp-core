@@ -51,9 +51,8 @@ def run(playlist_dict, unique_track_dict, indexed_tids, matrix_rows, N):
         cosine_sim_recommended_tracks = []  # List of tids
         jaccard_sim_recommended_tracks = [] # List of tids
         for i in range(N):
-            if cosine_similar_track_tuples[i][0] not in new_playlist_tracks:
-                cosine_sim_recommended_tracks.append(cosine_similar_track_tuples[i][0])
-                jaccard_sim_recommended_tracks.append(jaccard_similar_track_tuples[i][0])
+            cosine_sim_recommended_tracks.append(cosine_similar_track_tuples[i][0])
+            jaccard_sim_recommended_tracks.append(jaccard_similar_track_tuples[i][0])
         cosine_sim_r_precision_results.append(evaluation.r_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
         jaccard_sim_r_precision_results.append(evaluation.r_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
 

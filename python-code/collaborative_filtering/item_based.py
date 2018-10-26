@@ -22,7 +22,7 @@ def create_similarity_dictionaries(indexed_tids, matrix_rows,):
     return cosine_similarity_dict, jaccard_similarity_dict
 
 def run(playlist_dict, unique_track_dict, N, cosine_similarity_dict, jaccard_similarity_dict):
-    max_K = 300
+    max_K = 30
     print("Item-based collaborative filtering...")
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation

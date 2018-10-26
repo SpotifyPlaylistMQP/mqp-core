@@ -7,7 +7,7 @@ import sys
 mongo_collection = sys.argv[1]
 N = 10  # Number of songs to recommend
 
-number_of_times_to_run = 15
+number_of_times_to_run = 5
 iteration_r_precision_graph_data = []
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)

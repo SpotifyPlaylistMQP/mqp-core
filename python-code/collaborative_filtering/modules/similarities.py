@@ -1,4 +1,11 @@
-def calculate(col1, col2):
+from math import *
+
+def cosine(vector1, vector2):
+    numerator = sum(a * b for a, b in zip(vector1, vector2))
+    denominator = sqrt(sum(a * a for a in vector1)) * sqrt(sum(b * b for b in vector2))
+    return round(numerator / denominator, 5)
+
+def jaccard(col1, col2):
     numerator = 0
     denominator = 0
 

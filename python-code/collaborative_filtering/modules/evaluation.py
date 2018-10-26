@@ -5,12 +5,12 @@ def r_precision(recommended_tracks, T, N, track_dict):
         if recommendation in T:
             matches += 1
             # print(track_dict[recommendation]['name'])
-    return matches, matches / N
+    return matches / N
 
 def avg_precision(r_precision_results):
     r_precision_sums = 0.0
     for result in r_precision_results:
-        r_precision_sums += result[1]
+        r_precision_sums += result
 
     return r_precision_sums / len(r_precision_results)
 

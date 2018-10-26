@@ -1,7 +1,7 @@
 from collaborative_filtering import user_based, item_based
-from collaborative_filtering.modules.shared import matrix
+from collaborative_filtering.modules import matrix
 from mongodb import mongodb_communicate
-from graphing import graph, bar_graph
+from graphing import bar_graph
 import sys
 
 mongo_collection = sys.argv[1]
@@ -9,21 +9,13 @@ N = 10  # Number of songs to recommend
 
 number_of_times_to_run = 15
 iteration_r_precision_graph_data = []
-k_graph_data = {}
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 matrix = matrix.create(playlist_dict, unique_track_dict)
 
-<<<<<<< HEAD
-# Graph to find K for user-user collaborative filtering (comparison of cosine & jaccard)
-graph_data = {}
-graph_data["cosine_sim"], graph_data["jaccard_sim"], uc, uj = user_based.run(playlist_dict, unique_track_dict, indexed_pids, matrix, N)
-ic, ij = item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)
-graph.create_graph(graph_data, mongo_collection)
-=======
 for i in range(number_of_times_to_run):
-    print("Iteration " + str(i + 1) + "------------------------_-_-_-_-_-_-_-_-_-_-_")
-    k_graph_data["cosine_sim"], k_graph_data["jaccard_sim"], uc, uj = user_based.run(playlist_dict, unique_track_dict, indexed_pids, matrix, N)
+    print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
+    uc, uj = user_based.run(playlist_dict, unique_track_dict, matrix, N)
 
     ic, ij = item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)
 
@@ -34,8 +26,6 @@ for i in range(number_of_times_to_run):
     r_precision_graph_data["ic"] = ic
     r_precision_graph_data["ij"] = ij
     iteration_r_precision_graph_data.append(r_precision_graph_data)
-
->>>>>>> 5fd58a9fb08c533ca88976ea7f65e92e6f23c3c2
 
 r_precision_graph_data = {}
 avg_uc = 0

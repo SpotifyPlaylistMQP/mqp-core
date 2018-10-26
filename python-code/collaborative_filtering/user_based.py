@@ -1,7 +1,7 @@
 from collaborative_filtering.modules import similarities, evaluation, matrix, helpers
 
 def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
-    K = 3  # Number of top similar playlists to the input playlist
+    max_K = 30  # Number of top similar playlists to the input playlist
     print("User-based collaborative filtering...")
 
     # For each input playlist, get the list of the other playlists ordered by similarity
@@ -21,44 +21,49 @@ def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
         jaccard_similarity_dict[input_pid] = jaccard_similarity_tuples
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation
-    cosine_sim_r_precision_results = []  # List of r precision values
-    jaccard_sim_r_precision_results = []  # List of r precision values
+    cosine_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
+    jaccard_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
     for input_pid in playlist_dict.keys():
-        # Calculate the sum similarity score for each potential tid to recommend
-        cosine_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of cosine_similarities
-        jaccard_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of jaccard_similarities
-        for cosine_sim_playlist_tuple in cosine_similarity_dict[input_pid][:K]:
-            for tid in playlist_dict[cosine_sim_playlist_tuple[0]]['tracks']:
-                if tid not in cosine_similar_track_dict.keys():
-                    cosine_similar_track_dict[tid] = 0
-                cosine_similar_track_dict[tid] += cosine_sim_playlist_tuple[1]
-        for jaccard_sim_playlist_tuple in jaccard_similarity_dict[input_pid][:K]:
-            for tid in playlist_dict[jaccard_sim_playlist_tuple[0]]['tracks']:
-                if tid not in jaccard_similar_track_dict.keys():
-                    jaccard_similar_track_dict[tid] = 0
-                jaccard_similar_track_dict[tid] += jaccard_sim_playlist_tuple[1]
+        for K in range(1, max_K + 1):
+            # Calculate the sum similarity score for each potential tid to recommend
+            cosine_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of cosine_similarities
+            jaccard_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of jaccard_similarities
+            for cosine_sim_playlist_tuple in cosine_similarity_dict[input_pid][:K]:
+                for tid in playlist_dict[cosine_sim_playlist_tuple[0]]['tracks']:
+                    if tid not in cosine_similar_track_dict.keys():
+                        cosine_similar_track_dict[tid] = 0
+                    cosine_similar_track_dict[tid] += cosine_sim_playlist_tuple[1]
+            for jaccard_sim_playlist_tuple in jaccard_similarity_dict[input_pid][:K]:
+                for tid in playlist_dict[jaccard_sim_playlist_tuple[0]]['tracks']:
+                    if tid not in jaccard_similar_track_dict.keys():
+                        jaccard_similar_track_dict[tid] = 0
+                    jaccard_similar_track_dict[tid] += jaccard_sim_playlist_tuple[1]
 
-        # Transform those sum similarity scores into an ordered list of tuples
-        cosine_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total cosine similarity score
-        jaccard_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total jaccard similarity score
-        for cosine_similar_tid in cosine_similar_track_dict.keys():
-            cosine_similar_track_tuples.append((cosine_similar_tid, cosine_similar_track_dict[cosine_similar_tid]))
-        for jaccard_similar_tid in jaccard_similar_track_dict.keys():
-            jaccard_similar_track_tuples.append((jaccard_similar_tid, jaccard_similar_track_dict[jaccard_similar_tid]))
-        cosine_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-        jaccard_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+            # Transform those sum similarity scores into an ordered list of tuples
+            cosine_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total cosine similarity score
+            jaccard_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total jaccard similarity score
+            for cosine_similar_tid in cosine_similar_track_dict.keys():
+                cosine_similar_track_tuples.append((cosine_similar_tid, cosine_similar_track_dict[cosine_similar_tid]))
+            for jaccard_similar_tid in jaccard_similar_track_dict.keys():
+                jaccard_similar_track_tuples.append((jaccard_similar_tid, jaccard_similar_track_dict[jaccard_similar_tid]))
+            cosine_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+            jaccard_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
 
-        # Recommend N tracks to the input playlist and evaluate
-        T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
-        cosine_sim_recommended_tracks = helpers.recommend_n_tracks(N, cosine_similar_track_tuples, new_playlist_tracks)
-        jaccard_sim_recommended_tracks = helpers.recommend_n_tracks(N, jaccard_similar_track_tuples, new_playlist_tracks)
+            # Recommend N tracks to the input playlist and evaluate
+            T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
+            cosine_sim_recommended_tracks = helpers.recommend_n_tracks(N, cosine_similar_track_tuples, new_playlist_tracks)
+            jaccard_sim_recommended_tracks = helpers.recommend_n_tracks(N, jaccard_similar_track_tuples, new_playlist_tracks)
 
-        cosine_sim_r_precision_results.append(evaluation.r_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
-        jaccard_sim_r_precision_results.append(evaluation.r_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
+            if K not in cosine_sim_k_evaluation_results.keys(): cosine_sim_k_evaluation_results[K] = []
+            if K not in jaccard_sim_k_evaluation_results.keys(): jaccard_sim_k_evaluation_results[K] = []
+            cosine_sim_k_evaluation_results[K].append(evaluation.r_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
+            jaccard_sim_k_evaluation_results[K].append(evaluation.r_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
 
-    cosine_r_precision = evaluation.avg_precision(cosine_sim_r_precision_results)
-    jaccard_r_precision = evaluation.avg_precision(jaccard_sim_r_precision_results)
-    print("\tCosine Similarity Average Precision =", cosine_r_precision)
-    print("\tJaccard Similarity Average Precision =", jaccard_r_precision)
+    cosine_results_by_K = {}
+    jaccard_results_by_K = {}
+    for K in range(1, max_K + 1):
+        cosine_results_by_K[K] = evaluation.avg_precision(cosine_sim_k_evaluation_results[K])
+        jaccard_results_by_K[K] = evaluation.avg_precision(jaccard_sim_k_evaluation_results[K])
+        print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
-    return cosine_r_precision, jaccard_r_precision
+    return cosine_results_by_K, jaccard_results_by_K

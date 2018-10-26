@@ -1,5 +1,5 @@
 from collaborative_filtering import user_based, item_based
-from collaborative_filtering.modules import matrix
+from collaborative_filtering.modules import matrix, helpers
 from mongodb import mongodb_communicate
 from graphing import bar_graph
 import sys
@@ -13,11 +13,14 @@ iteration_r_precision_graph_data = []
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 matrix = matrix.create(playlist_dict, unique_track_dict)
 
+# Both have Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
+cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, matrix)
+
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
     uc, uj = user_based.run(playlist_dict, unique_track_dict, matrix, N)
 
-    ic, ij = item_based.run(playlist_dict, unique_track_dict, indexed_tids, matrix, N)
+    ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
 
     # R-precision graph
     r_precision_graph_data = {}
@@ -28,24 +31,43 @@ for i in range(number_of_times_to_run):
     iteration_r_precision_graph_data.append(r_precision_graph_data)
 
 r_precision_graph_data = {}
-avg_uc = 0
-avg_uj = 0
-avg_ic = 0
-avg_ij = 0
+uc_data = {}
+uj_data = {}
+ic_data = {}
+ij_data = {}
 for iteration in iteration_r_precision_graph_data:
-    avg_uc += iteration['uc']
-    avg_uj += iteration['uj']
-    avg_ic += iteration['ic']
-    avg_ij += iteration['ij']
-r_precision_graph_data['uc'] = avg_uc / number_of_times_to_run
-r_precision_graph_data['uj'] = avg_uj / number_of_times_to_run
-r_precision_graph_data['ic'] = avg_ic / number_of_times_to_run
-r_precision_graph_data['ij'] = avg_ij / number_of_times_to_run
-print("Average R-Precision for User Based Cosine Similarity: ", r_precision_graph_data['uc'])
-print("Average R-Precision for User Based Jaccard Similarity: ", r_precision_graph_data['uj'])
-print("Average R-Precision for Item Based Cosine Similarity: ", r_precision_graph_data['ic'])
-print("Average R-Precision for Item Based Jaccard Similarity: ", r_precision_graph_data['ij'])
+    for K in iteration['uc'].keys():
+        if K not in uc_data.keys(): uc_data[K] = []
+        if K not in uj_data.keys(): uj_data[K] = []
+        uc_data[K].append(iteration['uc'][K])
+        uj_data[K].append(iteration['uj'][K])
+    for K in iteration['ic'].keys():
+        if K not in ic_data.keys(): ic_data[K] = []
+        if K not in ij_data.keys(): ij_data[K] = []
+        ic_data[K].append(iteration['ic'][K])
+        ij_data[K].append(iteration['ij'][K])
+
+avg_uc = {}
+avg_uj = {}
+avg_ic = {}
+avg_ij = {}
+print("------RESULTS-------")
+print("User Based:")
+for K in iteration_r_precision_graph_data[0]['uc'].keys():
+    avg_uc[K] = helpers.get_avg_of_list(uc_data[K])
+    avg_uj[K] = helpers.get_avg_of_list(uj_data[K])
+    print("\tK = " + str(K) + ": cosine = " + str(avg_uc[K]) + ", jaccard = " + str(avg_uj[K]))
+print("Item Based:")
+for K in iteration_r_precision_graph_data[0]['ic'].keys():
+    avg_ic[K] = helpers.get_avg_of_list(ic_data[K])
+    avg_ij[K] = helpers.get_avg_of_list(ij_data[K])
+    print("\tK = " + str(K) + ": cosine = " + str(avg_ic[K]) + ", jaccard = " + str(avg_ij[K]))
+
+r_precision_graph_data['uc'] = avg_uc
+r_precision_graph_data['uj'] = avg_uj
+r_precision_graph_data['ic'] = avg_ic
+r_precision_graph_data['ij'] = avg_ij
 
 # graph.create_graph(k_graph_data, mongo_collection)
-bar_graph.create_graph(r_precision_graph_data, mongo_collection)
+#bar_graph.create_graph(r_precision_graph_data, mongo_collection)
 

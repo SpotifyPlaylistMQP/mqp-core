@@ -1,7 +1,7 @@
 from collaborative_filtering import user_based, item_based
 from collaborative_filtering.modules import matrix, helpers
 from mongodb import mongodb_communicate
-from graphing import bar_graph
+from graphing import precisionGraph
 import sys
 
 mongo_collection = sys.argv[1]
@@ -68,6 +68,6 @@ r_precision_graph_data['uj'] = avg_uj
 r_precision_graph_data['ic'] = avg_ic
 r_precision_graph_data['ij'] = avg_ij
 
-# graph.create_graph(k_graph_data, mongo_collection)
+#graph.create_graph(k_graph_data, mongo_collection)
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
-
+precisionGraph.create_graph(r_precision_graph_data, mongo_collection)

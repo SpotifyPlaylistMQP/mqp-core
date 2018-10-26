@@ -23,6 +23,7 @@ def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation
     cosine_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
     jaccard_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
+
     for input_pid in playlist_dict.keys():
         for K in range(1, max_K + 1):
             # Calculate the sum similarity score for each potential tid to recommend
@@ -53,6 +54,14 @@ def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
             T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
             cosine_sim_recommended_tracks = helpers.recommend_n_tracks(N, cosine_similar_track_tuples, new_playlist_tracks)
             jaccard_sim_recommended_tracks = helpers.recommend_n_tracks(N, jaccard_similar_track_tuples, new_playlist_tracks)
+
+            # DCG eval
+            cosine_sim_dcg_result = evaluation.dcg_score(cosine_sim_recommended_tracks, N)
+            jaccard_sim_dcg_result = evaluation.dcg_score(jaccard_sim_recommended_tracks, N)
+
+            print("Cosine DCG: ", cosine_sim_dcg_result)
+            print("Jaccard DCG: ", jaccard_sim_dcg_result)
+
 
             if K not in cosine_sim_k_evaluation_results.keys(): cosine_sim_k_evaluation_results[K] = []
             if K not in jaccard_sim_k_evaluation_results.keys(): jaccard_sim_k_evaluation_results[K] = []

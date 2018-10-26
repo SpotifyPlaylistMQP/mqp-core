@@ -57,7 +57,7 @@ def create_graph(graph_data, playlist_name):
     plt.ylabel('Average R Precision', fontsize=12)
     plt.title('K Values vs Average R Precision for Cosine Evaluation', fontsize=16)
     plt.plot(uc_x, uc_y, 'or', label='User Based Cosine') # User Based Cosine Values RED
-    plt.plot(ic_x, ic_y, 'ob', label='User Based Cosine') # Item Based Cosine Values BLUE
+    plt.plot(ic_x, ic_y, 'ob', label='Item Based Cosine') # Item Based Cosine Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)
 
     # Finalize and display the graph

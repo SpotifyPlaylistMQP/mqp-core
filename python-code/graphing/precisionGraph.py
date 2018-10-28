@@ -50,10 +50,10 @@ def create_graph(graph_data, playlist_name):
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average R Precision', fontsize=12)
     plt.title('K Values vs Average R Precision for User Based Evaluation', fontsize=16)
-    plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
 
     plt.plot(uj_x, uj_y, marker='o', color='r', label='User Based Jaccard') # User Based Jaccard Values RED
     plt.plot(uc_x, uc_y, marker='o', color='b', label='User Based Cosine') # Item Based Jaccard Values BLUE
+    plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
 
     z = np.polyfit(uj_x, uj_y, 1)
     p = np.poly1d(z)
@@ -68,10 +68,10 @@ def create_graph(graph_data, playlist_name):
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average R Precision', fontsize=12)
     plt.title('K Values vs Average R Precision for Item Based Evaluation', fontsize=16)
-    plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)
 
     plt.plot(ij_x, ij_y, marker='o', color='r', label='Item Based Jaccard') # User Based Jaccard Values RED
     plt.plot(ic_x, ic_y, marker='o', color='b', label='Item Based Cosine') # Item Based Jaccard Values BLUE
+    plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)
 
     z = np.polyfit(ij_x, ij_y, 1)
     p = np.poly1d(z)

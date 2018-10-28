@@ -12,7 +12,7 @@ def recommend_n_tracks(N, similar_track_tuples, current_playlist_tracks):
             print("Not enough tracks to recommend!")
             return recommended_tracks
         if similar_track_tuples[index][0] not in current_playlist_tracks:
-            recommended_tracks.append(similar_track_tuples[index][0])
+            recommended_tracks.append(similar_track_tuples[index])
         index += 1
     return recommended_tracks
 

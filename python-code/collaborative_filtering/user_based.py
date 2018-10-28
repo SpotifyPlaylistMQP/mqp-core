@@ -56,11 +56,11 @@ def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
             jaccard_sim_recommended_tracks = helpers.recommend_n_tracks(N, jaccard_similar_track_tuples, new_playlist_tracks)
 
             # DCG eval
-            cosine_sim_dcg_result = evaluation.dcg_score(cosine_sim_recommended_tracks, N)
-            jaccard_sim_dcg_result = evaluation.dcg_score(jaccard_sim_recommended_tracks, N)
-
-            print("Cosine DCG: ", cosine_sim_dcg_result)
-            print("Jaccard DCG: ", jaccard_sim_dcg_result)
+            # cosine_sim_dcg_result = evaluation.dcg_score(cosine_sim_recommended_tracks, N)
+            # jaccard_sim_dcg_result = evaluation.dcg_score(jaccard_sim_recommended_tracks, N)
+            #
+            # print("Cosine DCG: ", cosine_sim_dcg_result)
+            # print("Jaccard DCG: ", jaccard_sim_dcg_result)
 
 
             if K not in cosine_sim_k_evaluation_results.keys(): cosine_sim_k_evaluation_results[K] = []

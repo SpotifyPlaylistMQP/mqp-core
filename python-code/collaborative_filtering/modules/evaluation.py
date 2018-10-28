@@ -24,11 +24,3 @@ def avg_precision(r_precision_results):
 
     return r_precision_sums / len(r_precision_results)
 
-
-def dcg_score(recommended_tracks, N):
-    # N is number of tracks to recommend
-    print(recommended_tracks)
-    r = np.asfarray(recommended_tracks)[:N]
-    print(r)
-    return recommended_tracks[0] + np.sum(recommended_tracks[1:] / np.log2(np.arange(2, recommended_tracks.size + 1)))
-

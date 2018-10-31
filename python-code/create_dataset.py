@@ -26,6 +26,6 @@ final_playlists = master_count.get_final_playlists(playlist_scores, all_playlist
 # If the save flag was set, persist the playlists into mongo
 if len(sys.argv) == 4:
     # mongo_collection = 'mpd_' + str(track_relevancy_threshold) + "_" + str(playlist_relevancy_threshold) + "_v2"
-    mongo_collection = "master_1000"
+    mongo_collection = "mpd_15_60_0.8"
     mongodb_communicate.delete(mongo_collection)
     mongodb_communicate.post(final_playlists, mongo_collection)

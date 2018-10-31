@@ -5,7 +5,7 @@ import requests
 def json_reader():
     all_playlists = {}
     #Open 10 json files, loop and add each playlist to a dictionary
-    path_to_json = "./dataset_creator/master_json/"
+    path_to_json = "./dataset_creator/slices_15/"
 
     json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
 

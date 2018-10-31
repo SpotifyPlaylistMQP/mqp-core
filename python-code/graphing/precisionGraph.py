@@ -16,26 +16,20 @@ def create_graph(graph_data, playlist_name):
     ij = graph_data["ij"]
     uc = graph_data["uc"]
     ic = graph_data["ic"]
-
-    # print('---- Graph Data ----')
     # User Jaccard Values
-    # print('** User Jaccard Values **')
     uj_x = list(uj.keys())
     uj_y = list(uj.values())
     # User Cosine Values
-    # print('** User Cosine Values **')
     uc_x = list(uc.keys())
     uc_y = list(uc.values())
     # Item Jaccard Values
-    # print('** Item Jaccard Values **')
     ij_x = list(ij.keys())
     ij_y = list(ij.values())
     # Item Cosine Values
-    # print('** Item Cosine Values **')
     ic_x = list(ic.keys())
     ic_y = list(ic.values())
 
-    # Create the graphs
+    # Create the graph figure
     plt.figure(1)
     fig = plt.gcf().set_size_inches(28,16)
 
@@ -50,11 +44,9 @@ def create_graph(graph_data, playlist_name):
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average R Precision', fontsize=12)
     plt.title('K Values vs Average R Precision for User Based Evaluation', fontsize=16)
-
     plt.plot(uj_x, uj_y, marker='o', color='r', label='User Based Jaccard') # User Based Jaccard Values RED
     plt.plot(uc_x, uc_y, marker='o', color='b', label='User Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
-
     z = np.polyfit(uj_x, uj_y, 1)
     p = np.poly1d(z)
     UBJ_plot = plt.plot(uj_x,p(uj_x), "r--", label='User Based Jaccard')
@@ -68,11 +60,9 @@ def create_graph(graph_data, playlist_name):
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average R Precision', fontsize=12)
     plt.title('K Values vs Average R Precision for Item Based Evaluation', fontsize=16)
-
     plt.plot(ij_x, ij_y, marker='o', color='r', label='Item Based Jaccard') # User Based Jaccard Values RED
     plt.plot(ic_x, ic_y, marker='o', color='b', label='Item Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)
-
     z = np.polyfit(ij_x, ij_y, 1)
     p = np.poly1d(z)
     UBJ_plot = plt.plot(ij_x,p(ij_x), "r--", label='Item Based Jaccard')

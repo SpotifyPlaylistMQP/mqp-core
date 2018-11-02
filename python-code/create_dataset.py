@@ -13,7 +13,7 @@ import sys
 #     print("       Put a value here if you want it to persist, or leave it blank if not")
 #     exit()
 
-min_track_appearance = 1
+min_track_appearance = 20
 
 track_relevancy_threshold = int(float(sys.argv[1]))
 playlist_relevancy_threshold = float(sys.argv[2])

@@ -30,6 +30,7 @@ def get(mongo_collection):
     return playlist_dict, unique_track_dict, indexed_pids, indexed_tids
 
 def post(final_playlists, mongo_collection):
+    print("posting")
     chunk_size = 5
     chunk = []
     num_chunks_sent = 0
@@ -42,6 +43,8 @@ def post(final_playlists, mongo_collection):
             chunk = []
 
 def delete(mongo_collection):
+    print("deleting")
     r = requests.delete('http://localhost:8888/mongodb/playlists/' + str(mongo_collection))
+    print(r.status_code)
     if r.status_code == 200:
         print("Deleted mongo collection: " + mongo_collection)

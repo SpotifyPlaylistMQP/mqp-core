@@ -1,27 +1,31 @@
-from collaborative_filtering import user_based, item_based
-from collaborative_filtering.modules import matrix, helpers
+from recommender_systems import user_based, item_based, matrix_factorization
+from recommender_systems.modules import matrix, helpers
 from mongodb import mongodb_communicate
 from graphing import precisionGraph
 import sys
+import time
 
+start = time.time()
 mongo_collection = sys.argv[1]
 N = 10  # Number of songs to recommend
 
-number_of_times_to_run = 5
+number_of_times_to_run = 1
 iteration_r_precision_graph_data = []
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
-matrix = matrix.create(playlist_dict, unique_track_dict)
+track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
+print("Sparsity: ", matrix.sparsity(track_playlist_matrix))
 
 # Both have Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
-cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, matrix)
+### cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, track_playlist_matrix)
 
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
-    uc, uj = user_based.run(playlist_dict, unique_track_dict, matrix, N)
+    ###uc, uj = user_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, N)
+    ###ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
+    mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids)
 
-    ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
-
+    """
     # R-precision graph
     r_precision_graph_data = {}
     r_precision_graph_data["uc"] = uc
@@ -71,3 +75,7 @@ r_precision_graph_data['ij'] = avg_ij
 #graph.create_graph(k_graph_data, mongo_collection)
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
 precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
+
+"""
+
+print("Time in Seconds: ", time.time() - start)

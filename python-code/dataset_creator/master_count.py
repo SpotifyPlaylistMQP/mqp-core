@@ -38,7 +38,7 @@ def master_count(all_playlists, track_relevancy_threshold, min_playlist_len):
                 unique_track_scores[track['tid']] = 1
             else:
                 unique_track_scores[track['tid']] += 1
-    print("Number of unique tracks:", len(unique_track_scores.keys()))
+    print("Number of unique tracks in entire dataset:", len(unique_track_scores.keys()))
 
     top_tracks = []
     for tid in unique_track_scores.keys():

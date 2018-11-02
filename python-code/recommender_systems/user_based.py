@@ -1,4 +1,4 @@
-from collaborative_filtering.modules import similarities, evaluation, matrix, helpers
+from recommender_systems.modules import similarities, evaluation, matrix, helpers
 
 def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
     max_K = 30  # Number of top similar playlists to the input playlist

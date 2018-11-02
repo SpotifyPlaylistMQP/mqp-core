@@ -1,10 +1,11 @@
-from collaborative_filtering.modules import similarities, evaluation, matrix, helpers
+from recommender_systems.modules import similarities, evaluation, matrix, helpers
 
 # For each input track, get the list of the other tracks ordered by similarity
 def create_similarity_dictionaries(indexed_tids, matrix_rows,):
     cosine_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
     jaccard_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of jaccard similar track tuples
     for input_track_index, input_track_row in enumerate(matrix_rows):
+        print(input_track_index)
         input_tid = indexed_tids[input_track_index]
         cosine_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = cosine_similarity_value
         jaccard_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = jaccard_similarity_value
@@ -22,7 +23,7 @@ def create_similarity_dictionaries(indexed_tids, matrix_rows,):
     return cosine_similarity_dict, jaccard_similarity_dict
 
 def run(playlist_dict, unique_track_dict, N, cosine_similarity_dict, jaccard_similarity_dict):
-    max_K = 30
+    max_K = 300
     print("Item-based collaborative filtering...")
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation

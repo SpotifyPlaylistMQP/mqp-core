@@ -62,8 +62,8 @@ def run(playlist_dict, unique_track_dict, N, cosine_similarity_dict, jaccard_sim
 
                 if K not in cosine_sim_k_evaluation_results.keys(): cosine_sim_k_evaluation_results[K] = []
                 if K not in jaccard_sim_k_evaluation_results.keys(): jaccard_sim_k_evaluation_results[K] = []
-                cosine_sim_k_evaluation_results[K].append(evaluation.r_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
-                jaccard_sim_k_evaluation_results[K].append(evaluation.r_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
+                cosine_sim_k_evaluation_results[K].append(evaluation.dcg_precision(cosine_sim_recommended_tracks, T, N, unique_track_dict))
+                jaccard_sim_k_evaluation_results[K].append(evaluation.dcg_precision(jaccard_sim_recommended_tracks, T, N, unique_track_dict))
 
     cosine_results_by_K = {}
     jaccard_results_by_K = {}

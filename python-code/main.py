@@ -9,7 +9,7 @@ start = time.time()
 mongo_collection = sys.argv[1]
 N = 10  # Number of songs to recommend
 
-number_of_times_to_run = 1
+number_of_times_to_run = 15
 iteration_r_precision_graph_data = []
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
@@ -19,11 +19,16 @@ print("Sparsity: ", matrix.sparsity(track_playlist_matrix))
 # Both have Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
 cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, track_playlist_matrix)
 
+mf_steps = 10
+avg_mf = {}
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
     uc, uj = user_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, N)
     ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
-    # mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids)
+
+    mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, mf_steps)
+    avg_mf[mf_steps] = mf
+    mf_steps += 90 if mf_steps == 10 else 100
 
     # R-precision graph
     r_precision_graph_data = {}
@@ -70,10 +75,14 @@ r_precision_graph_data['uc'] = avg_uc
 r_precision_graph_data['uj'] = avg_uj
 r_precision_graph_data['ic'] = avg_ic
 r_precision_graph_data['ij'] = avg_ij
+r_precision_graph_data['mf'] = avg_mf # Sam, graph this like so:
+# X = step value: 10, 100, 200, 300, 400...
+# Y = dcg_precision: decimal between 0 and 1
 
 #graph.create_graph(k_graph_data, mongo_collection)
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
 precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
+
 
 
 print("Time in Seconds: ", time.time() - start)

@@ -1,17 +1,19 @@
 from recommender_systems.modules import evaluation, matrix, helpers
 import numpy
 
-def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids):
+def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, steps):
+    print("Matrix factorization...")
     number_of_track = len(track_playlist_matrix)
     number_of_playlists = len(track_playlist_matrix[0])
-    K = 10
+    K = 3
 
     P = numpy.random.rand(number_of_track, K)
     Q = numpy.random.rand(number_of_playlists, K)
 
-    steps = 10
     factorized_matrix = matrix_factorization(track_playlist_matrix, P, Q, K, steps, alpha=0.0002, beta=0.02)
 
+    avg_precision = 0
+    total_precisions = 0
     for input_playlist_index, input_playlist_row in enumerate(factorized_matrix.T):
         input_pid = indexed_pids[input_playlist_index]
         prediction_tuples = [] # List of tuples: (tid, prediction)
@@ -21,9 +23,13 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
 
         T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
         recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
-        print(evaluation.r_precision(recommended_tracks, T, N, unique_track_dict))
+        avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
+        total_precisions += 1
 
-    return factorized_matrix
+    avg_precision = avg_precision / total_precisions
+    print("\tSteps: ", steps, " Avg precision: ", avg_precision)
+
+    return avg_precision
 
 """
 @INPUT:

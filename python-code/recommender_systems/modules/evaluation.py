@@ -1,7 +1,7 @@
 import numpy as np
 
 # Returns a list of tracks in both recommended_tracks and original_20_percent, and their R-Precision value
-def r_precision(recommended_tracks, T, N, track_dict):
+def dcg_precision(recommended_tracks, T, N, track_dict):
     matches = 0
     matches_list = []
     ideal_list = []
@@ -24,7 +24,6 @@ def r_precision(recommended_tracks, T, N, track_dict):
     sorted_ideal = np.sort(ideal_list)
     reverse_ideal = sorted_ideal[::-1]
     # print("Scores array: ", reverse_array)
-
 
     # return matches / N
     

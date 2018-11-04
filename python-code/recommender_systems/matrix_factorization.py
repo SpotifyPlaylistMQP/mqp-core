@@ -4,13 +4,12 @@ import numpy
 def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids):
     number_of_track = len(track_playlist_matrix)
     number_of_playlists = len(track_playlist_matrix[0])
-    K = 2
+    K = 10
 
     P = numpy.random.rand(number_of_track, K)
     Q = numpy.random.rand(number_of_playlists, K)
-    print(P)
-    print(Q)
-    steps = 20
+
+    steps = 10
     factorized_matrix = matrix_factorization(track_playlist_matrix, P, Q, K, steps, alpha=0.0002, beta=0.02)
 
     for input_playlist_index, input_playlist_row in enumerate(factorized_matrix.T):
@@ -38,23 +37,23 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
 @OUTPUT:
     the final matrices P and Q
 """
-def matrix_factorization(R, P, Q, K, steps, alpha, beta):
+def matrix_factorization(track_playlist_matrix, P, Q, K, steps, alpha, beta):
     Q = Q.T
     for step in range(steps):
-        for i in range(len(R)):
-            for j in range(len(R[i])):
-                if R[i][j] > 0:
-                    eij = R[i][j] - numpy.dot(P[i,:],Q[:,j])
+        for row in range(len(track_playlist_matrix)):
+            for col in range(len(track_playlist_matrix[row])):
+                if track_playlist_matrix[row][col] > 0:
+                    eij = track_playlist_matrix[row][col] - numpy.dot(P[row, :], Q[:, col])
                     for k in range(K):
-                        P[i][k] = P[i][k] + alpha * (2 * eij * Q[k][j] - beta * P[i][k])
-                        Q[k][j] = Q[k][j] + alpha * (2 * eij * P[i][k] - beta * Q[k][j])
+                        P[row][k] = P[row][k] + alpha * (2 * eij * Q[k][col] - beta * P[row][k])
+                        Q[k][col] = Q[k][col] + alpha * (2 * eij * P[row][k] - beta * Q[k][col])
         e = 0
-        for i in range(len(R)):
-            for j in range(len(R[i])):
-                if R[i][j] > 0:
-                    e = e + pow(R[i][j] - numpy.dot(P[i,:],Q[:,j]), 2)
+        for row in range(len(track_playlist_matrix)):
+            for col in range(len(track_playlist_matrix[row])):
+                if track_playlist_matrix[row][col] > 0:
+                    e = e + pow(track_playlist_matrix[row][col] - numpy.dot(P[row, :], Q[:, col]), 2)
                     for k in range(K):
-                        e = e + (beta/2) * ( pow(P[i][k],2) + pow(Q[k][j],2) )
+                        e = e + (beta/2) * ( pow(P[row][k],2) + pow(Q[k][col],2) )
         if e < 0.001:
             break
     return numpy.dot(P, Q)

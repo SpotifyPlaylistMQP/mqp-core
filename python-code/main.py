@@ -17,15 +17,14 @@ track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("Sparsity: ", matrix.sparsity(track_playlist_matrix))
 
 # Both have Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
-### cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, track_playlist_matrix)
+cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, track_playlist_matrix)
 
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
-    ###uc, uj = user_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, N)
-    ###ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
-    mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids)
+    uc, uj = user_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, N)
+    ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
+    # mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids)
 
-    """
     # R-precision graph
     r_precision_graph_data = {}
     r_precision_graph_data["uc"] = uc
@@ -76,6 +75,5 @@ r_precision_graph_data['ij'] = avg_ij
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
 precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
 
-"""
 
 print("Time in Seconds: ", time.time() - start)

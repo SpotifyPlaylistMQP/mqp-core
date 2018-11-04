@@ -5,7 +5,7 @@ def create_similarity_dictionaries(indexed_tids, matrix_rows,):
     cosine_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
     jaccard_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of jaccard similar track tuples
     for input_track_index, input_track_row in enumerate(matrix_rows):
-        print(input_track_index)
+        # print(input_track_index)
         input_tid = indexed_tids[input_track_index]
         cosine_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = cosine_similarity_value
         jaccard_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = jaccard_similarity_value

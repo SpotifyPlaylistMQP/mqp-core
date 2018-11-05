@@ -1,7 +1,7 @@
 from recommender_systems import user_based, item_based, matrix_factorization
 from recommender_systems.modules import matrix, helpers
 from mongodb import mongodb_communicate
-from graphing import precisionGraph
+from graphing import precisionGraph, matrixGraph
 import sys
 import time
 
@@ -75,14 +75,11 @@ r_precision_graph_data['uc'] = avg_uc
 r_precision_graph_data['uj'] = avg_uj
 r_precision_graph_data['ic'] = avg_ic
 r_precision_graph_data['ij'] = avg_ij
-r_precision_graph_data['mf'] = avg_mf # Sam, graph this like so:
-# X = step value: 10, 100, 200, 300, 400...
-# Y = dcg_precision: decimal between 0 and 1
+r_precision_graph_data['mf'] = avg_mf
 
 #graph.create_graph(k_graph_data, mongo_collection)
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
-precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
-
-
+# precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
+matrixGraph.create_graph(r_precision_graph_data, mongo_collection)
 
 print("Time in Seconds: ", time.time() - start)

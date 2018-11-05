@@ -79,7 +79,7 @@ r_precision_graph_data['mf'] = avg_mf
 
 #graph.create_graph(k_graph_data, mongo_collection)
 #bar_graph.create_graph(r_precision_graph_data, mongo_collection)
-# precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
+precisionGraph.create_graph(r_precision_graph_data, mongo_collection)
 matrixGraph.create_graph(r_precision_graph_data, mongo_collection)
 
 print("Time in Seconds: ", time.time() - start)

@@ -42,6 +42,7 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     beta  : the regularization parameter
 @OUTPUT:
     the final matrices P and Q
+http://www.quuxlabs.com/blog/2010/09/matrix-factorization-a-simple-tutorial-and-implementation-in-python/
 """
 def matrix_factorization(track_playlist_matrix, P, Q, K, steps, alpha, beta):
     Q = Q.T

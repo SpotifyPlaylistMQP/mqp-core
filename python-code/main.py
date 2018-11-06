@@ -1,7 +1,7 @@
-from recommender_systems import user_based, item_based, matrix_factorization
+from recommender_systems import user_based, item_based
 from recommender_systems.modules import matrix, helpers
 from mongodb import mongodb_communicate
-from graphing import precisionGraph, matrixGraph
+from graphing import precisionGraph
 import sys
 import time
 

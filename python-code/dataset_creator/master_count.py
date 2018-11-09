@@ -2,10 +2,9 @@ import json
 import os.path
 import requests
 
-def json_reader():
-    all_playlists = {}
-    #Open 10 json files, loop and add each playlist to a dictionary
-    path_to_json = "./dataset_creator/slices_15/"
+def json_reader(dataset):
+    all_playlists = {} # Key = pid       Value = playlist object
+    path_to_json = "./dataset_creator/" + dataset + "/"
 
     json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
 
@@ -26,7 +25,7 @@ def json_reader():
                 "name": playlist["name"].encode('ascii', errors='ignore').decode(),
                 "tracks": tracks
             }
-    print("Number of playlists:", len(all_playlists.keys()))
+    print("Number of all_playlists:", len(all_playlists.keys()))
     return all_playlists
 
 def master_count(all_playlists, track_relevancy_threshold, min_playlist_len):

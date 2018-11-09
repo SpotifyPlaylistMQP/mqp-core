@@ -1,7 +1,6 @@
 from recommender_systems import matrix_factorization
 from recommender_systems.modules import matrix, helpers
 from mongodb import mongodb_communicate
-from graphing import matrixGraph
 import sys
 import time
 
@@ -13,10 +12,14 @@ playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communica
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
-steps = 10
+steps = 100
 avg_mf = {}
 
-mf = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, steps)
+avg_avg_precision = 0
+times_to_run = 15
+for i in range(times_to_run):
+    avg_avg_precision += matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, steps)
 
+print("Average Average precision: ", avg_avg_precision / times_to_run)
 
 print("Time in Seconds: ", time.time() - start)

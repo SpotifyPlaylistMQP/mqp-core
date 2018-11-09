@@ -19,7 +19,7 @@ track_relevancy_threshold = int(float(sys.argv[1]))
 playlist_relevancy_threshold = float(sys.argv[2])
 min_playlist_len = 60
 
-all_playlists = master_count.json_reader()
+all_playlists = master_count.json_reader("slices_15")
 playlist_scores, all_playlists, unique_track_scores = master_count.master_count(all_playlists, track_relevancy_threshold, min_playlist_len)
 final_playlists = master_count.get_final_playlists(playlist_scores, all_playlists, playlist_relevancy_threshold, unique_track_scores, min_track_appearance)
 

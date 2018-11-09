@@ -1,9 +1,6 @@
 from recommender_systems.modules import similarities, evaluation, matrix, helpers
 
-def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
-    max_K = 30  # Number of top similar playlists to the input playlist
-    print("User-based collaborative filtering...")
-
+def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
     # For each input playlist, get the list of the other playlists ordered by similarity
     cosine_similarity_dict = {}  # Key = pid, value = Ordered (L -> G) list of cosine similar playlist tuples
     jaccard_similarity_dict = {}  # Key = pid, value = Ordered (L -> G) list of jaccard similar playlist tuples
@@ -19,6 +16,11 @@ def run(playlist_dict, unique_track_dict, playlist_track_matrix, N):
         jaccard_similarity_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
         cosine_similarity_dict[input_pid] = cosine_similarity_tuples
         jaccard_similarity_dict[input_pid] = jaccard_similarity_tuples
+    return cosine_similarity_dict, jaccard_similarity_dict
+
+def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_similarity_dict, N):
+    max_K = 30  # Number of top similar playlists to the input playlist
+    print("User-based collaborative filtering...")
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation
     cosine_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results

@@ -9,7 +9,7 @@ import time
 #       - Plots the line of best fit for all metrics
 # var graph_data: A dictionary containing tuples of [K Value: Avg R Precision] for all four systems
 # var playlist_name: A string of the playlist name
-def create_graph(graph_data, playlist_name, N):
+def create_graph(graph_data, playlist_name, N, number_of_times_to_run):
     print("Generating Precision Evaluation Graph from " + playlist_name)
     # Individual Result Dictionaries
     uj = graph_data["uj"]
@@ -43,7 +43,7 @@ def create_graph(graph_data, playlist_name, N):
     plt.subplot(211)
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average DCG Precision', fontsize=12)
-    plt.title('K Values vs Average DCG Precision for User Based Evaluation where N = ' + str(N), fontsize=16)
+    plt.title('K Values vs Average DCG Precision for User Based Evaluation over ' + number_of_times_to_run + ' iterations where N = ' + str(N), fontsize=16)
     plt.plot(uj_x, uj_y, marker='o', color='r', label='User Based Jaccard') # User Based Jaccard Values RED
     plt.plot(uc_x, uc_y, marker='o', color='b', label='User Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
@@ -59,7 +59,7 @@ def create_graph(graph_data, playlist_name, N):
     plt.subplot(212)
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average DCG Precision', fontsize=12)
-    plt.title('K Values vs Average DCG Precision for Item Based Evaluation where N = ' + str(N), fontsize=16)
+    plt.title('K Values vs Average DCG Precision for Item Based Evaluation over ' + number_of_times_to_run + ' iterations where N = ' + str(N), fontsize=16)
     plt.plot(ij_x, ij_y, marker='o', color='r', label='Item Based Jaccard') # User Based Jaccard Values RED
     plt.plot(ic_x, ic_y, marker='o', color='b', label='Item Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)

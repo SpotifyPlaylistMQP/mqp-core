@@ -1,4 +1,6 @@
 from recommender_systems.modules import similarities, evaluation, matrix, helpers
+import numpy
+import time
 
 def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
     # For each input playlist, get the list of the other playlists ordered by similarity
@@ -19,6 +21,7 @@ def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
     return cosine_similarity_dict, jaccard_similarity_dict
 
 def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_similarity_dict, N):
+    t1 = time.time()
     max_K = 30  # Number of top similar playlists to the input playlist
     print("User-based collaborative filtering...")
 
@@ -26,18 +29,18 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
     cosine_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
     jaccard_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
 
-    for input_pid in playlist_dict.keys():
+    for input_pid in numpy.asarray(list(playlist_dict.keys())):
         for K in range(1, max_K + 1):
             # Calculate the sum similarity score for each potential tid to recommend
             cosine_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of cosine_similarities
             jaccard_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of jaccard_similarities
-            for cosine_sim_playlist_tuple in cosine_similarity_dict[input_pid][:K]:
-                for tid in playlist_dict[cosine_sim_playlist_tuple[0]]['tracks']:
+            for cosine_sim_playlist_tuple in numpy.asarray(cosine_similarity_dict[input_pid][:K]):
+                for tid in numpy.asarray(playlist_dict[cosine_sim_playlist_tuple[0]]['tracks']):
                     if tid not in cosine_similar_track_dict.keys():
                         cosine_similar_track_dict[tid] = 0
                     cosine_similar_track_dict[tid] += cosine_sim_playlist_tuple[1]
-            for jaccard_sim_playlist_tuple in jaccard_similarity_dict[input_pid][:K]:
-                for tid in playlist_dict[jaccard_sim_playlist_tuple[0]]['tracks']:
+            for jaccard_sim_playlist_tuple in numpy.asarray(jaccard_similarity_dict[input_pid][:K]):
+                for tid in numpy.asarray(playlist_dict[jaccard_sim_playlist_tuple[0]]['tracks']):
                     if tid not in jaccard_similar_track_dict.keys():
                         jaccard_similar_track_dict[tid] = 0
                     jaccard_similar_track_dict[tid] += jaccard_sim_playlist_tuple[1]
@@ -45,9 +48,9 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
             # Transform those sum similarity scores into an ordered list of tuples
             cosine_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total cosine similarity score
             jaccard_similar_track_tuples = [] # List of tuples where tuple[0] = tid, tuple[1] = sum total jaccard similarity score
-            for cosine_similar_tid in cosine_similar_track_dict.keys():
+            for cosine_similar_tid in numpy.asarray(cosine_similar_track_dict.keys()):
                 cosine_similar_track_tuples.append((cosine_similar_tid, cosine_similar_track_dict[cosine_similar_tid]))
-            for jaccard_similar_tid in jaccard_similar_track_dict.keys():
+            for jaccard_similar_tid in numpy.asarray(jaccard_similar_track_dict.keys()):
                 jaccard_similar_track_tuples.append((jaccard_similar_tid, jaccard_similar_track_dict[jaccard_similar_tid]))
             cosine_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
             jaccard_similar_track_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
@@ -70,4 +73,5 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
         jaccard_results_by_K[K] = evaluation.avg_precision(jaccard_sim_k_evaluation_results[K])
         print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
+    print("User-based time:", time.time() - t1)
     return cosine_results_by_K, jaccard_results_by_K

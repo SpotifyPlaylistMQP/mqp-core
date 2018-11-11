@@ -34,7 +34,11 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     return avg_precision
 
 # https://stackoverflow.com/questions/22767695/python-non-negative-matrix-factorization-that-handles-both-zeros-and-missing-dat
-def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, error_limit=0.000001, fit_error_limit=0.000001):
+
+# Optimized Alpha & Beta values for the corresponding datasets
+# mpd_sqare_100: Alpha = 0.0001; Beta = 0.001 (avg precision of 0.487...)
+# mpd_square_1000: Alpha = 0.00005; Beta = 0.001 (avg precision of 0.167...)
+def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, alpha=0.00005, beta=0.001):
     eps = 1e-5
     track_playlist_matrix = np.array(track_playlist_matrix)
 
@@ -72,7 +76,7 @@ def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, e
             matrix_est_prev = matrix_est
 
             cur_res = linalg.norm(mask * (track_playlist_matrix - matrix_est), ord='fro')
-            if cur_res < error_limit or fit_residual < fit_error_limit:
+            if cur_res < alpha or fit_residual < beta:
                 break
 
     return dot(A, Y)

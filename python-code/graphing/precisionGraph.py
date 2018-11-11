@@ -43,7 +43,7 @@ def create_graph(graph_data, playlist_name, N, number_of_times_to_run):
     plt.subplot(211)
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average DCG Precision', fontsize=12)
-    plt.title('K Values vs Average DCG Precision for User Based Evaluation over ' + number_of_times_to_run + ' iterations where N = ' + str(N), fontsize=16)
+    plt.title('K Values vs Average DCG Precision for User Based Evaluation over ' + str(number_of_times_to_run) + ' iterations where N = ' + str(N), fontsize=16)
     plt.plot(uj_x, uj_y, marker='o', color='r', label='User Based Jaccard') # User Based Jaccard Values RED
     plt.plot(uc_x, uc_y, marker='o', color='b', label='User Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
@@ -59,7 +59,7 @@ def create_graph(graph_data, playlist_name, N, number_of_times_to_run):
     plt.subplot(212)
     plt.xlabel('K Value', fontsize=12)
     plt.ylabel('Average DCG Precision', fontsize=12)
-    plt.title('K Values vs Average DCG Precision for Item Based Evaluation over ' + number_of_times_to_run + ' iterations where N = ' + str(N), fontsize=16)
+    plt.title('K Values vs Average DCG Precision for Item Based Evaluation over ' + str(number_of_times_to_run) + ' iterations where N = ' + str(N), fontsize=16)
     plt.plot(ij_x, ij_y, marker='o', color='r', label='Item Based Jaccard') # User Based Jaccard Values RED
     plt.plot(ic_x, ic_y, marker='o', color='b', label='Item Based Cosine') # Item Based Jaccard Values BLUE
     plt.legend(bbox_to_anchor=(0.02, 0.975, 1, 0), ncol=2, borderaxespad=0)

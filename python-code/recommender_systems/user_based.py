@@ -1,4 +1,5 @@
 from recommender_systems.modules import similarities, evaluation, matrix, helpers
+import time
 
 def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
     # For each input playlist, get the list of the other playlists ordered by similarity
@@ -20,6 +21,7 @@ def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
 
 def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_similarity_dict, N):
     max_K = 30  # Number of top similar playlists to the input playlist
+    start = time.time()
     print("User-based collaborative filtering...")
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation
@@ -70,4 +72,7 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
         jaccard_results_by_K[K] = evaluation.avg_precision(jaccard_sim_k_evaluation_results[K])
         print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
+    end = time.time()
+    total = end - start
+    print("Total time elapsed: " + str(round(total,2)) +" seconds")
     return cosine_results_by_K, jaccard_results_by_K

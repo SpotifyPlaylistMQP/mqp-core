@@ -3,38 +3,37 @@ import numpy as np
 from scipy import linalg
 from numpy import dot
 
-def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, steps):
+def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations):
     print("Matrix factorization...")
     number_of_track = len(track_playlist_matrix)
     number_of_playlists = len(track_playlist_matrix[0])
-    K = 1
 
     P = np.random.rand(number_of_track, K)
     Q = np.random.rand(number_of_playlists, K)
 
     factorized_matrix = matrix_factorization(track_playlist_matrix, K)
 
-    avg_precision = 0
-    total_precisions = 0
-    for input_playlist_index, input_playlist_row in enumerate(factorized_matrix.T):
-        input_pid = indexed_pids[input_playlist_index]
-        prediction_tuples = [] # List of tuples: (tid, prediction)
-        for track_index, prediction in enumerate(input_playlist_row):
-            prediction_tuples.append((indexed_tids[track_index], prediction))
-        prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+    avg_avg_precision = 0
+    for iteration in range(total_iterations):
+        avg_precision = 0
+        total_results = 0
+        for input_playlist_index, input_playlist_row in enumerate(factorized_matrix.T):
+            input_pid = indexed_pids[input_playlist_index]
+            prediction_tuples = [] # List of tuples: (tid, prediction)
+            for track_index, prediction in enumerate(input_playlist_row):
+                prediction_tuples.append((indexed_tids[track_index], prediction))
+            prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
 
-        T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
-        recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
-        avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
-        total_precisions += 1
+            T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
+            recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+            avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
+            total_results += 1
+        avg_avg_precision += avg_precision / total_results
 
-    avg_precision = avg_precision / total_precisions
-    print("\tSteps: ", steps, " Avg precision: ", avg_precision)
-
-    return avg_precision
+    return avg_avg_precision / total_iterations
 
 # https://stackoverflow.com/questions/22767695/python-non-negative-matrix-factorization-that-handles-both-zeros-and-missing-dat
-def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, error_limit=0.000001, fit_error_limit=0.000001):
+def matrix_factorization(track_playlist_matrix, latent_features, steps=100, error_limit=0.000001, fit_error_limit=0.0001):
     eps = 1e-5
     track_playlist_matrix = np.array(track_playlist_matrix)
 
@@ -51,7 +50,7 @@ def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, e
 
     masked_matrix = mask * track_playlist_matrix
     matrix_est_prev = dot(A, Y)
-    for i in range(1, max_iter + 1):
+    for i in range(1, steps + 1):
         # ===== updates =====
         top = dot(masked_matrix, Y.T)
         bottom = (dot((mask * dot(A, Y)), Y.T)) + eps
@@ -65,7 +64,7 @@ def matrix_factorization(track_playlist_matrix, latent_features, max_iter=200, e
         Y = np.maximum(Y, eps)
 
         # ==== evaluation ====
-        if i % 5 == 0 or i == 1 or i == max_iter:
+        if i % 5 == 0 or i == 1 or i == steps:
             matrix_est = dot(A, Y)
             err = mask * (matrix_est_prev - matrix_est)
             fit_residual = np.sqrt(np.sum(err ** 2))

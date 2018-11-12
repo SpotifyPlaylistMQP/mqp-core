@@ -12,14 +12,11 @@ playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communica
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
-steps = 100
-avg_mf = {}
-
-avg_avg_precision = 0
-times_to_run = 15
-for i in range(times_to_run):
-    avg_avg_precision += matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, steps)
-
-print("Average Average precision: ", avg_avg_precision / times_to_run)
+avg_precision_by_steps = {}
+total_iterations = 15
+for K in range(1, 10):
+    results = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations)
+    print("When K = ", K, " DCG = ", results)
+    avg_precision_by_steps[K] = results
 
 print("Time in Seconds: ", time.time() - start)

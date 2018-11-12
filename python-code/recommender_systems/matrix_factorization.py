@@ -8,9 +8,6 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     number_of_track = len(track_playlist_matrix)
     number_of_playlists = len(track_playlist_matrix[0])
 
-    P = np.random.rand(number_of_track, K)
-    Q = np.random.rand(number_of_playlists, K)
-
     factorized_matrix = matrix_factorization(track_playlist_matrix, K)
 
     avg_avg_precision = 0

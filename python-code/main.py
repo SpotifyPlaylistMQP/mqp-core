@@ -12,11 +12,14 @@ N = 10  # Number of songs to recommend
 number_of_times_to_run = 20
 iteration_dcg_graph_data = []
 
-playlist_matrix = mongodb_communicate.get(mongo_collection)
-"""
-track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
-print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
+playlist_matrix, pids, tids= mongodb_communicate.get_data(mongo_collection)
+track_matrix = playlist_matrix.T
+print("\tSparsity: ", matrix.sparsity(playlist_matrix))
 
+# Cells = tuple where [0] = cosine [1] = jaccard
+playlist_similarity_matrix = user_based.playlist_similarities(playlist_matrix)
+
+"""
 # Both have Key = track_id, Value = Ordered (L -> G) list of similar track tuples
 cosine_sim_playlist_dict, jaccard_sim_playlist_dict = user_based.create_similarity_dictionaries(playlist_dict, track_playlist_matrix)
 

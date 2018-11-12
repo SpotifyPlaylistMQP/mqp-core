@@ -1,4 +1,5 @@
 from math import *
+import scipy as sp
 
 def cosine(vector1, vector2):
     numerator = sum(a * b for a, b in zip(vector1, vector2))

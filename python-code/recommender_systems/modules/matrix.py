@@ -1,31 +1,14 @@
 import random
 import numpy as np
 
-# Returns the playlist X track matrix
-"""
-def create(playlist_dict, unique_track_dict):
-    playlist_matrix = np.zeros((len(playlist_dict.keys()), len(unique_track_dict.keys())))
-    for pidx, playlist in np.ndenumerate(np.asarray(playlist_dict)):
-    for tid in np.asarray(unique_track_dict.keys()):
-        for playlist_id in playlist_dict.keys():
-            if tid in playlist_dict[playlist_id]['tracks']:
-                playlist_matrix[]
-            else:
-                row.append(0)
-        matrix.append(row)
-    return matrix
-    """
-
 # Returns the sparsity value of the matrix
-def sparsity(playlist_track_matrix):
-    playlist_track_matches = 0
-    total_cells = 0
-    for row in playlist_track_matrix:
+def sparsity(playlist_matrix):
+    ones = 0
+    for row in playlist_matrix:
         for cell in row:
-            total_cells += 1
             if cell == 1:
-                playlist_track_matches += 1
-    return round(playlist_track_matches / total_cells, 5)
+                ones += 1
+    return round(ones / playlist_matrix.size, 5)
 
 # Removes 20% of input_playlist_id's tracks and returns a list of those original 20%
 def split_playlist(input_playlist_id, playlist_dict):

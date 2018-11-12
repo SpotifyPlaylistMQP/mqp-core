@@ -1,7 +1,7 @@
 import requests
 import numpy as np
 import time
-def get(mongo_collection):
+def get_data(mongo_collection):
     print("Getting playlist statistics")
     start = time.time()
     pids = []
@@ -16,7 +16,7 @@ def get(mongo_collection):
                     tids.append(track['tid'])
         print("\t# Unique playlists:", len(pids))
         print("\t# Unique tracks:", len(tids))
-        print("\t-Seconds elapsed:", time.time() - start)
+        print("-Seconds elapsed:", time.time() - start)
 
         print("Making matrix...")
         start = time.time()
@@ -29,12 +29,11 @@ def get(mongo_collection):
             for col, tid in np.ndenumerate(tids):
                 if tid in playlist_tids:
                     playlist_matrix[row][col] = 1
-        print("\t-Seconds elapsed:", time.time() - start)
-        print(playlist_matrix)
+        print("-Seconds elapsed:", time.time() - start)
+        return playlist_matrix, pids, tids
     else:
         print("Failed to get database collection from server")
-
-    return playlist_matrix
+        exit()
 
 def post(final_playlists, mongo_collection):
     print("posting")

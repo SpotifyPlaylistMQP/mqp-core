@@ -1,4 +1,4 @@
-from recommender_systems.modules import similarities, evaluation, matrix, helpers
+from recommender_systems.modules import evaluation, matrix, helpers
 from scipy.spatial import distance
 import numpy as np
 import time
@@ -12,40 +12,62 @@ def playlist_similarities(playlist_matrix):
         cosine_row = []
         jaccard_row = []
         for playlist2 in playlist_matrix:
-            cosine_row.append(distance.cosine(playlist1, playlist2))
-            jaccard_row.append(distance.jaccard(playlist1, playlist2))
+            if np.array_equal(playlist1, playlist2):
+                cosine_row.append(1)
+                jaccard_row.append(1)
+            else:
+                cosine_row.append(distance.cosine(playlist1, playlist2))
+                jaccard_row.append(distance.jaccard(playlist1, playlist2))
         cosine_sims.append(cosine_row)
         jaccard_sims.append(jaccard_row)
     print("-Seconds elapsed:", time.time() - start)
     return np.asarray(cosine_sims), np.asarray(jaccard_sims)
 
-def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
-    # For each input playlist, get the list of the other playlists ordered by similarity
-    cosine_similarity_dict = {}  # Key = pid, value = Ordered (L -> G) list of cosine similar playlist tuples
-    jaccard_similarity_dict = {}  # Key = pid, value = Ordered (L -> G) list of jaccard similar playlist tuples
-    for input_playlist_index, input_pid in enumerate(playlist_dict.keys()):
-        cosine_similarity_tuples = []  # List of tuples where tuple[0] = pid, tuple[1] = cosine_similarity_value
-        jaccard_similarity_tuples = []  # List of tuples where tuple[0] = pid, tuple[1] = jaccard_similarity_value
-        for comparison_playlist_index, comparison_pid in enumerate(playlist_dict.keys()):
-            if input_pid != comparison_pid:
-                input_playlist_column, comparison_playlist_column = helpers.get_two_playlist_column(input_playlist_index, comparison_playlist_index, playlist_track_matrix)
-                cosine_similarity_tuples.append((comparison_pid, similarities.cosine(input_playlist_column, comparison_playlist_column)))
-                jaccard_similarity_tuples.append((comparison_pid, similarities.jaccard(input_playlist_column, comparison_playlist_column)))
-        cosine_similarity_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-        jaccard_similarity_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-        cosine_similarity_dict[input_pid] = cosine_similarity_tuples
-        jaccard_similarity_dict[input_pid] = jaccard_similarity_tuples
-    return cosine_similarity_dict, jaccard_similarity_dict
-
-def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_similarity_dict, N):
-    t1 = time.time()
-    max_K = 30  # Number of top similar playlists to the input playlist
+def run(cosine_sims, jaccard_sims, playlist_matrix, tids, N):
+    start = time.time()
+    max_K = 30 # Number of top similar playlists to the input playlist
     print("User-based collaborative filtering...")
 
     # For each input playlist, recommend N tracks to it, and evaluate the recommendation
     cosine_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
-    jaccard_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results
+    jaccard_sim_k_evaluation_results = {} # Key = k, Value = list of r_precision_results'
 
+    #for playlist_index in range(0, playlist_matrix.shape[0]):
+        #for K in range(1, max_K + 1):
+    playlist_index = 0
+    K = 4
+    top_k_cosine_sims = np.sort(cosine_sims[playlist_index])[1:K +1].tolist()
+    top_k_playlists = []
+    for similar_index, cosine_sim in np.ndenumerate(cosine_sims[playlist_index]):
+        if top_k_cosine_sims.size == 0:
+            break
+        if cosine_sim in top_k_cosine_sims:
+            top_k_cosine_sims.remove(cosine_sim)
+            top_k_playlists.append((cosine_sim * playlist_matrix[similar_index]).tolist())
+    top_k_playlists = np.asarray(top_k_playlists)
+    track_relevancy_scores = np.sum(top_k_playlists, axis=0)
+    sorted_track_relevancy_scores = np.sort(track_relevancy_scores)
+
+    new_playlist = playlist_matrix[playlist_index]
+    evaluation_sample = []
+    for track_index, cell in np.ndenumerate(playlist_matrix[playlist_index]):
+        if len(evaluation_sample) < N and cell == 1:
+            evaluation_sample.append(track_index)
+            new_playlist[track_index] = 0
+
+    recommended_tracks = []
+    for track_index, track_score in np.ndenumerate(track_relevancy_scores):
+        if sorted_track_relevancy_scores.size == 0:
+            break
+        if track_score in top_n_track_relevancy_scores:
+            top_n_track_relevancy_scores.remove(track_score)
+            recommended_tracks.append(track_index)
+
+
+
+
+
+    """
     for input_pid in np.asarray(list(playlist_dict.keys())):
         for K in range(1, max_K + 1):
             # Calculate the sum similarity score for each potential tid to recommend
@@ -92,3 +114,5 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
 
     print("User-based time:", time.time() - t1)
     return cosine_results_by_K, jaccard_results_by_K
+    """
+    return 1

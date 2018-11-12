@@ -1,17 +1,20 @@
 import random
+import numpy as np
 
 # Returns the playlist X track matrix
+"""
 def create(playlist_dict, unique_track_dict):
-    matrix = [] # rows = tracks, columns = playlists, cells = 1 if track in playlist else 0
-    for track_id in unique_track_dict.keys():
-        row = []
+    playlist_matrix = np.zeros((len(playlist_dict.keys()), len(unique_track_dict.keys())))
+    for pidx, playlist in np.ndenumerate(np.asarray(playlist_dict)):
+    for tid in np.asarray(unique_track_dict.keys()):
         for playlist_id in playlist_dict.keys():
-            if track_id in playlist_dict[playlist_id]['tracks']:
-                row.append(1)
+            if tid in playlist_dict[playlist_id]['tracks']:
+                playlist_matrix[]
             else:
                 row.append(0)
         matrix.append(row)
     return matrix
+    """
 
 # Returns the sparsity value of the matrix
 def sparsity(playlist_track_matrix):

@@ -1,33 +1,40 @@
 import requests
-
+import numpy as np
+import time
 def get(mongo_collection):
-    print("Playlist Statistics:")
-    indexed_pids = []
-    indexed_tids = []
-    playlist_dict = {}
-    unique_track_dict = {}
+    print("Getting playlist statistics")
+    start = time.time()
+    pids = []
+    tids = []
     r = requests.get('http://localhost:8888/mongodb/playlists/' + str(mongo_collection))
     if r.status_code == 200:
-        for playlist in r.json():
-            indexed_pids.append(playlist['pid'])
-            tracks = []
+        playlists = np.asarray(r.json())
+        for playlist in playlists:
+            pids.append(playlist['pid'])
             for track in playlist['tracks']:
-                tracks.append(track['tid'])
-                if track['tid'] not in unique_track_dict.keys():
-                    unique_track_dict[track['tid']] = track
-                    indexed_tids.append(track['tid'])
-            playlist['tracks'] = tracks
-            playlist_dict[playlist['pid']] = playlist
+                if track['tid'] not in tids:
+                    tids.append(track['tid'])
+        print("\t# Unique playlists:", len(pids))
+        print("\t# Unique tracks:", len(tids))
+        print("\t-Seconds elapsed:", time.time() - start)
 
-    total_tracks = 0
-    for playlist_id in playlist_dict.keys():
-        total_tracks += len(playlist_dict[playlist_id]['tracks'])
+        print("Making matrix...")
+        start = time.time()
+        playlist_matrix = np.zeros((len(pids), len(tids)))
+        tids = np.asarray(tids)
+        for row, playlist in np.ndenumerate(playlists):
+            playlist_tids = []
+            for track in np.asarray(playlist['tracks']):
+                playlist_tids.append(track['tid'])
+            for col, tid in np.ndenumerate(tids):
+                if tid in playlist_tids:
+                    playlist_matrix[row][col] = 1
+        print("\t-Seconds elapsed:", time.time() - start)
+        print(playlist_matrix)
+    else:
+        print("Failed to get database collection from server")
 
-    print("\tTotal Playlists:", len(playlist_dict))
-    print("\tTotal Tracks:", total_tracks)
-    print("\tDistinct Tracks:", len(unique_track_dict))
-
-    return playlist_dict, unique_track_dict, indexed_pids, indexed_tids
+    return playlist_matrix
 
 def post(final_playlists, mongo_collection):
     print("posting")

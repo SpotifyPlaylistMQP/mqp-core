@@ -12,7 +12,8 @@ N = 10  # Number of songs to recommend
 number_of_times_to_run = 20
 iteration_dcg_graph_data = []
 
-playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
+playlist_matrix = mongodb_communicate.get(mongo_collection)
+"""
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
@@ -78,3 +79,4 @@ dcg_graph_data['ij'] = avg_ij
 precisionGraph.create_graph(dcg_graph_data, mongo_collection, N, number_of_times_to_run)
 
 print("Time in Seconds: ", time.time() - start)
+"""

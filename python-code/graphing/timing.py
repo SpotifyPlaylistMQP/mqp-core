@@ -16,7 +16,7 @@ def save_time(my_time, type):
 
     for i, row in excel_file.iterrows():
         if row['Date'] == save_date:
-            # print("Previous runtime found for " + type)
+            print("Previous runtime found for " + type + ". Comparing times...")
             prev_time = row['Runtime']
             my_time = check_best_time(my_time, prev_time)
             excel_file.at[i,'Runtime'] = my_time
@@ -31,13 +31,15 @@ def save_time(my_time, type):
         new_cell = pd.DataFrame(sample_cell)
         append_df_to_excel('./graphing/timing.xlsx', new_cell, type)
 
+    print("\r")
+
 def check_best_time(new, prev):
-    if(new < prev):
+    print("New Time: " + str(new) + " vs Previous Time: " + str(prev))
+    if(new >= prev):
+        return prev
+    else:
         print("New best runtime found! Updating spreadsheet...")
         return new
-    else:
-        # print("Previous runtime was better, tossing out new time...")
-        return prev
 
 def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=False, **to_excel_kwargs):
     if 'engine' in to_excel_kwargs:

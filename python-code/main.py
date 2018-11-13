@@ -4,6 +4,7 @@ from mongodb import mongodb_communicate
 from graphing import precisionGraph
 import sys
 import time
+from graphing import timing
 
 start = time.time()
 mongo_collection = sys.argv[1]
@@ -24,8 +25,13 @@ cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dic
 
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
-    uc, uj = user_based.run(playlist_dict, unique_track_dict, cosine_sim_playlist_dict, jaccard_sim_playlist_dict, N)
-    ic, ij = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
+    uc, uj, user_final_time = user_based.run(playlist_dict, unique_track_dict, cosine_sim_playlist_dict, jaccard_sim_playlist_dict, N)
+    ic, ij, item_final_time = item_based.run(playlist_dict, unique_track_dict, N, cosine_sim_track_dict, jaccard_sim_track_dict)
+    print("Iteration " + str(i + 1) + " Timings Results:")
+    print("User_Based Runtime: " + str(user_final_time))
+    print("Item_Based Runtime: " + str(item_final_time))
+    timing.save_time(user_final_time, "user_based")
+    timing.save_time(item_final_time, "item_based")
 
     # R-precision graph
     dcg_data = {}

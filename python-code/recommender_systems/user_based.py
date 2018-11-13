@@ -74,6 +74,4 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
         print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
     final = round(((time.time()) - start),2)
-    print("Total time elapsed: " + str(final) + " seconds")
-    timing.save_time(final, "user_based")
-    return cosine_results_by_K, jaccard_results_by_K
+    return cosine_results_by_K, jaccard_results_by_K, final

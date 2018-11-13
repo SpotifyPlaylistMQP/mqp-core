@@ -9,37 +9,55 @@ from openpyxl import load_workbook
 
 def save_time(my_time, type):
     save_date = time.strftime("%m-%d-%Y")
-    path_to_json = "./graphing/"
-    cwd = os.getcwd()
-    excel_file = pd.read_excel('./graphing/timing.xlsx', sheet_name=type, index=None)
-    update_flag = 0
+    file_name = './graphing/timing.xlsx'
+    excel_file = pd.read_excel(file_name, sheet_name=type, index=0)
+
+    writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+    # workbook  = writer.book
+    # worksheet = writer.sheets['Sheet1']
+    update_flag = True
 
     for i, row in excel_file.iterrows():
-        if row['Date'] == save_date:
+        if excel_file.at[i,'Date'] == save_date:
             print("Previous runtime found for " + type + ". Comparing times...")
             prev_time = excel_file.at[i,'Runtime']
-            my_time = check_best_time(my_time, prev_time)
-            excel_file.at[i,'Runtime'] = my_time
-            update_flag = 1
+            compare_flag = check_best_time(my_time, prev_time)
+
+            if compare_flag:
+                # print("New best runtime found! Updating spreadsheet...")
+            # #     print("MYTIMETOSHINE: " + str(my_time))
+            # #     # excel_file.at[i,'Runtime'] = my_time
+            #     excel_file.at[i,'Runtime'] = my_time
+            #     test = excel_file.at[i,'Runtime']
+            #     print("Checking updated value: " + str(test))
+            #     # excel_file.tail()
+            #
+            #     excel_file.to_excel(writer, sheet_name=type)
+            #     writer.save()
+            #     # excel_file.to_pickle(file_name)
+
+            update_flag = False
             break
         else:
             continue
 
-    if(update_flag == 0):
+    # print("UPDATE FLAG :" + str(update_flag))
+    if update_flag:
         print("Adding new runtime for " + type + " on " + save_date + " to spreadsheet...")
-        sample_cell = [{'Date':save_date,'Runtime':my_time}]
-        new_cell = pd.DataFrame(sample_cell)
-        append_df_to_excel('./graphing/timing.xlsx', new_cell, type)
+        data_frame = [{'Date':save_date,'Runtime':my_time}]
+        new_cell = pd.DataFrame(data_frame)
+        append_df_to_excel(file_name, new_cell, type)
+        # excel_file.append(new_cell,ignore_index=True)
+        # excel_file.tail()
 
     print("\r")
 
 def check_best_time(new, prev):
     print("New Time: " + str(new) + " vs Previous Time: " + str(prev))
-    if(new >= prev):
-        return prev
+    if(new < prev):
+        return True
     else:
-        print("New best runtime found! Updating spreadsheet...")
-        return new
+        return False
 
 def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=False, **to_excel_kwargs):
     if 'engine' in to_excel_kwargs:
@@ -77,10 +95,3 @@ def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=F
     # write and save
     df.to_excel(writer, sheet_name, startrow=startrow, header=None, index=None, **to_excel_kwargs)
     writer.save()
-
-def main():
-    data = []
-    print(data)
-
-if __name__ == '__main__':
-    main()

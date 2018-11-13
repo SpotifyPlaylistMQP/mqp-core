@@ -2,9 +2,12 @@ from recommender_systems.modules import evaluation, matrix, helpers
 import numpy as np
 from scipy import linalg
 from numpy import dot
+import time
 
 def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations):
     print("Matrix factorization...")
+    start = time.time()
+
     number_of_track = len(track_playlist_matrix)
     number_of_playlists = len(track_playlist_matrix[0])
 
@@ -27,6 +30,9 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
             total_results += 1
         avg_avg_precision += avg_precision / total_results
 
+    final = round(((time.time()) - start),2)
+    print("Total time elapsed: " + str(final) + " seconds")
+    timing.save_time(final, "Matrix_Factorization")
     return avg_avg_precision / total_iterations
 
 # https://stackoverflow.com/questions/22767695/python-non-negative-matrix-factorization-that-handles-both-zeros-and-missing-dat

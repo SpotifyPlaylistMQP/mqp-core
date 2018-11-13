@@ -73,9 +73,7 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
         jaccard_results_by_K[K] = evaluation.avg_precision(jaccard_sim_k_evaluation_results[K])
         print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
-    end = time.time()
-    total = end - start
-    rounded = round(total,2)
-    print("Total time elapsed: " + str(rounded) + " seconds")
-    timing.save_time(rounded, "user_based")
+    final = round(((time.time()) - start),2)
+    print("Total time elapsed: " + str(final) + " seconds")
+    timing.save_time(final, "user_based")
     return cosine_results_by_K, jaccard_results_by_K

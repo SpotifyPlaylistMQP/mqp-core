@@ -29,6 +29,12 @@ def dcg_precision(recommended_tracks, T, N, track_dict):
     
     return dcg_at_n(reverse_matches, N, 0) / dcg_at_n(reverse_ideal, N, 0)
 
+def r_precision(recommended_tracks, T, N):
+    matches = 0
+    for recommendation in recommended_tracks:
+        if recommendation[0] in T:
+            matches += 1
+    return matches / N
 
 def avg_precision(r_precision_results):
     r_precision_sums = 0.0

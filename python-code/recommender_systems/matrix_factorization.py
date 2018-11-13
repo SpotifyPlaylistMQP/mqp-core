@@ -1,15 +1,14 @@
 from recommender_systems.modules import evaluation, matrix, helpers
+import scipy.sparse as sparse
 import numpy as np
 from scipy import linalg
 from numpy import dot
 import time
+from scipy.sparse.linalg import spsolve
 
 def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations):
     print("Matrix factorization...")
     start = time.time()
-
-    number_of_track = len(track_playlist_matrix)
-    number_of_playlists = len(track_playlist_matrix[0])
 
     factorized_matrix = matrix_factorization(track_playlist_matrix, K)
 
@@ -17,7 +16,7 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     for iteration in range(total_iterations):
         avg_precision = 0
         total_results = 0
-        for input_playlist_index, input_playlist_row in enumerate(factorized_matrix.T):
+        for input_playlist_index, input_playlist_row in enumerate(factorized_matrix):
             input_pid = indexed_pids[input_playlist_index]
             prediction_tuples = [] # List of tuples: (tid, prediction)
             for track_index, prediction in enumerate(input_playlist_row):
@@ -32,49 +31,58 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
 
     final = round(((time.time()) - start),2)
     print("Total time elapsed: " + str(final) + " seconds")
-    timing.save_time(final, "Matrix_Factorization")
+    # timing.save_time(final, "Matrix_Factorization")
     return avg_avg_precision / total_iterations
 
-# https://stackoverflow.com/questions/22767695/python-non-negative-matrix-factorization-that-handles-both-zeros-and-missing-dat
-def matrix_factorization(track_playlist_matrix, latent_features, steps=100, error_limit=0.000001, fit_error_limit=0.0001):
-    eps = 1e-5
-    track_playlist_matrix = np.array(track_playlist_matrix)
+#https://jessesw.com/Rec-System/
+def matrix_factorization(track_playlist_matrix, beta=0.1, alpha=40, iterations=10, latent_features=20, seed=0):
+    # first set up our confidence matrix
+    conf = (alpha * sparse.csr_matrix(track_playlist_matrix))  # To allow the matrix to stay sparse, I will add one later when each row is taken
 
-    # mask
-    mask = np.sign(track_playlist_matrix)
+    # and converted to dense.
+    num_user = conf.shape[0]
+    num_item = conf.shape[1]  # Get the size of our original ratings matrix, m x n
 
-    # initial matrices. A is random [0,1] and Y is A\X.
-    rows, columns = track_playlist_matrix.shape
-    A = np.random.rand(rows, latent_features)
-    A = np.maximum(A, eps)
+    # initialize our X/Y feature vectors randomly with a set seed
+    rstate = np.random.RandomState(seed)
 
-    Y = linalg.lstsq(A, track_playlist_matrix)[0]
-    Y = np.maximum(Y, eps)
+    X = sparse.csr_matrix(rstate.normal(size=(num_user, latent_features)))  # Random numbers in a m x rank shape
+    Y = sparse.csr_matrix(rstate.normal(size=(num_item, latent_features)))  # Normally this would be rank x n but we can
+    # transpose at the end. Makes calculation more simple.
+    X_eye = sparse.eye(num_user)
+    Y_eye = sparse.eye(num_item)
+    lambda_eye = beta * sparse.eye(latent_features)  # Our regularization term lambda*I.
 
-    masked_matrix = mask * track_playlist_matrix
-    matrix_est_prev = dot(A, Y)
-    for i in range(1, steps + 1):
-        # ===== updates =====
-        top = dot(masked_matrix, Y.T)
-        bottom = (dot((mask * dot(A, Y)), Y.T)) + eps
-        A *= top / bottom
+    # We can compute this before iteration starts.
 
-        A = np.maximum(A, eps)
+    # Begin iterations
 
-        top = dot(A.T, masked_matrix)
-        bottom = dot(A.T, mask * dot(A, Y)) + eps
-        Y *= top / bottom
-        Y = np.maximum(Y, eps)
+    for iter_step in range(iterations):  # Iterate back and forth between solving X given fixed Y and vice versa
+        # Compute yTy and xTx at beginning of each iteration to save computing time
+        yTy = Y.T.dot(Y)
+        xTx = X.T.dot(X)
+        # Being iteration to solve for X based on fixed Y
+        for u in range(num_user):
+            conf_samp = conf[u, :].toarray()  # Grab user row from confidence matrix and convert to dense
+            pref = conf_samp.copy()
+            pref[pref != 0] = 1  # Create binarized preference vector
+            CuI = sparse.diags(conf_samp, [0])  # Get Cu - I term, don't need to subtract 1 since we never added it
+            yTCuIY = Y.T.dot(CuI).dot(Y)  # This is the yT(Cu-I)Y term
+            yTCupu = Y.T.dot(CuI + Y_eye).dot(pref.T)  # This is the yTCuPu term, where we add the eye back in
+            # Cu - I + I = Cu
+            X[u] = spsolve(yTy + yTCuIY + lambda_eye, yTCupu)
+            # Solve for Xu = ((yTy + yT(Cu-I)Y + lambda*I)^-1)yTCuPu, equation 4 from the paper
+        # Begin iteration to solve for Y based on fixed X
+        for i in range(num_item):
+            conf_samp = conf[:, i].T.toarray()  # transpose to get it in row format and convert to dense
+            pref = conf_samp.copy()
+            pref[pref != 0] = 1  # Create binarized preference vector
+            CiI = sparse.diags(conf_samp, [0])  # Get Ci - I term, don't need to subtract 1 since we never added it
+            xTCiIX = X.T.dot(CiI).dot(X)  # This is the xT(Cu-I)X term
+            xTCiPi = X.T.dot(CiI + X_eye).dot(pref.T)  # This is the xTCiPi term
+            Y[i] = spsolve(xTx + xTCiIX + lambda_eye, xTCiPi)
+            # Solve for Yi = ((xTx + xT(Cu-I)X) + lambda*I)^-1)xTCiPi, equation 5 from the paper
+    # End iterations
+    return np.dot(X.toarray(), Y.toarray().T).T.tolist()  # Transpose at the end to make up for not being transposed at the beginning.
+    # Y needs to be rank x n. Keep these as separate matrices for scale reasons.
 
-        # ==== evaluation ====
-        if i % 5 == 0 or i == 1 or i == steps:
-            matrix_est = dot(A, Y)
-            err = mask * (matrix_est_prev - matrix_est)
-            fit_residual = np.sqrt(np.sum(err ** 2))
-            matrix_est_prev = matrix_est
-
-            cur_res = linalg.norm(mask * (track_playlist_matrix - matrix_est), ord='fro')
-            if cur_res < error_limit or fit_residual < fit_error_limit:
-                break
-
-    return dot(A, Y)

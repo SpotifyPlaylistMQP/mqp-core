@@ -17,7 +17,7 @@ def save_time(my_time, type):
     for i, row in excel_file.iterrows():
         if row['Date'] == save_date:
             print("Previous runtime found for " + type + ". Comparing times...")
-            prev_time = row['Runtime']
+            prev_time = excel_file.at[i,'Runtime']
             my_time = check_best_time(my_time, prev_time)
             excel_file.at[i,'Runtime'] = my_time
             update_flag = 1

@@ -11,10 +11,6 @@ def save_time(my_time, type):
     save_date = time.strftime("%m-%d-%Y")
     file_name = './graphing/timing.xlsx'
     excel_file = pd.read_excel(file_name, sheet_name=type, index=0)
-
-    writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-    # workbook  = writer.book
-    # worksheet = writer.sheets['Sheet1']
     update_flag = True
 
     for i, row in excel_file.iterrows():
@@ -23,14 +19,14 @@ def save_time(my_time, type):
             prev_time = excel_file.at[i,'Runtime']
             compare_flag = check_best_time(my_time, prev_time)
 
-            if compare_flag:
-                # print("New best runtime found! Updating spreadsheet...")
-            # #     print("MYTIMETOSHINE: " + str(my_time))
-            # #     # excel_file.at[i,'Runtime'] = my_time
+            # if compare_flag:
+            #     print("New best runtime found! Updating spreadsheet...")
+            #     print("MYTIMETOSHINE: " + str(my_time))
+            #     excel_file.at[i,'Runtime'] = my_time
             #     excel_file.at[i,'Runtime'] = my_time
             #     test = excel_file.at[i,'Runtime']
             #     print("Checking updated value: " + str(test))
-            #     # excel_file.tail()
+            #     excel_file.tail()
             #
             #     excel_file.to_excel(writer, sheet_name=type)
             #     writer.save()
@@ -41,17 +37,15 @@ def save_time(my_time, type):
         else:
             continue
 
-    # print("UPDATE FLAG :" + str(update_flag))
     if update_flag:
         print("Adding new runtime for " + type + " on " + save_date + " to spreadsheet...")
         data_frame = [{'Date':save_date,'Runtime':my_time}]
         new_cell = pd.DataFrame(data_frame)
         append_df_to_excel(file_name, new_cell, type)
-        # excel_file.append(new_cell,ignore_index=True)
-        # excel_file.tail()
 
     print("\r")
 
+# Function to compare two times and return a boolean
 def check_best_time(new, prev):
     print("New Time: " + str(new) + " vs Previous Time: " + str(prev))
     if(new < prev):
@@ -59,6 +53,7 @@ def check_best_time(new, prev):
     else:
         return False
 
+# Function to append a new date to the end of the existing spreadsheet
 def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=False, **to_excel_kwargs):
     if 'engine' in to_excel_kwargs:
         to_excel_kwargs.pop('engine')
@@ -71,20 +66,16 @@ def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=F
         FileNotFoundError = IOError
 
     try:
-        # try to open an existing workbook
         writer.book = load_workbook(filename)
 
-        # get the last row in the existing Excel sheet if it was not specified explicitly
         if startrow is None and sheet_name in writer.book.sheetnames:
             startrow = writer.book[sheet_name].max_row
 
-        # truncate sheet
         if truncate_sheet and sheet_name in writer.book.sheetnames:
             idx = writer.book.sheetnames.index(sheet_name)
             writer.book.remove(writer.book.worksheets[idx])
             writer.book.create_sheet(sheet_name, idx)
 
-        # copy existing sheets
         writer.sheets = {ws.title:ws for ws in writer.book.worksheets}
     except FileNotFoundError:
         pass
@@ -92,6 +83,5 @@ def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=F
     if startrow is None:
         startrow = 0
 
-    # write and save
     df.to_excel(writer, sheet_name, startrow=startrow, header=None, index=None, **to_excel_kwargs)
-    writer.save()
+    writer.save() # write and save

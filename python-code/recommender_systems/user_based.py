@@ -1,5 +1,6 @@
 from recommender_systems.modules import similarities, evaluation, matrix, helpers
 import time
+from graphing import timing
 
 def create_similarity_dictionaries(playlist_dict, playlist_track_matrix):
     # For each input playlist, get the list of the other playlists ordered by similarity
@@ -72,7 +73,5 @@ def run(playlist_dict, unique_track_dict, cosine_similarity_dict, jaccard_simila
         jaccard_results_by_K[K] = evaluation.avg_precision(jaccard_sim_k_evaluation_results[K])
         print("\tK = " + str(K) + ": cosine = " + str(cosine_results_by_K[K]) + ", jaccard = " + str(jaccard_results_by_K[K]))
 
-    end = time.time()
-    total = end - start
-    print("Total time elapsed: " + str(round(total,2)) +" seconds")
-    return cosine_results_by_K, jaccard_results_by_K
+    final = round(((time.time()) - start),2)
+    return cosine_results_by_K, jaccard_results_by_K, final

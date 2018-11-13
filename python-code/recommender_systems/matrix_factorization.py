@@ -1,10 +1,14 @@
 from recommender_systems.modules import evaluation, matrix, helpers
 import scipy.sparse as sparse
 import numpy as np
+from scipy import linalg
+from numpy import dot
+import time
 from scipy.sparse.linalg import spsolve
 
 def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations):
     print("Matrix factorization...")
+    start = time.time()
 
     factorized_matrix = matrix_factorization(track_playlist_matrix, K)
 
@@ -25,6 +29,9 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
             total_results += 1
         avg_avg_precision += avg_precision / total_results
 
+    final = round(((time.time()) - start),2)
+    print("Total time elapsed: " + str(final) + " seconds")
+    # timing.save_time(final, "Matrix_Factorization")
     return avg_avg_precision / total_iterations
 
 #https://jessesw.com/Rec-System/
@@ -78,3 +85,4 @@ def matrix_factorization(track_playlist_matrix, beta=0.1, alpha=40, iterations=1
     # End iterations
     return np.dot(X.toarray(), Y.toarray().T).T.tolist()  # Transpose at the end to make up for not being transposed at the beginning.
     # Y needs to be rank x n. Keep these as separate matrices for scale reasons.
+

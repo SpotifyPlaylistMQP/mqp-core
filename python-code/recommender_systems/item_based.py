@@ -1,26 +1,27 @@
-from recommender_systems.modules import similarities, evaluation, matrix, helpers
+from recommender_systems.modules import evaluation, matrix, helpers
+from scipy.spatial import distance
+import numpy as np
+import time
 
-# For each input track, get the list of the other tracks ordered by similarity
-def create_similarity_dictionaries(indexed_tids, matrix_rows,):
-    cosine_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of cosine similar track tuples
-    jaccard_similarity_dict = {}  # Key = track_id, Value = Ordered (L -> G) list of jaccard similar track tuples
-    for input_track_index, input_track_row in enumerate(matrix_rows):
-        # print(input_track_index)
-        input_tid = indexed_tids[input_track_index]
-        cosine_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = cosine_similarity_value
-        jaccard_similarity_tuples = []  # List of tuples where tuple[0] = tid, tuple[1] = jaccard_similarity_value
-        for comparison_track_index, comparison_track_row in enumerate(matrix_rows):
-            comparison_tid = indexed_tids[comparison_track_index]
-            if input_tid != comparison_tid:
-                cosine_similarity_tuples.append(
-                    (comparison_tid, similarities.cosine(input_track_row, comparison_track_row)))
-                jaccard_similarity_tuples.append(
-                    (comparison_tid, similarities.jaccard(input_track_row, comparison_track_row)))
-        cosine_similarity_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-        jaccard_similarity_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-        cosine_similarity_dict[input_tid] = cosine_similarity_tuples
-        jaccard_similarity_dict[input_tid] = jaccard_similarity_tuples
-    return cosine_similarity_dict, jaccard_similarity_dict
+def track_similarities(track_matrix):
+    start = time.time()
+    print("Track similarities...")
+    cosine_sims = []
+    jaccard_sims = []
+    for track1 in track_matrix:
+        cosine_row = []
+        jaccard_row = []
+        for track2 in track_matrix:
+            if np.array_equal(track1, track2):
+                cosine_row.append(1)
+                jaccard_row.append(1)
+            else:
+                cosine_row.append(distance.cosine(track1, track2))
+                jaccard_row.append(distance.jaccard(track1, track2))
+        cosine_sims.append(cosine_row)
+        jaccard_sims.append(jaccard_row)
+    print("-Seconds elapsed:", time.time() - start)
+    return np.asarray(cosine_sims), np.asarray(jaccard_sims)
 
 def run(playlist_dict, unique_track_dict, N, cosine_similarity_dict, jaccard_similarity_dict):
     max_K = 300

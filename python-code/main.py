@@ -12,16 +12,17 @@ N = 10  # Number of songs to recommend
 number_of_times_to_run = 20
 iteration_dcg_graph_data = []
 
-playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
-track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
-print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
+playlist_matrix, pids, tids = mongodb_communicate.get_data(mongo_collection)
+track_matrix = playlist_matrix.T
+print("\tSparsity: ", matrix.sparsity(playlist_matrix))
 
-# Both have Key = track_id, Value = Ordered (L -> G) list of similar track tuples
-cosine_sim_playlist_dict, jaccard_sim_playlist_dict = user_based.create_similarity_dictionaries(playlist_dict, track_playlist_matrix)
+# Cells = tuple where [0] = cosine [1] = jaccard
+playlist_cosine_sims, playlist_jaccard_sims = user_based.playlist_similarities(playlist_matrix)
+print(playlist_jaccard_sims)
+track_cosine_sims, track_jaccard_sims = item_based.track_similarities(track_matrix)
 
-# Both have Key = track_id, Value = Ordered (L -> G) list of similar track tuples
-cosine_sim_track_dict, jaccard_sim_track_dict = item_based.create_similarity_dictionaries(indexed_tids, track_playlist_matrix)
-
+user_based.run(playlist_cosine_sims, playlist_jaccard_sims, playlist_matrix, tids, N)
+"""
 for i in range(number_of_times_to_run):
     print("Iteration " + str(i + 1) + "-----------------------------------------------------------------------")
     uc, uj = user_based.run(playlist_dict, unique_track_dict, cosine_sim_playlist_dict, jaccard_sim_playlist_dict, N)
@@ -78,3 +79,4 @@ dcg_graph_data['ij'] = avg_ij
 precisionGraph.create_graph(dcg_graph_data, mongo_collection, N, number_of_times_to_run)
 
 print("Time in Seconds: ", time.time() - start)
+"""

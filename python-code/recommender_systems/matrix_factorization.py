@@ -1,19 +1,23 @@
 from recommender_systems.modules import evaluation, matrix, helpers
 import scipy.sparse as sparse
 import numpy as np
-from scipy import linalg
-from numpy import dot
 import time
 from scipy.sparse.linalg import spsolve
 
-def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations):
+def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids):
     print("Matrix factorization...")
     start = time.time()
 
-    factorized_matrix = matrix_factorization(track_playlist_matrix, K)
+    # Testing parameters
+    alpha = 10
+    beta = 0.1
+    latent_features = 20
+    iterations = 10
+    test_iterations_for_avg_precision = 10
 
     avg_avg_precision = 0
-    for iteration in range(total_iterations):
+    factorized_matrix = matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations)
+    for test_iteration in range(test_iterations_for_avg_precision):
         avg_precision = 0
         total_results = 0
         for input_playlist_index, input_playlist_row in enumerate(factorized_matrix):
@@ -28,14 +32,14 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
             avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
             total_results += 1
         avg_avg_precision += avg_precision / total_results
+    print("When alpha={}, beta={}, latent_features={}: NDCG={}".format(alpha, beta, latent_features, avg_avg_precision / test_iterations_for_avg_precision))
 
     final = round(((time.time()) - start),2)
     print("Total time elapsed: " + str(final) + " seconds")
     # timing.save_time(final, "Matrix_Factorization")
-    return avg_avg_precision / total_iterations
 
 #https://jessesw.com/Rec-System/
-def matrix_factorization(track_playlist_matrix, beta=0.1, alpha=40, iterations=10, latent_features=20, seed=0):
+def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations, seed=0):
     # first set up our confidence matrix
     conf = (alpha * sparse.csr_matrix(track_playlist_matrix))  # To allow the matrix to stay sparse, I will add one later when each row is taken
 

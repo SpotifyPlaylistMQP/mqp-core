@@ -14,9 +14,6 @@ print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
 avg_precision_by_steps = {}
 total_iterations = 15
-for K in range(1, 10):
-    results = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, K, total_iterations)
-    print("When K = ", K, " DCG = ", results)
-    avg_precision_by_steps[K] = results
+matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids)
 
 print("Time in Seconds: ", time.time() - start)

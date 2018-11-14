@@ -19,29 +19,22 @@ def save_time(my_time, type):
             prev_time = excel_file.at[i,'Runtime']
             compare_flag = check_best_time(my_time, prev_time)
 
-            # if compare_flag:
-            #     print("New best runtime found! Updating spreadsheet...")
-            #     print("MYTIMETOSHINE: " + str(my_time))
-            #     excel_file.at[i,'Runtime'] = my_time
-            #     excel_file.at[i,'Runtime'] = my_time
-            #     test = excel_file.at[i,'Runtime']
-            #     print("Checking updated value: " + str(test))
-            #     excel_file.tail()
-            #
-            #     excel_file.to_excel(writer, sheet_name=type)
-            #     writer.save()
-            #     # excel_file.to_pickle(file_name)
+            if compare_flag: # Need to update the existing spreadsheet
+                print("New best runtime found! Updating spreadsheet...")
+                data_frame = [{'Date':save_date,'Runtime':my_time}]
+                updated_cell = pd.DataFrame(data_frame)
+                append_df_to_excel(file_name, updated_cell, type, i+1)
 
             update_flag = False
             break
         else:
             continue
 
-    if update_flag:
+    if update_flag: # Add a new entry to the spreadsheet
         print("Adding new runtime for " + type + " on " + save_date + " to spreadsheet...")
         data_frame = [{'Date':save_date,'Runtime':my_time}]
         new_cell = pd.DataFrame(data_frame)
-        append_df_to_excel(file_name, new_cell, type)
+        append_df_to_excel(file_name, new_cell, type, None)
 
     print("\r")
 
@@ -54,7 +47,7 @@ def check_best_time(new, prev):
         return False
 
 # Function to append a new date to the end of the existing spreadsheet
-def append_df_to_excel(filename, df, sheet_name, startrow=None, truncate_sheet=False, **to_excel_kwargs):
+def append_df_to_excel(filename, df, sheet_name, startrow, truncate_sheet=False, **to_excel_kwargs):
     if 'engine' in to_excel_kwargs:
         to_excel_kwargs.pop('engine')
 

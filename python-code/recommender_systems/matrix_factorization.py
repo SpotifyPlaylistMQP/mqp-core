@@ -9,30 +9,53 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     start = time.time()
 
     # Testing parameters
-    alpha = 10
-    beta = 0.1
-    latent_features = 20
-    iterations = 10
+    alphas = [100, 10, 1, 0.1, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001, 0.000000001]
+    betas = [100, 10, 1, 0.1, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001, 0.000000001]
+    num_latent_features = [5, 10, 15, 20, 30, 35, 40, 50]
+    num_steps = [100]
     test_iterations_for_avg_precision = 10
 
-    avg_avg_precision = 0
-    factorized_matrix = matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations)
-    for test_iteration in range(test_iterations_for_avg_precision):
-        avg_precision = 0
-        total_results = 0
-        for input_playlist_index, input_playlist_row in enumerate(factorized_matrix):
-            input_pid = indexed_pids[input_playlist_index]
-            prediction_tuples = [] # List of tuples: (tid, prediction)
-            for track_index, prediction in enumerate(input_playlist_row):
-                prediction_tuples.append((indexed_tids[track_index], prediction))
-            prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+    best_ndcg = 0
+    best_alpha = 0
+    best_beta = 0
+    best_lf = 0
+    best_steps = 0
 
-            T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
-            recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
-            avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
-            total_results += 1
-        avg_avg_precision += avg_precision / total_results
-    print("When alpha={}, beta={}, latent_features={}: NDCG={}".format(alpha, beta, latent_features, avg_avg_precision / test_iterations_for_avg_precision))
+    for alpha in alphas:
+        for beta in betas:
+            for num_latent_feature in num_latent_features:
+                for num_step in num_steps:
+                    avg_avg_precision = 0
+                    factorized_matrix = matrix_factorization(track_playlist_matrix, alpha, beta, num_latent_feature, num_step)
+                    for test_iteration in range(test_iterations_for_avg_precision):
+                        avg_precision = 0
+                        total_results = 0
+                        for input_playlist_index, input_playlist_row in enumerate(factorized_matrix):
+                            input_pid = indexed_pids[input_playlist_index]
+                            prediction_tuples = [] # List of tuples: (tid, prediction)
+                            for track_index, prediction in enumerate(input_playlist_row):
+                                prediction_tuples.append((indexed_tids[track_index], prediction))
+                            prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+
+                            T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
+                            recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+                            avg_precision += evaluation.dcg_precision(recommended_tracks, T, N, unique_track_dict)
+                            total_results += 1
+                        avg_avg_precision += avg_precision / total_results
+                    print("When alpha={}, beta={}, latent_features={}, steps={}: NDCG={}".format(alpha, beta, num_latent_feature, num_step, avg_avg_precision / test_iterations_for_avg_precision))
+                    if avg_avg_precision / test_iterations_for_avg_precision > best_ndcg:
+                        best_ndcg = avg_avg_precision / test_iterations_for_avg_precision
+                        best_alpha = alpha
+                        best_beta = beta
+                        best_lf = num_latent_feature
+                        best_steps = num_step
+
+    print("BEST:")
+    print("\talpha", best_alpha)
+    print("\tbeta:", best_beta)
+    print("\tlatent_features:", best_lf)
+    print("\tsteps:", best_steps)
+
 
     final = round(((time.time()) - start),2)
     print("Total time elapsed: " + str(final) + " seconds")

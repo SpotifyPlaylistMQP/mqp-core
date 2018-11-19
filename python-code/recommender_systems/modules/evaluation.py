@@ -1,7 +1,7 @@
 import numpy as np
 
 # Returns a list of tracks in both recommended_tracks and original_20_percent, and their R-Precision value
-def dcg_precision(recommended_tracks, T, N, track_dict):
+def ndcg_precision(recommended_tracks, T, N, track_dict):
     matches = 0
     matches_list = []
     ideal_list = []
@@ -29,12 +29,12 @@ def dcg_precision(recommended_tracks, T, N, track_dict):
     
     return dcg_at_n(reverse_matches, N, 0) / dcg_at_n(reverse_ideal, N, 0)
 
-def r_precision(recommended_tracks, T, N):
+def r_precision(recommended_tracks, T):
     matches = 0
     for recommendation in recommended_tracks:
         if recommendation[0] in T:
             matches += 1
-    return matches / N
+    return matches / len(T)
 
 def avg_precision(r_precision_results):
     r_precision_sums = 0.0
@@ -92,11 +92,3 @@ def ndcg_at_n(r, n, method=0):
 
     print("DCG: ", dcg_at_n(r, n, method) / dcg_max)
     return dcg_at_n(r, n, method) / dcg_max
-
-
-# print(ndcg_at_n([0],5, method=1))
-# print(ndcg_at_n([1],5, method=1))
-# print(ndcg_at_n([1,0],5, method=1))
-# print(ndcg_at_n([0,1],5, method=1))
-# print(ndcg_at_n([0,1,1],5, method=1))
-# print(ndcg_at_n([0,1,1,1],5, method=1))

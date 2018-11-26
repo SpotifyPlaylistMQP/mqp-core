@@ -1,4 +1,4 @@
-from recommender_systems import matrix_factorization
+from recommender_systems import matrix_factorization_enhanced
 from recommender_systems.modules import matrix
 from mongodb import mongodb_communicate
 import sys
@@ -6,7 +6,7 @@ import time
 
 start = time.time()
 mongo_collection = sys.argv[1]
-max_N = 30
+N = 10
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
@@ -34,6 +34,6 @@ print("Params:")
 print(mf_params[mongo_collection])
 
 
-matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, mf_params[mongo_collection])
+matrix_factorization_enhanced.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, mf_params[mongo_collection])
 
 print("Time in Seconds: ", time.time() - start)

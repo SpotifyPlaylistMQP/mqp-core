@@ -2,7 +2,6 @@ from recommender_systems.modules import evaluation, matrix, helpers
 import scipy.sparse as sparse
 import numpy as np
 import time
-import implicit
 from scipy.sparse.linalg import spsolve
 
 def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, sample_size_for_avg, test_values):

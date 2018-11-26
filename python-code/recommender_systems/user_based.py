@@ -128,3 +128,5 @@ def run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, s
     print("\tAvg NDCG:{}, Avg R-Precision:{}".format(sum_cosine_ndcg / sample_size_for_avg, sum_cosine_r / sample_size_for_avg))
     print("Final Jaccard:")
     print("\tAvg NDCG:{}, Avg R-Precision:{}".format(sum_jaccard_ndcg / sample_size_for_avg, sum_jaccard_r / sample_size_for_avg))
+
+    return sum_cosine_ndcg / sample_size_for_avg, sum_cosine_r / sample_size_for_avg

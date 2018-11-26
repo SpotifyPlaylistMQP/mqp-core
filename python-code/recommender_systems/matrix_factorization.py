@@ -64,3 +64,4 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
     # timing.save_time(final, "Matrix_Factorization")
 
     return sum_iteration_ndcg / params['number_of_runs'], sum_iteration_r / params['number_of_runs']
+

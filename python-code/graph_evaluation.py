@@ -10,5 +10,5 @@ user_ndcg, user_r = run_user.run(mongo_collection)
 
 print("Completed data collection... Creating graphs...")
 versusN.n_vs_ndcg(user_ndcg, item_ndcg, mf_ndcg, mongo_collection)
-verusN.n_vs_r_precision(user_r, item_r, mf_r, mongo_collection)
+versusN.n_vs_r_precision(user_r, item_r, mf_r, mongo_collection)
 print("Done!")

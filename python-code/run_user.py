@@ -7,7 +7,7 @@ import time
 
 def run(mongo_collection):
     start = time.time()
-    N = 20  # Number of songs to recommend
+    max_N = 5  # Number of songs to recommend
 
     ndcg_dict = {}
     r_dict = {}
@@ -32,7 +32,7 @@ def run(mongo_collection):
 
     print("Time in Seconds: ", time.time() - start)
 
-    return ncdg_dict, r_dict
+    return ndcg_dict, r_dict
 
 
 mongo_collection = sys.argv[1]

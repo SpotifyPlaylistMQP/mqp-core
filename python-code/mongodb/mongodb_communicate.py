@@ -31,7 +31,7 @@ def get(mongo_collection):
 
 def post(final_playlists, mongo_collection):
     print("posting")
-    chunk_size = 5
+    chunk_size = 3
     chunk = []
     num_chunks_sent = 0
     for i in range(len(final_playlists)):

@@ -7,7 +7,11 @@ module.exports = {
         list.forEach(track => {
           if (track.tid == null || typeof track.tid !== "string" ||
               track.name == null || typeof track.name !== "string" ||
-              track.artist == null || typeof track.artist !== "string"){
+              track.artist == null || typeof track.artist !== "string" ||
+              track.danceability == null || typeof track.danceability !== "number" ||
+              track.energy == null || typeof track.energy !== "number" ||
+              track.tempo == null || typeof track.tempo !== "number" ||
+              track.valence == null || typeof track.valence !== "number"){
             result = false;
             console.log("Invalid track: ", track)
           }

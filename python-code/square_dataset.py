@@ -1,6 +1,6 @@
 from dataset_creator import master_count
 from mongodb import mongodb_communicate
-import sys, time
+import sys, time, requests
 
 start = time.time()
 
@@ -64,6 +64,36 @@ print("Finding the final playlists...")
 final_playlists = []
 for playlist_and_score in playlists_and_scores[:square_size]:
     final_playlists.append(all_playlists[playlist_and_score[0]])
+
+# Fetch audio-features to each track
+print("Fetching audio-features for each track of interest...")
+audio_features = {}
+tid_chunk = []
+for tid_index, tid in enumerate(tids_of_interest):
+    tid_chunk.append(tid)
+    if len(tid_chunk) == 100 or tid_index + 1 == len(tids_of_interest):
+        r = requests.get('http://localhost:8888/spotify/audio-features?tids=' + ','.join(map(str, tid_chunk)))
+        if r.status_code == 200:
+           for track_features in r.json()['audio_features']:
+               audio_features[track_features['id']] = {
+                   'danceability': track_features['danceability'],
+                   'energy': track_features['energy'],
+                   'tempo': track_features['tempo'],
+                   'valence': track_features['valence']
+               }
+        else:
+            print("\tError connecting to spotify/audio-features", r)
+        tid_chunk = []
+        time.sleep(5)
+
+# Attach each audio-feature to each track
+print("Saving each audio-feature to each track...")
+for playlist_index, playlist in enumerate(final_playlists):
+    updated_tracks = []
+    for track in playlist['tracks']:
+        updated_tracks.append({**track, **audio_features[track['tid']]})
+    playlist['tracks'] = updated_tracks
+    final_playlists[playlist_index] = playlist
 
 # Send the final playlists to mongo
 mongo_collection = "mpd_square_" + str(square_size)

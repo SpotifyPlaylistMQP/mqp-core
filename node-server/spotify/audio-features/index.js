@@ -2,8 +2,7 @@ const routes = require('express').Router();
 const request = require('request');
 
 routes.get('/', function(req, res) {
-  console.log(req.query);
-  if (req.query.tids.split(',').length > 10){
+  if (req.query.tids.split(',').length > 100){
     res.send({error: 'Cannot send over 100 Track IDs'})
   }
   const requestOptions = {

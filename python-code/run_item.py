@@ -4,10 +4,9 @@ from mongodb import mongodb_communicate
 import sys
 import time
 
-def run(mongo_collection):
+def run(mongo_collection, max_N):
     start = time.time()
     #mongo_collection = sys.argv[1]
-    max_N = 5  # Number of songs to recommend
     user_params = {
         "mpd_square_100": {
             "K": 20
@@ -35,7 +34,7 @@ def run(mongo_collection):
 
 
 mongo_collection = sys.argv[1]
-ndcg_dict, r_dict = run(mongo_collection)
+ndcg_dict, r_dict = run(mongo_collection, 5)
 
 print(ndcg_dict)
 print(r_dict)

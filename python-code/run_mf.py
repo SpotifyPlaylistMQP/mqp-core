@@ -5,10 +5,8 @@ import sys
 import time
 
 
-def run(mongo_collection):
+def run(mongo_collection, max_N):
     start = time.time()
-
-    max_N = 5
 
     ndcg_dict = {}
     r_dict = {}
@@ -38,7 +36,7 @@ def run(mongo_collection):
     print("Params:")
     print(mf_params[mongo_collection])
 
-    for N in range(1, max_N):
+    for N in range(1, max_N + 1):
         ndcg_dict[N], r_dict[N] = matrix_factorization.run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, mf_params[mongo_collection])
 
 

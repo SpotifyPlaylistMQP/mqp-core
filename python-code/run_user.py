@@ -5,9 +5,8 @@ import sys
 import time
 
 
-def run(mongo_collection):
+def run(mongo_collection, max_N):
     start = time.time()
-    max_N = 5  # Number of songs to recommend
 
     ndcg_dict = {}
     r_dict = {}
@@ -27,7 +26,7 @@ def run(mongo_collection):
     track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
     print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
-    for N in range(1, max_N):
+    for N in range(1, max_N + 1):
         ndcg_dict[N], r_dict[N] = user_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, sample_size_for_avg, N, user_params[mongo_collection]['K'])
 
     print("Time in Seconds: ", time.time() - start)

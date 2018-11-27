@@ -5,7 +5,7 @@ import time
 from scipy.sparse.linalg import spsolve
 
 def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, sample_size_for_avg, test_values):
-    filename = "mf_training" + time.strftime("_%m-%d-%Y__%Hh%Mm") + ".txt"
+    filename = "feature_mf_training" + time.strftime("_%m-%d-%Y__%Hh%Mm") + ".txt"
     output = open(filename, "a")
     output.write("Alpha, Beta, Latent Features, Steps, NDCG, R-Precision\n")
 
@@ -27,7 +27,7 @@ def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_ti
     print("Wrote results to " + filename)
 
 def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
-    print("Matrix factorization...")
+    print("Feature matrix factorization...")
     start = time.time()
 
     sum_iteration_ndcg = 0
@@ -111,6 +111,6 @@ def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, it
             Y[i] = spsolve(xTx + xTCiIX + lambda_eye, xTCiPi)
             # Solve for Yi = ((xTx + xT(Cu-I)X) + lambda*I)^-1)xTCiPi, equation 5 from the paper
     # End iterations
-    print("mf:", time.time() - start)
+
     return np.dot(X.toarray(), Y.toarray().T).T.tolist()  # Transpose at the end to make up for not being transposed at the beginning.
     # Y needs to be rank x n. Keep these as separate matrices for scale reasons.

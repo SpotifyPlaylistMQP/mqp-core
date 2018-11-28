@@ -21,6 +21,18 @@ def n_vs_ndcg(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     matrix_x = list(Dictionary_3.keys())
     matrix_y = list(Dictionary_3.values())
 
+    # Test print statements
+    print("---------- NDCG Graph ---------- ")
+    print("User Based Values")
+    print(user_x)
+    print(user_y)
+    print("Item Based Values")
+    print(item_x)
+    print(item_y)
+    print("Matrix Values")
+    print(matrix_x)
+    print(matrix_y)
+
     # Create the graph figure
     plt.figure(1)
     fig = plt.gcf().set_size_inches(28,16)
@@ -42,15 +54,15 @@ def n_vs_ndcg(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     plt.plot(matrix_x, matrix_y, marker='o', color='g', label='Matrix Factorization') # Item Based Jaccard Values BLUE
 
     plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
-    z = np.polyfit(user_x, user_y, 1)
-    p = np.poly1d(z)
-    #UBJ_plot = plt.plot(uj_x,p(uj_x), "r--", label='User Based')
-    z = np.polyfit(item_x, item_y, 1)
-    p = np.poly1d(z)
-    #UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Item Based')
-    z = np.polyfit(matrix_x, matrix_y, 1)
-    p = np.poly1d(z)
-    #UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Matrix Factorization')
+    # z = np.polyfit(user_x, user_y, 1)
+    # p = np.poly1d(z)
+    # UBJ_plot = plt.plot(uj_x,p(uj_x), "r--", label='User Based')
+    # z = np.polyfit(item_x, item_y, 1)
+    # p = np.poly1d(z)
+    # UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Item Based')
+    # z = np.polyfit(matrix_x, matrix_y, 1)
+    # p = np.poly1d(z)
+    # UBC_plot = plt.plot(uc_x,p(uc_x), "g--", label='Matrix Factorization')
 
     # Finalize and display the graph
     graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_NDCG.png'
@@ -77,8 +89,20 @@ def n_vs_r_precision(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     matrix_x = list(Dictionary_3.keys())
     matrix_y = list(Dictionary_3.values())
 
+    # Test print statements
+    print("---------- R Precision Graph ---------- ")
+    print("User Based Values")
+    print(user_x)
+    print(user_y)
+    print("Item Based Values")
+    print(item_x)
+    print(item_y)
+    print("Matrix Values")
+    print(matrix_x)
+    print(matrix_y)
+
     # Create the graph figure
-    plt.figure(1)
+    plt.figure(2)
     fig = plt.gcf().set_size_inches(28,16)
 
     # Create the legend
@@ -98,15 +122,15 @@ def n_vs_r_precision(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     plt.plot(matrix_x, matrix_y, marker='o', color='g', label='Matrix Factorization') # Item Based Jaccard Values BLUE
 
     plt.legend(bbox_to_anchor=(0.02, 0.975, .22, 0), ncol=2, borderaxespad=0)
-    z = np.polyfit(user_x, user_y, 1)
-    p = np.poly1d(z)
+    # z = np.polyfit(user_x, user_y, 1)
+    # p = np.poly1d(z)
     # UBJ_plot = plt.plot(uj_x,p(uj_x), "r--", label='User Based')
-    z = np.polyfit(item_x, item_y, 1)
-    p = np.poly1d(z)
-    #UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Item Based')
-    z = np.polyfit(matrix_x, matrix_y, 1)
-    p = np.poly1d(z)
-    # UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Matrix Factorization')
+    # z = np.polyfit(item_x, item_y, 1)
+    # p = np.poly1d(z)
+    # UBC_plot = plt.plot(uc_x,p(uc_x), "b--", label='Item Based')
+    # z = np.polyfit(matrix_x, matrix_y, 1)
+    # p = np.poly1d(z)
+    # UBC_plot = plt.plot(uc_x,p(uc_x), "g--", label='Matrix Factorization')
 
     # Finalize and display the graph
     graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_Rprecision.png'

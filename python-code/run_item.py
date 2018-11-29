@@ -4,37 +4,35 @@ from mongodb import mongodb_communicate
 import sys
 import time
 
-def run(mongo_collection, max_N):
+def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, indexed_tids, max_N):
     start = time.time()
-    #mongo_collection = sys.argv[1]
-    user_params = {
+
+    item_params = {
         "mpd_square_100": {
-            "K": 20
+            "K": 20,
+            "number_of_runs": 10,
+            "sample_size_for_avg": 100
         },
         "mpd_square_1000": {
-            "K": 40
+            "K": 40,
+            "number_of_runs": 10,
+            "sample_size_for_avg": 1000
         }
     }
 
-    sample_size_for_avg = 100
-
-    playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
-    track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
-    print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
-
-    ndcg_dict = {}
-    r_dict = {}
-    for N in range(1, max_N + 1):
-        ndcg, r = item_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, indexed_tids, sample_size_for_avg, N, user_params[mongo_collection]['K'])
-        ndcg_dict[N] = ndcg
-        r_dict[N] = r
+    ndcg_dict, r_dict = item_based.run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, indexed_tids, max_N, item_params[mongo_collection])
 
     print("Time in Seconds: ", time.time() - start)
     return ndcg_dict, r_dict
 
 
 mongo_collection = sys.argv[1]
-ndcg_dict, r_dict = run(mongo_collection, 5)
+
+playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
+track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
+print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
+
+ndcg_dict, r_dict = run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, indexed_tids, 5)
 
 print(ndcg_dict)
 print(r_dict)

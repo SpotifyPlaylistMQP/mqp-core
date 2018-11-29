@@ -18,16 +18,16 @@ mf_params = {
         "beta": 0.001,
         "latent_features": 70,
         "steps": 100,
-        "number_of_runs": 1,
-        "sample_size_for_avg": 5
+        "number_of_runs": 10,
+        "sample_size_for_avg": 100
     },
     "mpd_square_1000": {
         "alpha": 1e-06,
         "beta": 0.001,
         "latent_features": 70,
         "steps": 200,
-        "number_of_runs": 1,
-        "sample_size_for_avg": 50
+        "number_of_runs": 10,
+        "sample_size_for_avg": 1000
     }
 }
 print("Params:")

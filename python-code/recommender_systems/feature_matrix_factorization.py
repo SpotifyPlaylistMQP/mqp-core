@@ -26,7 +26,7 @@ def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_ti
                     output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
     print("Wrote results to " + filename)
 
-def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
+def run(playlist_dict, unique_track_dict, feature_matrix, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
     print("Feature matrix factorization...")
     start = time.time()
 
@@ -39,7 +39,7 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
             T, new_playlist_tracks = matrix.split_playlist(indexed_pids[input_playlist_index], playlist_dict)
             matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix, unique_track_dict)
 
-            factorized_matrix = matrix_factorization(track_playlist_matrix, params['alpha'], params['beta'], params['latent_features'], params['steps'])
+            factorized_matrix = matrix_factorization(track_playlist_matrix, params['alpha'], params['beta'], params['latent_features'], params['steps'], feature_matrix)
 
             prediction_tuples = []
             for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
@@ -62,10 +62,10 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
 
 
 # https://jessesw.com/Rec-System/
-def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations, seed=0):
+def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations, feature_matrix, seed=0):
     start = time.time()
     # first set up our confidence matrix
-    conf = (alpha * sparse.csr_matrix(track_playlist_matrix))  # To allow the matrix to stay sparse, I will add one later when each row is taken
+    conf = (alpha * sparse.csr_matrix(track_playlist_matrix)).T  # To allow the matrix to stay sparse, I will add one later when each row is taken
 
     # and converted to dense.
     num_user = conf.shape[0]
@@ -74,8 +74,19 @@ def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, it
     # initialize our X/Y feature vectors randomly with a set seed
     rstate = np.random.RandomState(seed)
 
-    X = sparse.csr_matrix(rstate.normal(size=(num_user, latent_features)))  # Random numbers in a m x rank shape
+    X = sparse.csr_matrix(rstate.normal(size=(num_user, latent_features + 4)))  # Random numbers in a m x rank shape
     Y = sparse.csr_matrix(rstate.normal(size=(num_item, latent_features)))  # Normally this would be rank x n but we can
+
+    # append features to Y
+    # Y = np.append(Y, feature_matrix, axis=1)
+    # print("Y: ", Y.shape)
+    # print(sparse.csr_matrix(feature_matrix).shape)
+
+    Y = sparse.hstack((Y, feature_matrix))
+
+    print('this is Y')
+    print(Y)
+
     # transpose at the end. Makes calculation more simple.
     X_eye = sparse.eye(num_user)
     Y_eye = sparse.eye(num_item)
@@ -87,8 +98,8 @@ def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, it
 
     for iter_step in range(iterations):  # Iterate back and forth between solving X given fixed Y and vice versa
         # Compute yTy and xTx at beginning of each iteration to save computing time
-        yTy = Y.T.dot(Y)
-        xTx = X.T.dot(X)
+        yTy = Y.T.dot(Y) #item
+        xTx = X.T.dot(X) #user
         # Being iteration to solve for X based on fixed Y
         for u in range(num_user):
             conf_samp = conf[u, :].toarray()  # Grab user row from confidence matrix and convert to dense

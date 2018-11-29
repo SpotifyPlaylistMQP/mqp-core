@@ -26,15 +26,16 @@ def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_ti
                     output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
     print("Wrote results to " + filename)
 
-def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
+def run(playlist_dict, unique_track_dict, max_N, track_playlist_matrix, indexed_tids, indexed_pids, params):
     print("Matrix factorization...")
-    start = time.time()
 
-    sum_iteration_ndcg = 0
-    sum_iteration_r = 0
-    for test_iteration in range(params['number_of_runs']):
-        sum_ndcg = 0
-        sum_r = 0
+    ndcg_N_dict = {}
+    r_N_dict = {}
+    for N in range(1, max_N + 1):
+        ndcg_N_dict[N] = 0
+        r_N_dict[N] = 0
+
+    for run in range(params['number_of_runs']):
         for input_playlist_index in range(params['sample_size_for_avg']):
             T, new_playlist_tracks = matrix.split_playlist(indexed_pids[input_playlist_index], playlist_dict)
             matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix, unique_track_dict)
@@ -43,7 +44,6 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
                                                          regularization=params['beta'],
                                                          iterations=params['steps'])
             model.fit(sparse.csr_matrix(track_playlist_matrix)* params['alpha'])
-
             factorized_matrix = np.dot(model.user_factors, model.item_factors.T).T.T.tolist()
 
             prediction_tuples = []
@@ -51,17 +51,19 @@ def run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids
                 prediction_tuples.append((indexed_tids[track_index], prediction))
             prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
 
-            recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+
+            for N in range(1, max_N + 1):
+                recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+                ndcg_N_dict[N] += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)
+                r_N_dict[N] += evaluation.r_precision(recommended_tracks, T)
+
             matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks + T, track_playlist_matrix, unique_track_dict)
-            sum_ndcg += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)
-            sum_r += evaluation.r_precision(recommended_tracks, T)
-        sum_iteration_ndcg += sum_ndcg / params['sample_size_for_avg']
-        sum_iteration_r += sum_r / params['sample_size_for_avg']
 
-    print("Final Avg NDCG: {}      R: {}".format(sum_iteration_ndcg / params['number_of_runs'], sum_iteration_r / params['number_of_runs']))
-    final = round(((time.time()) - start),2)
-    print("Total time elapsed: " + str(final) + " seconds")
-    # timing.save_time(final, "Matrix_Factorization")
+    for N in range(1, max_N + 1):
+        ndcg_N_dict[N] = ndcg_N_dict[N] / (params['number_of_runs'] * params['sample_size_for_avg'])
+        r_N_dict[N] = r_N_dict[N] / (params['number_of_runs'] * params['sample_size_for_avg'])
+    print("\tAvg NDCG:", ndcg_N_dict)
+    print("\tAvg R-Precision:", r_N_dict)
 
-    return sum_iteration_ndcg / params['number_of_runs'], sum_iteration_r / params['number_of_runs']
+    return ndcg_N_dict, r_N_dict
 

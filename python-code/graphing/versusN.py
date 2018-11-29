@@ -113,7 +113,7 @@ def n_vs_r_precision(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
 
     # Graph setup
     plt.xlabel('N Value (# of songs recommended)', fontsize=12)
-    plt.ylabel('NDCG Precision', fontsize=12)
+    plt.ylabel('R Precision', fontsize=12)
     plt.title('N Values vs R Precision for User, Item, and Matrix Factorization Metrics', fontsize=16)
 
     # Plotting

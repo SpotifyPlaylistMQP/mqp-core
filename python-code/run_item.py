@@ -15,8 +15,8 @@ def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matri
         },
         "mpd_square_1000": {
             "K": 40,
-            "number_of_runs": 10,
-            "sample_size_for_avg": 1000
+            "number_of_runs": 5,
+            "sample_size_for_avg": 100
         }
     }
 
@@ -25,7 +25,7 @@ def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matri
     print("Time in Seconds: ", time.time() - start)
     return ndcg_dict, r_dict
 
-
+"""
 mongo_collection = sys.argv[1]
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
@@ -36,3 +36,4 @@ ndcg_dict, r_dict = run(mongo_collection, playlist_dict, unique_track_dict, trac
 
 print(ndcg_dict)
 print(r_dict)
+"""

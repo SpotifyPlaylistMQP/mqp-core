@@ -1,3 +1,4 @@
+import random
 
 # Helps sort tuples by their second value
 def sort_by_second_tuple(input):
@@ -9,7 +10,7 @@ def recommend_n_tracks(N, similar_track_tuples, current_playlist_tracks):
     recommended_tracks = []
     while len(recommended_tracks) < N:
         if index >= len(similar_track_tuples):
-            print("Not enough tracks to recommend!")
+            #print("Not enough tracks to recommend!")
             return recommended_tracks
         if similar_track_tuples[index][0] not in current_playlist_tracks:
             recommended_tracks.append(similar_track_tuples[index])
@@ -31,3 +32,11 @@ def get_avg_of_list(list):
     for item in list:
         total += item
     return total / len(list)
+
+def get_random_input_playlist_indexes(number_of_indexes, max_index):
+    indexes = []
+    while len(indexes) < number_of_indexes:
+        random_index = random.randint(0, max_index - 1)
+        if random_index not in indexes:
+            indexes.append(random_index)
+    return indexes

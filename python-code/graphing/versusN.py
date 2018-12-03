@@ -65,7 +65,7 @@ def n_vs_ndcg(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     # UBC_plot = plt.plot(uc_x,p(uc_x), "g--", label='Matrix Factorization')
 
     # Finalize and display the graph
-    graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_NDCG.png'
+    graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_NDCG1.png'
     plt.savefig('./graphing/output_images/evaluation_graphs/' + graph_name)
     print("Generated the graph: \"" + graph_name + "\"")
     print("Saving to ./graphing/output_images/evaluation_graphs/...")
@@ -133,7 +133,7 @@ def n_vs_r_precision(Dictionary_1, Dictionary_2, Dictionary_3, playlist_name):
     # UBC_plot = plt.plot(uc_x,p(uc_x), "g--", label='Matrix Factorization')
 
     # Finalize and display the graph
-    graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_Rprecision.png'
+    graph_name = playlist_name + time.strftime("-%d-%m-%Y") + '_Rprecision1.png'
     plt.savefig('./graphing/output_images/evaluation_graphs/' + graph_name)
     print("Generated the graph: \"" + graph_name + "\"")
     print("Saving to ./graphing/output_images/evaluation_graphs/...")

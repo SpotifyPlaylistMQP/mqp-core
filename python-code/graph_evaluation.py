@@ -10,7 +10,7 @@ playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communica
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
-max_N = 100
+max_N = 1000
 
 mf_ndcg, mf_r = run_mf.run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_tids, indexed_pids, max_N)
 item_ndcg, item_r = run_item.run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, indexed_tids, max_N)

@@ -87,7 +87,8 @@ def run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, m
         r_N_dict[N] = 0
 
     for run in range(params['number_of_runs']):
-        for input_playlist_index in range(params['sample_size_for_avg']):
+        print("Run #", run)
+        for input_playlist_index in helpers.get_random_input_playlist_indexes(params['sample_size_for_avg'], len(indexed_pids)):
             input_pid = indexed_pids[input_playlist_index]
             # Calculate the sum similarity score for each potential tid to recommend
             cosine_similar_track_dict = {} # Key = potential tid to recommend, Value = Sum total of cosine_similarities

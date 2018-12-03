@@ -22,8 +22,8 @@ def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matri
             "beta": 0.001,
             "latent_features": 70,
             "steps": 200,
-            "number_of_runs": 10,
-            "sample_size_for_avg": 1000
+            "number_of_runs": 5,
+            "sample_size_for_avg": 100
         }
     }
     print("Params:")
@@ -34,6 +34,7 @@ def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matri
     print("Time in Seconds: ", time.time() - start)
     return ndcg_dict, r_dict
 
+"""
 mongo_collection = sys.argv[1]
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
@@ -41,3 +42,4 @@ track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
 run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_tids, indexed_pids, 5)
+"""

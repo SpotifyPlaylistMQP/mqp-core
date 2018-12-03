@@ -36,7 +36,8 @@ def run(playlist_dict, unique_track_dict, max_N, track_playlist_matrix, indexed_
         r_N_dict[N] = 0
 
     for run in range(params['number_of_runs']):
-        for input_playlist_index in range(params['sample_size_for_avg']):
+        print("Run #", run)
+        for input_playlist_index in helpers.get_random_input_playlist_indexes(params['sample_size_for_avg'], len(indexed_pids)):
             T, new_playlist_tracks = matrix.split_playlist(indexed_pids[input_playlist_index], playlist_dict)
             matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix, unique_track_dict)
 

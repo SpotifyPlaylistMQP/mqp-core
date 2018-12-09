@@ -12,12 +12,12 @@ playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communica
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
-sample_size_for_avg = 20
+sample_size_for_avg = 100
 test_values = {
-    "alpha_set": [100, 1, 1e-2, 1e-4, 1e-6],
-    "beta_set": [100, 1, 1e-2, 1e-4, 1e-6],
-    "latent_features_set": [10, 50, 90],
-    "steps_set": [50, 100, 150]
+    "alpha_set": [100, 10, 1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9],
+    "beta_set": [100, 10, 1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9],
+    "latent_features_set": [10, 30, 50, 70, 90, 110],
+    "steps_set": [50, 100, 150, 200]
 }
 matrix_factorization.train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, sample_size_for_avg, test_values)
 

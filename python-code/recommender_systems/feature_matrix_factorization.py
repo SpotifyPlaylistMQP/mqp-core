@@ -5,25 +5,38 @@ import time
 from scipy.sparse.linalg import spsolve
 
 def train(playlist_dict, unique_track_dict, feature_matrix, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
-    filename = "feature_mf_training" + time.strftime("_%m-%d-%Y__%Hh%Mm") + ".txt"
+    filename = str(len(playlist_dict.keys())) + "feature_mf_training" + time.strftime("_%m-%d-%Y__%Hh%Mm") + ".txt"
     output = open(filename, "a")
-    output.write("Alpha, Beta, Latent Features, Steps, NDCG, R-Precision\n")
+    output.write("Alpha, Beta, c, Latent Features, Steps, NDCG, R-Precision\n")
+    runs_for_avg = 5
+    input_playlist_index = 0
+
+    T, new_playlist_tracks = matrix.split_playlist_not_random(indexed_pids[input_playlist_index], playlist_dict)
+    matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix,
+                                        unique_track_dict)
 
     for alpha in params["alpha_set"]:
         for beta in params["beta_set"]:
             for latent_features in params["latent_features_set"]:
                 for steps in params["steps_set"]:
-                    run_params = {
-                        "alpha": alpha,
-                        "beta": beta,
-                        "latent_features": latent_features,
-                        "steps": steps,
-                        "number_of_runs": params['number_of_runs'],
-                        "sample_size_for_avg": params['sample_size_for_avg']
-                    }
-                    avg_ndcg, avg_r = run(playlist_dict, unique_track_dict, feature_matrix, N, track_playlist_matrix, indexed_tids, indexed_pids, run_params)
-                    print("Alpha:{}, Beta:{}, Latent_Features:{}, steps:{},  NDCG:{}, R:{}".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
-                    output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
+                    for c in params["c_set"]:
+                        c_feature_matrix = (np.array(feature_matrix) * c).tolist()
+                        sum_ndcg = 0
+                        sum_r = 0
+                        for run in range(runs_for_avg):
+                            factorized_matrix = matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, steps, c_feature_matrix)
+
+                            prediction_tuples = []
+                            for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
+                                prediction_tuples.append((indexed_tids[track_index], prediction))
+                            prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+
+                            recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+
+                            sum_ndcg += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)
+                            sum_r += evaluation.r_precision(recommended_tracks, T)
+                        print("Alpha:{}, Beta:{}, C:{}, Latent_Features:{}, steps:{},  NDCG:{}, R:{}".format(alpha, beta, c, latent_features, steps, sum_ndcg / runs_for_avg, sum_r / runs_for_avg))
+                        output.write("{}, {}, {}, {}, {}, {}, {}\n".format(alpha, beta, c, latent_features, steps, sum_ndcg / runs_for_avg, sum_r / runs_for_avg))
     print("Wrote results to " + filename)
 
 def run(playlist_dict, unique_track_dict, feature_matrix, N, track_playlist_matrix, indexed_tids, indexed_pids, params):
@@ -61,44 +74,69 @@ def run(playlist_dict, unique_track_dict, feature_matrix, N, track_playlist_matr
 
     return sum_iteration_ndcg / params['number_of_runs'], sum_iteration_r / params['number_of_runs']
 
+def evaluate(playlist_dict, unique_track_dict, feature_matrix, max_N, track_playlist_matrix, indexed_tids, indexed_pids, params):
+    print("Feature matrix factorization...")
+
+    ndcg_N_dict = {}
+    r_N_dict = {}
+    for N in range(1, max_N + 1):
+        ndcg_N_dict[N] = 0
+        r_N_dict[N] = 0
+
+    for run in range(params['number_of_runs']):
+        print("Run #", run)
+        for input_playlist_index in helpers.get_random_input_playlist_indexes(params['sample_size_for_avg'], len(indexed_pids)):
+            T, new_playlist_tracks = matrix.split_playlist(indexed_pids[input_playlist_index], playlist_dict)
+            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix, unique_track_dict)
+
+            c_feature_matrix = (np.array(feature_matrix) * params["c"]).tolist()
+            factorized_matrix = matrix_factorization(track_playlist_matrix, params['alpha'], params['beta'], params['latent_features'], params['steps'], c_feature_matrix)
+
+            prediction_tuples = []
+            for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
+                prediction_tuples.append((indexed_tids[track_index], prediction))
+            prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
+
+            for N in range(1, max_N + 1):
+                recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)
+                ndcg_N_dict[N] += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)
+                r_N_dict[N] += evaluation.r_precision(recommended_tracks, T)
+
+            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks + T, track_playlist_matrix, unique_track_dict)
+
+    for N in range(1, max_N + 1):
+        ndcg_N_dict[N] = ndcg_N_dict[N] / (params['number_of_runs'] * params['sample_size_for_avg'])
+        r_N_dict[N] = r_N_dict[N] / (params['number_of_runs'] * params['sample_size_for_avg'])
+    print("\tAvg NDCG:", ndcg_N_dict)
+    print("\tAvg R-Precision:", r_N_dict)
+
+    return ndcg_N_dict, r_N_dict
 
 # https://jessesw.com/Rec-System/
 def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, iterations, feature_matrix, seed=0):
-    start = time.time()
-    num_spotify_features = 4
+    num_spotify_features = 3
     total_features = latent_features + num_spotify_features
-    # first set up our confidence matrix
-    conf = (alpha * sparse.csr_matrix(track_playlist_matrix)).T  # To allow the matrix to stay sparse, I will add one later when each row is taken
 
-    # and converted to dense.
+    conf = (alpha * sparse.csr_matrix(track_playlist_matrix)).T
+
     num_user = conf.shape[0]
-    num_item = conf.shape[1]  # Get the size of our original ratings matrix, m x n
+    num_item = conf.shape[1]
 
-    # initialize our X/Y feature vectors randomly with a set seed
     rstate = np.random.RandomState(seed)
 
-    X = sparse.csr_matrix(rstate.normal(size=(num_user, total_features)))  # Random numbers in a m x rank shape
-    Y = sparse.csr_matrix(rstate.normal(size=(num_item, latent_features)))  # Normally this would be rank x n but we can
-
-    # append features to Y
-    # Y = np.append(Y, feature_matrix, axis=1)
-    # print("Y: ", Y.shape)
-    # print(sparse.csr_matrix(feature_matrix).shape)
+    X = sparse.csr_matrix(rstate.normal(size=(num_user, total_features)))
+    Y = sparse.csr_matrix(rstate.normal(size=(num_item, latent_features)))
 
     Y = sparse.csr_matrix(sparse.hstack((Y, feature_matrix)))
 
-    # transpose at the end. Makes calculation more simple.
     X_eye = sparse.eye(num_user)
     Y_eye = sparse.eye(num_item)
-    lambda_eye = beta * sparse.eye(total_features)  # Our regularization term lambda*I.
+    lambda_eye = beta * sparse.eye(total_features)
 
-    # We can compute this before iteration starts.
-    # Begin iterations
-    for iter_step in range(iterations):  # Iterate back and forth between solving X given fixed Y and vice versa
-        # Compute yTy and xTx at beginning of each iteration to save computing time
+    for iter_step in range(iterations):
         yTy = Y.T.dot(Y) #item
         xTx = X.T.dot(X) #user
-        # Being iteration to solve for X based on fixed Y
+
         for u in range(num_user):
             conf_samp = conf[u, :].toarray()  # Grab user row from confidence matrix and convert to dense
             pref = conf_samp.copy()
@@ -108,8 +146,7 @@ def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, it
             yTCupu = Y.T.dot(CuI + Y_eye).dot(pref.T)  # This is the yTCuPu term, where we add the eye back in
             # Cu - I + I = Cu
             X[u] = spsolve(yTy + yTCuIY + lambda_eye, yTCupu)
-            # Solve for Xu = ((yTy + yT(Cu-I)Y + lambda*I)^-1)yTCuPu, equation 4 from the paper
-        # Begin iteration to solve for Y based on fixed X
+
         for i in range(num_item):
             conf_samp = conf[:, i].T.toarray()  # transpose to get it in row format and convert to dense
             pref = conf_samp.copy()
@@ -118,13 +155,9 @@ def matrix_factorization(track_playlist_matrix, alpha, beta, latent_features, it
             xTCiIX = X.T.dot(CiI).dot(X)  # This is the xT(Cu-I)X term
             xTCiPi = X.T.dot(CiI + X_eye).dot(pref.T)  # This is the xTCiPi term
             new_yi = list(np.array(spsolve(xTx + xTCiIX + lambda_eye, xTCiPi)))
-            new_yi[total_features-4] = feature_matrix[i][0]
-            new_yi[total_features-3] = feature_matrix[i][1]
-            new_yi[total_features-2] = feature_matrix[i][2]
-            new_yi[total_features-1] = feature_matrix[i][3]
+            new_yi[total_features-3] = feature_matrix[i][0]
+            new_yi[total_features-2] = feature_matrix[i][1]
+            new_yi[total_features-1] = feature_matrix[i][2]
             Y[i] = sparse.csr_matrix(new_yi)
-            # Solve for Yi = ((xTx + xT(Cu-I)X) + lambda*I)^-1)xTCiPi, equation 5 from the paper
-    # End iterations
 
-    return np.dot(X.toarray(), Y.toarray().T).tolist()  # Transpose at the end to make up for not being transposed at the beginning.
-    # Y needs to be rank x n. Keep these as separate matrices for scale reasons.
+    return np.dot(X.toarray(), Y.toarray().T).tolist()

@@ -1,7 +1,4 @@
 from recommender_systems import matrix_factorization
-from recommender_systems.modules import matrix
-from mongodb import mongodb_communicate
-import sys
 import time
 
 
@@ -10,18 +7,18 @@ def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matri
 
     mf_params = {
         "mpd_square_100": {
-            "alpha": 1e-06,
-            "beta": 0.001,
-            "latent_features": 70,
-            "steps": 200,
+            "alpha": 0.1,
+            "beta": 1,
+            "latent_features": 90,
+            "steps": 150,
             "number_of_runs": 10,
             "sample_size_for_avg": 100
         },
         "mpd_square_1000": {
-            "alpha": 1e-06,
-            "beta": 0.001,
-            "latent_features": 70,
-            "steps": 200,
+            "alpha": 1,
+            "beta": 1e-4,
+            "latent_features": 10,
+            "steps": 100,
             "number_of_runs": 5,
             "sample_size_for_avg": 100
         }

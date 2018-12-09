@@ -22,8 +22,8 @@ def train(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_ti
                         "sample_size_for_avg": sample_size_for_avg
                     }
                     avg_ndcg, avg_r = run(playlist_dict, unique_track_dict, N, track_playlist_matrix, indexed_tids, indexed_pids, params)
-                    print("Alpha:{}, Beta:{}, Latent_Features:{}, steps:{},  NDCG:{}, R:{}".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
-                    output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, latent_features, steps, avg_ndcg, avg_r))
+                    print("Alpha:{}, Beta:{}, Latent_Features:{}, steps:{},  NDCG:{}, R:{}".format(alpha, beta, latent_features, steps, avg_ndcg[20], avg_r[20]))
+                    output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, latent_features, steps, avg_ndcg[20], avg_r[20]))
     print("Wrote results to " + filename)
 
 def run(playlist_dict, unique_track_dict, max_N, track_playlist_matrix, indexed_tids, indexed_pids, params):
@@ -44,14 +44,13 @@ def run(playlist_dict, unique_track_dict, max_N, track_playlist_matrix, indexed_
             model = implicit.als.AlternatingLeastSquares(factors=params['latent_features'],
                                                          regularization=params['beta'],
                                                          iterations=params['steps'])
-            model.fit(sparse.csr_matrix(track_playlist_matrix)* params['alpha'])
+            model.fit(sparse.csr_matrix(track_playlist_matrix) * params['alpha'], show_progress=False)
             factorized_matrix = np.dot(model.user_factors, model.item_factors.T).T.T.tolist()
 
             prediction_tuples = []
             for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
                 prediction_tuples.append((indexed_tids[track_index], prediction))
             prediction_tuples.sort(reverse=True, key=helpers.sort_by_second_tuple)
-
 
             for N in range(1, max_N + 1):
                 recommended_tracks = helpers.recommend_n_tracks(N, prediction_tuples, new_playlist_tracks)

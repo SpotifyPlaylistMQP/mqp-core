@@ -106,6 +106,7 @@ def run(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids, i
                 for cosine_sim_tuple in cosine_similar_track_tuples[:params['K']]:
                     if cosine_sim_tuple[0] not in cosine_similar_track_dict.keys():
                         cosine_similar_track_dict[cosine_sim_tuple[0]] = 0
+
                     cosine_similar_track_dict[cosine_sim_tuple[0]] += cosine_sim_tuple[1]
 
             # Transform those sum similarity scores into an ordered list of tuples

@@ -69,6 +69,7 @@ def train(playlist_dict, unique_track_dict, track_playlist_matrix, indexed_pids,
 
     filename = "user_training" + time.strftime("_%m-%d-%Y__%Hh%Mm") + ".txt"
     output = open(filename, "a")
+
     output.write("K, cosine_ndcg, cosine_r, jaccard_ndcg, jaccard_r\n")
     for k in test_values['k_set']:
         output.write("{}, {}, {}, {}, {}\n".format(k,

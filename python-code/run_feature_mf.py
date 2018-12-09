@@ -1,5 +1,5 @@
 from recommender_systems import feature_matrix_factorization
-"""
+
 start = time.time()
 mongo_collection = sys.argv[1]
 N = 10
@@ -7,13 +7,14 @@ N = 10
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
-"""
+
 def run(mongo_collection, playlist_dict, unique_track_dict, track_playlist_matrix, indexed_tids, indexed_pids, max_N):
     mf_params = {
         "mpd_square_100": {
-            "alpha": 1e-5,
+            "alpha": 100,
             "beta": 1,
-            "latent_features": 70,
+            "latent_features": 80,
+            "c": 1,
             "steps": 10,
             "number_of_runs": 10,
             "sample_size_for_avg": 100

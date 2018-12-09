@@ -15,20 +15,18 @@ print("\tSparsity: ", matrix.sparsity(track_playlist_matrix))
 
 mf_params = {
     "mpd_square_100": {
-        "alpha_set": [100, 10, 1, 0.1, 0.01, 0.001],
-        "beta_set": [100, 10, 1, 0.1, 0.01, 0.001],
-        "latent_features_set": [3, 5, 8, 11, 15],
-        "steps_set": [10, 20, 30],
-        "number_of_runs": 1,
-        "sample_size_for_avg": 10
+        "alpha_set": [100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001],
+        "beta_set": [100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001],
+        "c_set": [1, 2, 3, 4, 5],
+        "latent_features_set": [10, 20, 30, 40, 50, 60, 70, 80],
+        "steps_set": [10, 50, 100]
     },
     "mpd_square_1000": {
-        "alpha": 1e-06,
-        "beta": 0.001,
-        "latent_features": 70,
-        "steps": 200,
-        "number_of_runs": 10,
-        "sample_size_for_avg": 1000
+        "alpha_set": [100, 1, 0.01, 0.0001, 0.00001],
+        "beta_set": [100, 1, 0.01, 0.0001, 0.00001],
+        "c_set": [1, 2, 3, 4, 5],
+        "latent_features_set": [5, 10, 15],
+        "steps_set": [10, 50, 100]
     }
 }
 print("Params:")
@@ -41,7 +39,6 @@ for tid in unique_track_dict.keys():
     feature_matrix.append([
         unique_track_dict[tid]["danceability"],
         unique_track_dict[tid]["energy"],
-        unique_track_dict[tid]["tempo"],
         unique_track_dict[tid]["valence"]
     ])
 

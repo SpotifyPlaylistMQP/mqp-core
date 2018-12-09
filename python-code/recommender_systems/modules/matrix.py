@@ -41,6 +41,20 @@ def split_playlist(input_playlist_id, playlist_dict):
             split_80_percent.append(playlist_dict[input_playlist_id]['tracks'][i])
     return split_20_percent, split_80_percent
 
+def split_playlist_not_random(input_playlist_id, playlist_dict):
+    random_indexes_to_split = []
+    for i in range(round(len(playlist_dict[input_playlist_id]['tracks']) / 5)):
+        random_indexes_to_split.append(i)
+
+    split_20_percent = []
+    split_80_percent = []
+    for i in range(len(playlist_dict[input_playlist_id]['tracks'])):
+        if i in random_indexes_to_split:
+            split_20_percent.append(playlist_dict[input_playlist_id]['tracks'][i])
+        else:
+            split_80_percent.append(playlist_dict[input_playlist_id]['tracks'][i])
+    return split_20_percent, split_80_percent
+
 # Updates the tracks of the input_playlist
 def update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, matrix, unique_track_dict):
     for index, track_id in enumerate(unique_track_dict.keys()):

@@ -9,16 +9,12 @@ params = {
         "beta": 1,
         "latent_features": 90,
         "steps": 150,
-        "number_of_runs": 10,
-        "sample_size_for_avg": 100
     },
     "mpd_square_1000": {
         "alpha": 1,
         "beta": 1e-4,
         "latent_features": 10,
         "steps": 100,
-        "number_of_runs": 5,
-        "sample_size_for_avg": 100
     }
 }
 

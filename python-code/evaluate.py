@@ -24,6 +24,14 @@ params = params[mongo_collection]
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 
+feature_matrix = []
+for tid in unique_track_dict.keys():
+    feature_matrix.append([
+        unique_track_dict[tid]["danceability"],
+        unique_track_dict[tid]["energy"],
+        unique_track_dict[tid]["valence"]
+    ])
+
 ndcg_results = {}
 r_results = {}
 for N in range(1, params["max_N"] + 1):
@@ -47,7 +55,7 @@ for run in range(params["number_of_runs"]):
         elif rec_system == 'mf':
             ranked_tracks = matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, mongo_collection)
         elif rec_system == 'feature_mf':
-            ranked_tracks = feature_matrix_factorization.get_ranked_tracks(input_playlist_index, unique_track_dict, indexed_tids, track_playlist_matrix, mongo_collection)
+            ranked_tracks = feature_matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, feature_matrix, mongo_collection)
 
         for N in range(1, params["max_N"] + 1):
             recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks)

@@ -11,6 +11,7 @@ def create(playlist_dict, unique_track_dict):
             else:
                 row.append(0)
         matrix.append(row)
+    print("\tSparsity: ", sparsity(matrix))
     return matrix
 
 # Returns the sparsity value of the matrix

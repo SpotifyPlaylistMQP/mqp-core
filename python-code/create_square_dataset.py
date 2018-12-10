@@ -5,7 +5,7 @@ import sys, time, requests
 start = time.time()
 
 # How to run program
-#   py square_dataset.py {square_size}
+#   py create_square_dataset.py {square_size}
 square_size = int(float(sys.argv[1]))
 
 

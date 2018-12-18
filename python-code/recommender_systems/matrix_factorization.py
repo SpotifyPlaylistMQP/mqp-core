@@ -32,4 +32,17 @@ def get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix,
 
     return ranked_tracks
 
+def train_run(input_playlist_index, indexed_tids, track_playlist_matrix, train_params):
+    model = implicit.als.AlternatingLeastSquares(factors=train_params['latent_features'],
+                                                 regularization=train_params['beta'],
+                                                 iterations=train_params['steps'])
+    model.fit(sparse.csr_matrix(track_playlist_matrix) * train_params['alpha'], show_progress=False)
+    factorized_matrix = np.dot(model.user_factors, model.item_factors.T).T.T.tolist()
+
+    ranked_tracks = []
+    for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
+        ranked_tracks.append((indexed_tids[track_index], prediction))
+    ranked_tracks.sort(reverse=True, key=helpers.sort_by_second_tuple)
+
+    return ranked_tracks
 

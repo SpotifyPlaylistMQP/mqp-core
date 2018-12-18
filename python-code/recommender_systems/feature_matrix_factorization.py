@@ -6,10 +6,10 @@ import time
 
 params = {
     "mpd_square_100": {
-        "alpha": 0.1,
+        "alpha": 1,
         "beta": 1,
-        "latent_features": 90,
-        "steps": 150,
+        "latent_features": 10,
+        "steps": 100,
         "c": 0.01,
     },
     "mpd_square_1000": {

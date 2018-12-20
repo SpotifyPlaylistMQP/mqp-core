@@ -2,6 +2,7 @@
 <html class="gr__getbootstrap_com" lang="en">
     <head>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -49,12 +50,51 @@
         <main role="main" class="container">
             <div class="starter-template">
                 <h1>Matrix Factorization Precision Graph</h1>
-                    <p class="lead">
-                    <br>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.
-                    <br>
-                </p>
+
+                <div id="graph" align="center"></div>
+
+                <script type="text/javascript">
+                    d3.select("#graph").select("svg").remove();
+
+                    // Set the dimensions of the canvas / graph
+                    var margin = {top: 30, right: 20, bottom: 40, left: 50};
+                    var width = 600 - margin.left - margin.right;
+                    var height = 270 - margin.top - margin.bottom;
+
+                    // Adds the svg canvas
+                    var svg = d3.select("body").select("#graph")
+                        .append("svg")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                    // Set the ranges
+                    var x = d3.scaleLinear().range([0, width]);
+                    var y = d3.scaleLinear().range([height, 0]);
+
+                    // Define the axes
+                    var xAxis = d3.axisBottom()
+                        .scale(x)
+
+                    var yAxis = d3.axisLeft()
+                        .scale(y)
+
+                    // svg.append("text")
+                    //     .attr("x", -150)
+                    //     .attr("y", -40)
+                    //     .attr("dy", "0.71em")
+                    //     .attr("fill", "#000")
+                    //     .attr("transform", "rotate(-90)")
+                    //             .text("Number of Attacks")
+                    //     .style("font", "12px avenir")
+                    //     .style("fill", "#000000")
+                    //     .style("font-weight", "bold");
+
+                    d3.csv("/data/mf_mpd_square_100.csv", function(data) {
+                        console.log(data)
+                    });
+                </script>
             </div>
         </main>
 

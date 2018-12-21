@@ -29,6 +29,44 @@
     .legend {margin-right:20px;}
     .mf { background: #4682B4;}
     .feat_mf { background: #FF0000;}
+
+    body {
+      background-color: #F1F3F3
+    }
+    .axis {
+    	font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #D4D8DA;
+      stroke-width: 2px;
+      shape-rendering: crispEdges;
+    }
+
+    .line {
+      fill: none;
+      stroke: #6F257F;
+      stroke-width: 5px;
+    }
+
+    .overlay {
+      fill: none;
+      pointer-events: all;
+    }
+
+    .focus circle {
+      fill: #6F257F;
+      stroke: #6F257F;
+      stroke-width: 3px;
+    }
+
+    .hover-line {
+      stroke: #6F257F;
+      stroke-width: 2px;
+      stroke-dasharray: 3,3;
+    }
     </style>
     <body data-gr-c-s-loaded="true">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -65,20 +103,29 @@
                       <div class="legend1"> <p class="data-name"><span class="key-dot mf"></span>Matrix Factorization</p> </div>
                       <div class="legend1"> <p class="data-name"><span class="key-dot feat_mf"></span>Feature Matrix Factorization</p> </div>
                 </div>
-                <div id="MatrixGraph" align="center"></div>
+                <svg id="MatrixGraph" width="1000" height="600" align="center"></svg>
                 <br>
 
                 <script type="text/javascript">
-                    d3.select("#MatrixGraph").select("svg").remove();
+                    // d3.select("#MatrixGraph").select("svg").remove();
                     // Set the dimensions of the canvas / MatrixGraph
-                    var margin = {top: 50, right: 20, bottom: 40, left: 50};
-                    var width = 1000 - margin.left - margin.right;
-                    var height = 570 - margin.top - margin.bottom;
+                    var svg = d3.select("svg"),
+                        margin = {top: 50, right: 20, bottom: 40, left: 50},
+                        width = +svg.attr("width") - margin.left - margin.right,
+                        height = +svg.attr("height") - margin.top - margin.bottom;
+
+
                     var x = d3.scaleLinear().range([0, width]).nice();
                     var y = d3.scaleLinear().range([height, 0]).nice();
-                    var formatter = d3.format(".1");
-                    var xAxis = d3.axisBottom().scale(x);
-                    var yAxis = d3.axisLeft().scale(y).tickFormat(formatter);
+
+                    // Define the line
+                    var valueline = d3.line()
+                        .x(function(data) { return x(data.n); })
+                        .y(function(data) { console.log(data.ndcg.slice(0, 7)); return y(data.ndcg.slice(0, 7)); });
+
+                    var valueline2 = d3.line()
+                        .x(function(data) { return x(data.n); })
+                        .y(function(data) { console.log(data.ndcg_feat.slice(0, 7)); return y(data.ndcg_feat.slice(0, 7)); });
 
                     // Adds the svg canvas
                     var svg = d3.select("body").select("#MatrixGraph")
@@ -89,28 +136,23 @@
                             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
                     d3.csv("/data/masterSheet.csv", function(data) {
-                        // Define the line
-                        var valueline = d3.line()
-                            .x(function(data) { return x(data.n); })
-                            .y(function(data) { console.log(data.ndcg.slice(0, 7)); return y(data.ndcg.slice(0, 7)); });
+                        var formatter = d3.format(".1");
+                        var xAxis = d3.axisBottom().scale(x);
+                        var yAxis = d3.axisLeft().scale(y).tickFormat(formatter);
 
-                        var valueline2 = d3.line()
-                            .x(function(data) { return x(data.n); })
-                            .y(function(data) { console.log(data.ndcg_feat.slice(0, 7)); return y(data.ndcg_feat.slice(0, 7)); });
+                        data.forEach(function(d) {
+                            d.n = d.n;
+                            d.ndcg = d.ndcg;
+                        });
 
                         // console.log(data)
-                        var min = Math.min(d3.min(data, function(data) { return data.ndcg; }), d3.min(data, function(data) { return data.ndcg_feat; }));
-                        var max = Math.max(d3.max(data, function(data){return data.ndcg; }),d3.max(data, function(data){return data.ndcg_feat;}));
+                        var min = Math.min(d3.min(data, function(data){ return data.ndcg; }), d3.min(data, function(data) { return data.ndcg_feat; }));
+                        var max = Math.max(d3.max(data, function(data){ return data.ndcg; }), d3.max(data, function(data){return data.ndcg_feat;}));
                         var buffer = 0.025;
 
                         // Scale the range of the data
                         x.domain(d3.extent(data, function(data) { return data.n; }));
                         y.domain([min-buffer, max+buffer]);
-
-                        // Add the X Axis
-                        svg.append("g")
-                            .attr("transform", "translate(0," + height + ")")
-                            .call(d3.axisBottom(x));
 
                         // Add the X Axis
                         svg.append("g")
@@ -146,7 +188,7 @@
 
                         // Add the valueline path.
                         svg.append("path")
-                            .data([data])
+                            .data(data)
                             .style("fill", "none")
                             .style("stroke", "steelblue")
                             .style("stroke-width", 3)
@@ -154,12 +196,52 @@
                             .attr("d", valueline(data));
 
                         svg.append("path")
-                            .data([data])
+                            .data(data)
                             .style("fill", "none")
                             .style("stroke", "red")
                             .style("stroke-width", 3)
                             .attr("class", "line")
                             .attr("d", valueline2(data));
+
+                        var focus = svg.append("g")
+                            .attr("class", "focus")
+                            .style("display", "none");
+
+                        focus.append("line")
+                            .attr("class", "x-hover-line hover-line")
+                            .attr("y1", 0)
+                            .attr("y2", height);
+
+                        focus.append("line")
+                            .attr("class", "y-hover-line hover-line")
+                            .attr("x1", width)
+                            .attr("x2", width);
+
+                        focus.append("text")
+                            .attr("x", 15)
+                            .attr("dy", ".31em");
+
+                        svg.append("rect")
+                            .attr("transform", "translate(0,0)")
+                            .attr("class", "overlay")
+                            .attr("width", width)
+                            .attr("height", height)
+                            .on("mouseover", function() { focus.style("display", null); })
+                            .on("mouseout", function() { focus.style("display", "none"); })
+                            .on("mousemove", mousemove);
+
+                        function mousemove() {
+                            var x0 = x.invert(d3.mouse(this)[0]); //X value
+                            var xval = Math.round(x0)
+                            var yval = data[xval]["ndcg"];
+                            var d0 = data[xval - 1]["ndcg"];
+                            var d1 = data[xval]["ndcg"];
+                            var d = x0 - xval - 1 > xval - x0 ? d1 : d0;
+                            focus.attr("transform", "translate(" + x(xval) + "," + y(d) + ")");
+                            focus.select("text").text(function() { return d.ndcg; });
+                            focus.select(".x-hover-line").attr("y2", height - y(d));
+                            focus.select(".y-hover-line").attr("x2", width + width);
+                          }
 
                           });
                 </script>

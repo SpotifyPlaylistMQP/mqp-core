@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html class='gr__getbootstrap_com' lang='en'>
-    <head>
-        <script type='text/javascript' src='http://code.jquery.com/jquery-latest.min.js'></script>
-        <script src='https://d3js.org/d3.v4.min.js'></script>
-        <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
-        <meta charset='utf-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-        <meta name='description' content=''>
-        <meta name='author' content=''>
-        <link rel='icon' href='https://getbootstrap.com/favicon.ico'>
-        <title>Spotify MQP - Matrix Factorization Graph</title>
+<head>
+    <script type='text/javascript' src='http://code.jquery.com/jquery-latest.min.js'></script>
+    <script src='https://d3js.org/d3.v4.min.js'></script>
+    <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+    <meta name='description' content=''>
+    <meta name='author' content='Spotify Playlist Continuation MQP'>
+    <!-- <link rel='icon' href='https://getbootstrap.com/favicon.ico'> -->
+    <title>Spotify MQP - Matrix Factorization Graph</title>
 
-        <!-- CSS -->
-        <link href='/css/bootstrap.css' rel='stylesheet'>
-        <link href='/css/starter-template.css' rel='stylesheet'>
-        <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
-    </head>
-    <style>
-    /*HTML Vertical Lengend*/
-    h3 {margin-top: 15px;}
+    <!-- CSS -->
+    <link href='/css/bootstrap.css' rel='stylesheet'>
+    <link href='/css/starter-template.css' rel='stylesheet'>
+    <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
+</head>
+<!-- Style (todo:move to style.css) -->
+<style>
     .data-name {margin: 0 !important;}
     .key-dot {
         display: inline-block;
@@ -29,14 +28,6 @@
     .legend {margin-right:20px;}
     .mf { background: #4682B4;}
     .feat_mf { background: #FF0000;}
-
-    body {
-      background-color: #F1F3F3
-    }
-    .axis {
-    	font: 10px sans-serif;
-    }
-
     .axis path,
     .axis line {
       fill: none;
@@ -44,328 +35,295 @@
       stroke-width: 2px;
       shape-rendering: crispEdges;
     }
-
+    .axis {
+    	font: 10px sans-serif;
+    }
     .line {
       fill: none;
       stroke: #6F257F;
       stroke-width: 5px;
     }
-
     .overlay {
       fill: none;
       pointer-events: all;
     }
-
     .focus circle {
       fill: #6F257F;
       stroke: #6F257F;
       stroke-width: 3px;
     }
-
     .hover-line {
       stroke: #6F257F;
       stroke-width: 2px;
       stroke-dasharray: 3,3;
     }
-
     .mf_val {}
     .visualization_container {}
-      table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-td {
-  border: 1px solid #000000;
-  text-align: center;
-  background-color: #DED2CF;
-  padding: 8px;
-}
-th {
-  border: 1px solid #000000;
-  background-color: #dddddd;
-  width: 100px;
-  text-align: center;
-  padding: 8px;
-}
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-    </style>
-    <body data-gr-c-s-loaded='true'>
-        <nav class='navbar navbar-expand-md navbar-dark bg-dark fixed-top'>
-            <a class='navbar-brand' href='#'>Spotify Playlist Continuation MQP</a>
-            <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarsExampleDefault' aria-controls='navbarsExampleDefault' aria-expanded='false' aria-label='Toggle navigation'>
-                <span class='navbar-toggler-icon'></span>
-            </button>
+    h3 {margin-top: 15px;}
+    body {
+        background-color: #F1F3F3
+    }
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    td {
+        border: 1px solid #000000;
+        text-align: center;
+        background-color: #DED2CF;
+        padding: 8px;
+    }
+    th {
+        border: 1px solid #000000;
+        background-color: #dddddd;
+        width: 100px;
+        text-align: center;
+        padding: 8px;
+    }
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+<!-- Body -->
+<body data-gr-c-s-loaded='true'>
+    <nav class='navbar navbar-expand-md navbar-dark bg-dark fixed-top'>
+        <a class='navbar-brand' href='#'>Spotify Playlist Continuation MQP</a>
+        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarsExampleDefault' aria-controls='navbarsExampleDefault' aria-expanded='false' aria-label='Toggle navigation'>
+            <span class='navbar-toggler-icon'></span>
+        </button>
 
-            <div class='collapse navbar-collapse' id='navbarsExampleDefault'>
-                <ul class='navbar-nav mr-auto'>
-                    <li class='nav-item active'>
-                        <a class='nav-link' href='index.html'>Home</a>
-                    </li>
-                    <li class='nav-item active'>
-                        <a class='nav-link' href='about.html'>About</a>
-                    </li>
-                    <li class='nav-item dropdown'>
-                        <a class='nav-link dropdown-toggle' href='#' id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Graphs</a>
-                        <div class='dropdown-menu' aria-labelledby='dropdown01'>
-                            <a class='dropdown-item' href='#'>Matrix Factorization Precision</a>
-                            <a class='dropdown-item' href='#'>Graph 2</a>
-                            <a class='dropdown-item' href='#'>Graph 3</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <main role='main' class='container'>
-            <div class='starter-template'>
-                <h1>Matrix Factorization Precision Graph</h1>
-                <div class='visualization_container'>
-                  <div class='legend1'>
-                      <h3>Legend</h3>
-                          <div class='legend1'> <p class='data-name'><span class='key-dot mf'></span>Matrix Factorization</p> </div>
-                          <div class='legend1'> <p class='data-name'><span class='key-dot feat_mf'></span>Feature Matrix Factorization</p> </div>
-                  </div>
-                  <svg id='MatrixGraph' width='1000' height='600' align='center'></svg>
-                  <br><br><br>
-                  <table id='resultsTable'></table>
+        <div class='collapse navbar-collapse' id='navbarsExampleDefault'>
+            <ul class='navbar-nav mr-auto'>
+                <li class='nav-item active'>
+                    <a class='nav-link' href='index.html'>Home</a>
+                </li>
+                <li class='nav-item active'>
+                    <a class='nav-link' href='about.html'>About</a>
+                </li>
+                <li class='nav-item dropdown'>
+                    <a class='nav-link dropdown-toggle' href='#' id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Graphs</a>
+                    <div class='dropdown-menu' aria-labelledby='dropdown01'>
+                        <a class='dropdown-item' href='#'>Matrix Factorization Precision</a>
+                        <a class='dropdown-item' href='#'>Graph 2</a>
+                        <a class='dropdown-item' href='#'>Graph 3</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main role='main' class='container'>
+        <div class='starter-template'>
+            <h1>Matrix Factorization Precision Graph</h1>
+            <!-- Container Div for all visualizations -->
+            <div class='visualization_container'>
+                <!-- Legend -->
+                <div class='legend1'>
+                    <h3>Legend</h3>
+                    <div class='legend1'> <p class='data-name'><span class='key-dot mf'></span>Matrix Factorization</p> </div>
+                    <div class='legend1'> <p class='data-name'><span class='key-dot feat_mf'></span>Feature Matrix Factorization</p> </div>
                 </div>
-                <br>
-                <script type='text/javascript'>
-                // builds an html string by looping through movies, adds to #results
-function build_table() {
-  // https://wesbos.com/template-strings-html/
-  //console.log(pokemon_arr);
-  // var results_html = `${
-  //   pokemon_arr.map(pokemon =>
-  //     `
-  //     <tr id=${pokemon.id}>
-  //       <td style='width:60px; text-align: center;'>${pokemon.id}</td>
-  //       <td style='width:100px; text-align: center;'>${pokemon.title}</td>
-  //       <td style='width:100px; text-align: center;'>${pokemon.rating}</td>
-  //       <td><button id='edit_${pokemon.id}' class='edit_btn' onclick='move_row('${pokemon.id}')'> Select </button></td>
-  //     </tr>
-  //     `
-  //   ).join('')
-  // }`
-  //console.log(results_html);
-  html = ''
-  html = html + '<th>K Value</th>'
-  html = html + '<th>Matrix Factorization NDCG Score</th>'
-  html = html + '<th>Feature Matrix Factorization NDCG Score</th>'
-  // html = html + results_html
-  //console.log(html)
-  document.getElementById('resultsTable').innerHTML = html;
-  // sortTable();
-};
-
-function add_row(n, ndcg, ndcg_feat){
-  var new_row =  ''
-  new_row = new_row + '<tr>'
-  new_row = new_row + '<td>'+n+'</td>'
-  new_row = new_row + '<td>'+ndcg+'</td>'
-  new_row = new_row + '<td>'+ndcg_feat+'</td>'
-  new_row = new_row + '</tr>'
-
-  var html = document.getElementById('resultsTable').innerHTML;
-  html = html + new_row;
-  document.getElementById('resultsTable').innerHTML = html;
-};
-
-
-                </script>
-
-
-                <script type='text/javascript'>
-                    // d3.select('#MatrixGraph').select('svg').remove();
-                    // Set the dimensions of the canvas / MatrixGraph
-                    var svg = d3.select('svg'),
-                        margin = {top: 50, right: 20, bottom: 40, left: 50},
-                        width = +svg.attr('width') - margin.left - margin.right,
-                        height = +svg.attr('height') - margin.top - margin.bottom;
-
-
-                    var x = d3.scaleLinear().range([0, width]).nice();
-                    var y = d3.scaleLinear().range([height, 0]).nice();
-
-                    // Define the line
-                    var valueline = d3.line()
-                        .x(function(data) { return x(data.n); })
-                        .y(function(data) { console.log(data.ndcg.slice(0, 7)); return y(data.ndcg.slice(0, 7)); });
-
-                    var valueline2 = d3.line()
-                        .x(function(data) { return x(data.n); })
-                        .y(function(data) { console.log(data.ndcg_feat.slice(0, 7)); return y(data.ndcg_feat.slice(0, 7)); });
-
-                    // Adds the svg canvas
-                    var svg = d3.select('body').select('#MatrixGraph')
-                        .append('svg')
-                            .attr('width', width + margin.left + margin.right)
-                            .attr('height', height + margin.top + margin.bottom)
-                        .append('g')
-                            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-
-
-                    d3.csv('/data/masterSheet.csv', function(data) {
-
-                        // var array = string.split(',');
-                        build_table()
-
-                        var formatter = d3.format('.1');
-                        var xAxis = d3.axisBottom().scale(x);
-                        var yAxis = d3.axisLeft().scale(y).tickFormat(formatter);
-
-                        data.forEach(function(d) {
-                            d.n = d.n;
-                            d.ndcg = d.ndcg;
-                            d.ndcg_feat = d.ndcg_feat;
-                            add_row(d.n, d.ndcg, d.ndcg_feat);
-                        });
-
-                        // console.log(data)
-                        var min = Math.min(d3.min(data, function(data){ return data.ndcg; }), d3.min(data, function(data) { return data.ndcg_feat; }));
-                        var max = Math.max(d3.max(data, function(data){ return data.ndcg; }), d3.max(data, function(data){return data.ndcg_feat;}));
-                        var buffer = 0.025;
-
-                        // Scale the range of the data
-                        x.domain(d3.extent(data, function(data) { return data.n; }));
-                        y.domain([min-buffer, max+buffer]);
-
-                        // Add the X Axis
-                        svg.append('g')
-                            .attr('class', 'axis')
-                            .attr('transform', 'translate(0,' + height + ')')
-                            // .style('text-anchor', 'middle')
-                            // .attr('dx', '-.1em')
-                            .call(d3.axisBottom(x)
-                                .ticks(25))
-                            .append('text')
-                            .attr('x', width/2)
-                            .attr('y', 35)
-                            .attr('dx', '0.71em')
-                            .attr('fill', '#000')
-                            .attr('text-anchor', 'start')
-                            .style('font-weight', 'bold')
-                            .text('K Value');;
-
-                        // Add the Y Axis
-                        svg.append('g')
-                            .attr('class', 'axis')
-                            .call(d3.axisLeft(y)
-                                .ticks(20))
-                            .append('text')
-                            .attr('transform', 'rotate(-90)')
-                            .attr('x', -250)
-                            .attr('y', -50)
-                            .attr('dy', '0.71em')
-                            .attr('fill', '#000')
-                            .attr('text-anchor', 'start')
-                            .style('font-weight', 'bold')
-                            .text('NDCG Precision');
-
-                        // Add the valueline path.
-                        svg.append('path')
-                            .data(data)
-                            .style('fill', 'none')
-                            .style('stroke', 'steelblue')
-                            .style('stroke-width', 3)
-                            .attr('class', 'line')
-                            .attr('d', valueline(data));
-
-                        svg.append('path')
-                            .data(data)
-                            .style('fill', 'none')
-                            .style('stroke', 'red')
-                            .style('stroke-width', 3)
-                            .attr('class', 'line')
-                            .attr('d', valueline2(data));
-
-                        var focus = svg.append('g')
-                            .attr('class', 'focus')
-                            .style('display', 'none');
-
-                        focus.append('line')
-                            .attr('class', 'x-hover-line hover-line')
-                            .attr('y1', 0)
-                            .attr('y2', height);
-
-                        // focus.append('line')
-                        //     .attr('class', 'y-hover-line hover-line')
-                        //     .attr('x1', width);
-                        //
-                        // focus.append('line')
-                        //     .attr('class', 'y-hover-line2 hover-line')
-                        //     .attr('y1', 0)
-                        //     .attr('x1', width)
-                        //     .attr('y2', height);
-
-                        focus.append('text')
-                            .attr('class', 'mf_val')
-                            .attr('x', 5)
-                            .attr('y', -30)
-                            .attr('dy', '.31em')
-                            .text(1);
-
-                        focus.append('text')
-                            .attr('class', 'mf_feat_val')
-                            .attr('x', 5)
-                            .attr('y', -10)
-                            .attr('dy', '.31em')
-                            .text(1);
-
-                        focus.append('text')
-                            .attr('class', 'n_val')
-                            .attr('x', 5)
-                            .attr('y', -50)
-                            .attr('dy', '.31em')
-                            .text(1);
-
-                        svg.append('rect')
-                            .attr('transform', 'translate(0,0)')
-                            .attr('class', 'overlay')
-                            .attr('width', width)
-                            .attr('height', height)
-                            .on('mouseover', function() { focus.style('display', null); })
-                            .on('mouseout', function() { focus.style('display', 'none'); })
-                            .on('mousemove', mousemove);
-
-                        function mousemove() {
-                            var x0 = Math.round(x.invert(d3.mouse(this)[0])); // Mouse X value
-                            var y0 = y.invert(d3.mouse(this)[0]); // Mouse Y value
-
-                            // Matrix Factorization Y Value
-                            var d0 = data[x0 - 1]['ndcg']; // X-1 Y Value
-                            var d1 = data[x0]['ndcg']; // Y Value
-
-                            // Feature Matrix Factorization Y Value
-                            var c0 = data[x0 - 1]['ndcg_feat']; // X-1 Y Value
-                            var c1 = data[x0]['ndcg_feat']; // Y Value
-
-                            var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
-                            var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
-                            focus.attr('transform', 'translate(' + x(x0) + ',' + y(d) + ')');
-
-                            // Text Value Display
-                            focus.select('.n_val').text('K: '.concat(x0));
-                            focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
-                            focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
-
-                            // Hover lines
-                            focus.select('.x-hover-line').attr('y2', height - y(d)); //510 - inverse current pixel height
-                            focus.select('.y-hover-line2').attr('y2', height - y(c)); //510 - inverse current pixel height
-                            // focus.select('.y-hover-line2').attr('x1', 0 - y(y0)); //x(c) - 930
-                          }
-
-                          });
-                </script>
+                <!-- Line graph -->
+                <svg id='MatrixGraph' width='1000' height='600' align='center'></svg>
+                <br><br><br>
+                <!-- Results data table -->
+                <table id='resultsTable'></table>
             </div>
-        </main>
+            <br>
+        </div>
+    </main>
 
-        <!-- Bootstrap core JavaScript -->
-        <script src='/js/popper.js'></script>
-        <script src='/js/bootstrap.js'></script>
-    </body>
+    <!-- Bootstrap core JavaScript -->
+    <script src='/js/popper.js'></script>
+    <script src='/js/bootstrap.js'></script>
+</body>
+<!-- Function to create everything -->
+<script type='text/javascript'>
+    //
+    var svg = d3.select('svg'),
+        margin = {top: 50, right: 20, bottom: 40, left: 50},
+        width = +svg.attr('width') - margin.left - margin.right,
+        height = +svg.attr('height') - margin.top - margin.bottom;
+
+        var x = d3.scaleLinear().range([0, width]).nice();
+        var y = d3.scaleLinear().range([height, 0]).nice();
+
+        // Define the MF NDCG line
+        var valueline = d3.line()
+            .x(function(data) { return x(data.n); })
+            .y(function(data) { console.log(data.ndcg.slice(0, 7)); return y(data.ndcg.slice(0, 7)); });
+
+        // Define the Feature MF NDCG line
+        var valueline2 = d3.line()
+            .x(function(data) { return x(data.n); })
+            .y(function(data) { console.log(data.ndcg_feat.slice(0, 7)); return y(data.ndcg_feat.slice(0, 7)); });
+
+        // Adds the svg canvas
+        var svg = d3.select('body').select('#MatrixGraph')
+            .append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        d3.csv('/data/masterSheet.csv', function(data) {
+            build_table() //Creates the headers for the table
+            var formatter = d3.format('.1');
+            var xAxis = d3.axisBottom().scale(x);
+            var yAxis = d3.axisLeft().scale(y).tickFormat(formatter);
+
+            data.forEach(function(d) {
+                d.n = d.n;
+                d.ndcg = d.ndcg;
+                d.ndcg_feat = d.ndcg_feat;
+                add_row(d.n, d.ndcg, d.ndcg_feat); //adds a row to the table
+            });
+
+            // sortTable();
+            var min = Math.min(d3.min(data, function(data){ return data.ndcg; }), d3.min(data, function(data) { return data.ndcg_feat; }));
+            var max = Math.max(d3.max(data, function(data){ return data.ndcg; }), d3.max(data, function(data){return data.ndcg_feat;}));
+            var buffer = 0.025;
+
+            // Scale the range of the data
+            x.domain(d3.extent(data, function(data) { return data.n; }));
+            y.domain([min-buffer, max+buffer]);
+
+            // Add the X Axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .attr('transform', 'translate(0,' + height + ')')
+                .call(d3.axisBottom(x)
+                    .ticks(25))
+                .append('text')
+                .attr('x', width/2)
+                .attr('y', 35)
+                .attr('dx', '0.71em')
+                .attr('fill', '#000')
+                .attr('text-anchor', 'start')
+                .style('font-weight', 'bold')
+                .text('K Value');;
+
+            // Add the Y Axis
+            svg.append('g')
+                .attr('class', 'axis')
+                .call(d3.axisLeft(y)
+                    .ticks(20))
+                .append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -250)
+                .attr('y', -50)
+                .attr('dy', '0.71em')
+                .attr('fill', '#000')
+                .attr('text-anchor', 'start')
+                .style('font-weight', 'bold')
+                .text('NDCG Precision');
+
+            // Add the valueline path.
+            svg.append('path')
+                .data(data)
+                .style('fill', 'none')
+                .style('stroke', 'steelblue')
+                .style('stroke-width', 3)
+                .attr('class', 'line')
+                .attr('d', valueline(data));
+
+            svg.append('path')
+                .data(data)
+                .style('fill', 'none')
+                .style('stroke', 'red')
+                .style('stroke-width', 3)
+                .attr('class', 'line')
+                .attr('d', valueline2(data));
+
+            var focus = svg.append('g')
+                .attr('class', 'focus')
+                .style('display', 'none');
+
+            focus.append('line')
+                .attr('class', 'x-hover-line hover-line')
+                .attr('y1', 0)
+                .attr('y2', height);
+
+            focus.append('text')
+                .attr('class', 'mf_val')
+                .attr('x', 5)
+                .attr('y', -30)
+                .attr('dy', '.31em')
+                .text(1);
+
+            focus.append('text')
+                .attr('class', 'mf_feat_val')
+                .attr('x', 5)
+                .attr('y', -10)
+                .attr('dy', '.31em')
+                .text(1);
+
+            focus.append('text')
+                .attr('class', 'n_val')
+                .attr('x', 5)
+                .attr('y', -50)
+                .attr('dy', '.31em')
+                .text(1);
+
+            svg.append('rect')
+                .attr('transform', 'translate(0,0)')
+                .attr('class', 'overlay')
+                .attr('width', width)
+                .attr('height', height)
+                .on('mouseover', function() { focus.style('display', null); })
+                .on('mouseout', function() { focus.style('display', 'none'); })
+                .on('mousemove', mousemove);
+
+            function mousemove() {
+                var x0 = Math.round(x.invert(d3.mouse(this)[0])); // Mouse X value
+                var y0 = y.invert(d3.mouse(this)[0]); // Mouse Y value
+
+                // Matrix Factorization Y Value
+                var d0 = data[x0 - 1]['ndcg']; // X-1 Y Value
+                var d1 = data[x0]['ndcg']; // Y Value
+
+                // Feature Matrix Factorization Y Value
+                var c0 = data[x0 - 1]['ndcg_feat']; // X-1 Y Value
+                var c1 = data[x0]['ndcg_feat']; // Y Value
+
+                var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
+                var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+                focus.attr('transform', 'translate(' + x(x0) + ',' + y(d) + ')');
+
+                // Text Value Display
+                focus.select('.n_val').text('K: '.concat(x0));
+                focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
+                focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
+
+                // Hover lines
+                focus.select('.x-hover-line').attr('y2', height - y(d)); //510 - inverse current pixel height
+                focus.select('.y-hover-line2').attr('y2', height - y(c)); //510 - inverse current pixel height
+                // focus.select('.y-hover-line2').attr('x1', 0 - y(y0)); //x(c) - 930
+              }
+
+              });
+    </script>
+    <script type='text/javascript'>
+    // builds an html string by looping through movies, adds to #results
+    function build_table() {
+      html = ''
+      html = html + '<th>K Value</th>'
+      html = html + '<th>Matrix Factorization NDCG Score</th>'
+      html = html + '<th>Feature Matrix Factorization NDCG Score</th>'
+      document.getElementById('resultsTable').innerHTML = html;
+    };
+
+    function add_row(n, ndcg, ndcg_feat){
+      var new_row =  ''
+      new_row = new_row + '<tr>'
+      new_row = new_row + '<td>'+n+'</td>'
+      new_row = new_row + '<td>'+ndcg+'</td>'
+      new_row = new_row + '<td>'+ndcg_feat+'</td>'
+      new_row = new_row + '</tr>'
+
+      var html = document.getElementById('resultsTable').innerHTML;
+      html = html + new_row;
+      document.getElementById('resultsTable').innerHTML = html;
+    };
+    </script>
 </html>

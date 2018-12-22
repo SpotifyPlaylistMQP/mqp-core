@@ -4,28 +4,6 @@ var http = require('http')
     , port = 8080;
 
 var server = http.createServer(function (req, res) {
-/*
-    if(req.method == "POST"){
-            res.writeHead(200, {"Content-Type":"application/javascript"});
-            res.write('<h1> Example </h1>');
-            res.end();
-    }
-*/
-        /**
-         If we have a post request.
-         If we want to make multiple we need to specify the url ending ie
-          if(req.url === '/getmydata'){
-                handle a /getmydata request
-          }
-          if(req.url ==='/dootherthing'){
-
-                handle a /dootherthing request
-          }
-         **/
-
-
-        //add code to call function on req
-
     var uri = url.parse(req.url)
     //console.log('Fetching ' + uri.pathname + "!")
     switch (uri.pathname) {
@@ -45,19 +23,12 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.css':
             sendFile(res, 'public/css/bootstrap.css', 'text/css')
             break
-        case '/css/starter-template.css':
-            sendFile(res, 'public/css/starter-template.css', 'text/css')
+        case '/css/style.css':
+            sendFile(res, 'public/css/style.css', 'text/css')
             break
         case '/data/masterSheet.csv':
             sendFile(res, 'public/data/masterSheet.csv', 'text/css')
             break
-        // case '/vendor/bootstrap/css/bootstrap.min.css.map':
-        //     sendFile(res, 'public/vendor/bootstrap/css/bootstrap.min.css.map', 'text/css')
-        //     break
-        // //fetches for img
-        // case '/img/profile.jpg':
-        //     sendFile(res, 'public/img/profile.jpg', 'img/jpg')
-        //     break
         //fetches for JS
         case '/js/bootstrap.js':
             sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
@@ -65,9 +36,9 @@ var server = http.createServer(function (req, res) {
         case '/js/popper.js':
             sendFile(res, 'public/js/popper.js', 'text/javascript')
             break
-        // case '/vendor/bootstrap/js/bootstrap.bundle.min.js':
-        //     sendFile(res, 'public/vendor/bootstrap/js/bootstrap.bundle.min.js', 'text/javascript')
-        //     break
+        case '/js/d3scripts.js':
+            sendFile(res, 'public/js/d3scripts.js', 'text/javascript')
+            break
         // case '/vendor/bootstrap/js/bootstrap.bundle.min.js.map':
         //     sendFile(res, 'public/vendor/bootstrap/js/bootstrap.bundle.min.js.map', 'text/javascript')
         //     break

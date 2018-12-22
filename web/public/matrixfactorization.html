@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class='gr__getbootstrap_com' lang='en'>
+<html lang='en'>
 <head>
     <script type='text/javascript' src='http://code.jquery.com/jquery-latest.min.js'></script>
     <script src='https://d3js.org/d3.v4.min.js'></script>
@@ -13,7 +13,7 @@
 
     <!-- CSS -->
     <link href='/css/bootstrap.css' rel='stylesheet'>
-    <link href='/css/starter-template.css' rel='stylesheet'>
+    <link href='/css/style.css' rel='stylesheet'>
     <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
 </head>
 <!-- Style (todo:move to style.css) -->
@@ -27,7 +27,7 @@
     }
     .legend {margin-right:20px;}
     .mf { background: #4682B4;}
-    .feat_mf { background: #FF0000;}
+    .feat_mf { background: #FF3232;}
     .axis path,
     .axis line {
       fill: none;
@@ -71,8 +71,14 @@
     td {
         border: 1px solid #000000;
         text-align: center;
-        background-color: #DED2CF;
         padding: 8px;
+        background-color: #a3a3a3;
+    }
+    .ndcgtd{
+        background-color: #4682B4;
+    }
+    .mfndcgtd{
+        background-color: #FF3232;
     }
     th {
         border: 1px solid #000000;
@@ -105,8 +111,8 @@
                     <a class='nav-link dropdown-toggle' href='#' id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Graphs</a>
                     <div class='dropdown-menu' aria-labelledby='dropdown01'>
                         <a class='dropdown-item' href='#'>Matrix Factorization Precision</a>
-                        <a class='dropdown-item' href='#'>Graph 2</a>
-                        <a class='dropdown-item' href='#'>Graph 3</a>
+                        <a class='dropdown-item' href='#'>Explore a dataset</a>
+                        <!-- <a class='dropdown-item' href='#'>Graph 3</a> -->
                     </div>
                 </li>
             </ul>
@@ -136,6 +142,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>
     <script src='/js/bootstrap.js'></script>
+    <script src='/js/d3scripts.js'></script>
 </body>
 <!-- Function to create everything -->
 <script type='text/javascript'>
@@ -183,9 +190,11 @@
             var min = Math.min(d3.min(data, function(data){ return data.ndcg; }), d3.min(data, function(data) { return data.ndcg_feat; }));
             var max = Math.max(d3.max(data, function(data){ return data.ndcg; }), d3.max(data, function(data){return data.ndcg_feat;}));
             var buffer = 0.025;
+            // var tes = d3.extent(data, function(data) { return data.n; });
+
 
             // Scale the range of the data
-            x.domain(d3.extent(data, function(data) { return data.n; }));
+            x.domain(["1", "100"]);
             y.domain([min-buffer, max+buffer]);
 
             // Add the X Axis
@@ -195,7 +204,7 @@
                 .call(d3.axisBottom(x)
                     .ticks(25))
                 .append('text')
-                .attr('x', width/2)
+                .attr('x', (width/2)-5)
                 .attr('y', 35)
                 .attr('dx', '0.71em')
                 .attr('fill', '#000')
@@ -230,7 +239,7 @@
             svg.append('path')
                 .data(data)
                 .style('fill', 'none')
-                .style('stroke', 'red')
+                .style('stroke', '#FF3232')
                 .style('stroke-width', 3)
                 .attr('class', 'line')
                 .attr('d', valueline2(data));
@@ -242,26 +251,28 @@
             focus.append('line')
                 .attr('class', 'x-hover-line hover-line')
                 .attr('y1', 0)
-                .attr('y2', height);
+                .attr('y2', 0);
 
             focus.append('text')
                 .attr('class', 'mf_val')
                 .attr('x', 5)
-                .attr('y', -30)
+                .attr('y', 30)
+                .style('fill', 'steelblue')
                 .attr('dy', '.31em')
                 .text(1);
 
             focus.append('text')
                 .attr('class', 'mf_feat_val')
                 .attr('x', 5)
-                .attr('y', -10)
+                .attr('y', 50)
+                .style('fill', '#FF3232')
                 .attr('dy', '.31em')
                 .text(1);
 
             focus.append('text')
                 .attr('class', 'n_val')
-                .attr('x', 5)
-                .attr('y', -50)
+                .attr('x', -15)
+                .attr('y', -10)
                 .attr('dy', '.31em')
                 .text(1);
 
@@ -288,7 +299,7 @@
 
                 var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
                 var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
-                focus.attr('transform', 'translate(' + x(x0) + ',' + y(d) + ')');
+                focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 
                 // Text Value Display
                 focus.select('.n_val').text('K: '.concat(x0));
@@ -296,34 +307,30 @@
                 focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
 
                 // Hover lines
-                focus.select('.x-hover-line').attr('y2', height - y(d)); //510 - inverse current pixel height
-                focus.select('.y-hover-line2').attr('y2', height - y(c)); //510 - inverse current pixel height
-                // focus.select('.y-hover-line2').attr('x1', 0 - y(y0)); //x(c) - 930
+                focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
               }
+              // returns slope, intercept and r-square of the line
+	function leastSquares(xSeries, ySeries) {
+		var reduceSumFunc = function(prev, cur) { return prev + cur; };
 
+		var xBar = xSeries.reduce(reduceSumFunc) * 1.0 / xSeries.length;
+		var yBar = ySeries.reduce(reduceSumFunc) * 1.0 / ySeries.length;
+
+		var ssXX = xSeries.map(function(d) { return Math.pow(d - xBar, 2); })
+			.reduce(reduceSumFunc);
+
+		var ssYY = ySeries.map(function(d) { return Math.pow(d - yBar, 2); })
+			.reduce(reduceSumFunc);
+
+		var ssXY = xSeries.map(function(d, i) { return (d - xBar) * (ySeries[i] - yBar); })
+			.reduce(reduceSumFunc);
+
+		var slope = ssXY / ssXX;
+		var intercept = yBar - (xBar * slope);
+		var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
+
+		return [slope, intercept, rSquare];
+	}
               });
-    </script>
-    <script type='text/javascript'>
-    // builds an html string by looping through movies, adds to #results
-    function build_table() {
-      html = ''
-      html = html + '<th>K Value</th>'
-      html = html + '<th>Matrix Factorization NDCG Score</th>'
-      html = html + '<th>Feature Matrix Factorization NDCG Score</th>'
-      document.getElementById('resultsTable').innerHTML = html;
-    };
-
-    function add_row(n, ndcg, ndcg_feat){
-      var new_row =  ''
-      new_row = new_row + '<tr>'
-      new_row = new_row + '<td>'+n+'</td>'
-      new_row = new_row + '<td>'+ndcg+'</td>'
-      new_row = new_row + '<td>'+ndcg_feat+'</td>'
-      new_row = new_row + '</tr>'
-
-      var html = document.getElementById('resultsTable').innerHTML;
-      html = html + new_row;
-      document.getElementById('resultsTable').innerHTML = html;
-    };
     </script>
 </html>

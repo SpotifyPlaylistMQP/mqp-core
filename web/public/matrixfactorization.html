@@ -108,10 +108,10 @@
                     <a class='nav-link' href='about.html'>About</a>
                 </li>
                 <li class='nav-item dropdown'>
-                    <a class='nav-link dropdown-toggle' href='#' id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Graphs</a>
+                    <a class='nav-link dropdown-toggle' href='#' id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Explore</a>
                     <div class='dropdown-menu' aria-labelledby='dropdown01'>
-                        <a class='dropdown-item' href='#'>Matrix Factorization Precision</a>
-                        <a class='dropdown-item' href='#'>Explore a dataset</a>
+                        <a class='dropdown-item' href='#'>NDCG Precision</a>
+                        <a class='dropdown-item' href='run.html'>Run an Evaluation</a>
                         <!-- <a class='dropdown-item' href='#'>Graph 3</a> -->
                     </div>
                 </li>
@@ -120,7 +120,7 @@
     </nav>
     <main role='main' class='container'>
         <div class='starter-template'>
-            <h1>Matrix Factorization Precision Graph</h1>
+            <h1>NDCG Precision Graph</h1>
             <!-- Container Div for all visualizations -->
             <div class='visualization_container'>
                 <!-- Legend -->
@@ -191,7 +191,6 @@
             var max = Math.max(d3.max(data, function(data){ return data.ndcg; }), d3.max(data, function(data){return data.ndcg_feat;}));
             var buffer = 0.025;
             // var tes = d3.extent(data, function(data) { return data.n; });
-
 
             // Scale the range of the data
             x.domain(["1", "100"]);

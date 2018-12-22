@@ -22,7 +22,6 @@ var server = http.createServer(function (req, res) {
         case '/run.html':
             sendFile(res, 'public/run.html')
             break
-        // //fetches for CSS
         case '/css/bootstrap.css':
             sendFile(res, 'public/css/bootstrap.css', 'text/css')
             break
@@ -32,19 +31,24 @@ var server = http.createServer(function (req, res) {
         case '/data/masterSheet.csv':
             sendFile(res, 'public/data/masterSheet.csv', 'text/css')
             break
-        //fetches for JS
         case '/js/bootstrap.js':
             sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
             break
         case '/js/popper.js':
             sendFile(res, 'public/js/popper.js', 'text/javascript')
             break
+        case '/js/popper.min.js.map':
+            sendFile(res, 'public/js/popper.min.js.map', 'text/javascript')
+            break
+        case '/js/bootstrap.min.js.map':
+            sendFile(res, 'public/js/bootstrap.min.js.map', 'text/javascript')
+            break
         case '/js/d3scripts.js':
             sendFile(res, 'public/js/d3scripts.js', 'text/javascript')
             break
-        // case '/vendor/bootstrap/js/bootstrap.bundle.min.js.map':
-        //     sendFile(res, 'public/vendor/bootstrap/js/bootstrap.bundle.min.js.map', 'text/javascript')
-        //     break
+        case '/css/bootstrap.min.css.map':
+            sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
+            break
         // //fontawesome-free
         // case '/vendor/fontawesome-free/css/all.min.css':
         //     sendFile(res, 'public/vendor/fontawesome-free/css/all.min.css', 'text/css')

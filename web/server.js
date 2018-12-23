@@ -28,9 +28,6 @@ var server = http.createServer(function (req, res) {
         case '/css/style.css':
             sendFile(res, 'public/css/style.css', 'text/css')
             break
-        case '/data/masterSheet.csv':
-            sendFile(res, 'public/data/masterSheet.csv', 'text/css')
-            break
         case '/js/bootstrap.js':
             sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
             break
@@ -49,10 +46,12 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
-        // //fontawesome-free
-        // case '/vendor/fontawesome-free/css/all.min.css':
-        //     sendFile(res, 'public/vendor/fontawesome-free/css/all.min.css', 'text/css')
-        //     break
+        case '/data/mf_mpd_square_100':
+            sendFile(res, 'public/data/mf_mpd_square_100', 'text')
+            break
+        case '/data/feature_mf_mpd_square_100':
+            sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
+            break
         // case '/vendor/fontawesome-free/webfonts/fa-brands-400.woff2':
         //     sendFile(res, 'public/vendor/fontawesome-free/webfonts/fa-brands-400.woff2', 'font/woff2')
         //     break

@@ -2,16 +2,7 @@ body {
   padding-top: 5rem;
 }
 
-.grid line {
-  stroke: lightgrey;
-  stroke-opacity: 0.7;
-  shape-rendering: crispEdges;
-}
-
-.grid path {
-  stroke-width: 0;
-}
-.starter-template {
+.base_template {
   padding: 3rem 1.5rem;
   text-align: center;
 }
@@ -19,86 +10,7 @@ body {
 .datasetWarn{
   background-color:#e50000;
 }
-.data-name {margin: 0 !important;}
-.key-dot {
-    display: inline-block;
-    height: 10px;
-    margin-right: .5em;
-    width: 10px;
-}
-.legend {margin-right:20px;}
-.mf { background: #4682B4;}
-.feat_mf { background: #FF3232;}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #D4D8DA;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
-}
-.axis {
-  font: 10px sans-serif;
-}
-.line {
-  fill: none;
-  stroke: #6F257F;
-  stroke-width: 5px;
-}
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
-.focus circle {
-  fill: #6F257F;
-  stroke: #6F257F;
-  stroke-width: 3px;
-}
-.hover-line {
-  stroke: #6F257F;
-  stroke-width: 2px;
-  stroke-dasharray: 3,3;
-}
-.mf_val {}
-.visualization_container {}
-h3 {margin-top: 15px;}
+
 body {
     background-color: #F1F3F3
-}
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-td {
-    border: 1px solid #000000;
-    text-align: center;
-    padding: 8px;
-    background-color: #a3a3a3;
-}
-
-/* Table CSS */
-.ndcgtd{
-    padding: 1px;
-    background-color: #4682B4;
-    width:25px;
-}
-.mfndcgtd{
-    padding: 1px;
-    background-color: #FF3232;
-    width:25px;
-}
-.table_index{
-    padding: 1px;
-    width:25px;
-}
-
-th {
-    border: 1px solid #000000;
-    background-color: #dddddd;
-    width: 100px;
-    text-align: center;
-    padding: 8px;
-}
-tr:nth-child(even) {
-    background-color: #dddddd;
 }

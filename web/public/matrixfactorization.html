@@ -8,14 +8,14 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
     <meta name='description' content=''>
     <meta name='author' content='Spotify Playlist Continuation MQP'>
-    <!-- <link rel='icon' href='https://getbootstrap.com/favicon.ico'> -->
     <title>Spotify MQP - Matrix Factorization Graph</title>
-
     <!-- CSS -->
     <link href='/css/bootstrap.css' rel='stylesheet'>
     <link href='/css/style.css' rel='stylesheet'>
+    <link href='/css/datavis.css' rel='stylesheet'>
     <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
 </head>
+
 <!-- Body -->
 <body data-gr-c-s-loaded='true' onload="start_up()">
     <nav class='navbar navbar-expand-md navbar-dark bg-dark fixed-top'>
@@ -44,30 +44,29 @@
         </div>
     </nav>
     <main role='main' class='container'>
-        <div class='starter-template'>
+        <div class='base_template'>
             <h1>NDCG Precision Graph</h1>
             <!-- Container Div for all visualizations -->
             <div class='visualization_container'>
                 <!-- Legend -->
-                <div class='legend1'>
-                    <h3>Legend</h3>
-                    <div class='legend1'> <p class='data-name'><span class='key-dot mf'></span>Matrix Factorization</p> </div>
-                    <div class='legend1'> <p class='data-name'><span class='key-dot feat_mf'></span>Feature Matrix Factorization</p> </div>
-                </div>
+                <div id='legendDiv' class='legend' style="display: inline-block;"></div>
                 <!-- Line graph -->
                 <svg id='MatrixGraph' width='1000' height='600' align='center'></svg>
-                <br><br><br>
+                <!-- Radar graph -->
+                <!-- <svg id='RadarGraph' width='1000' height='600' align='center'></svg> -->
                 <!-- Results data table -->
-                <table id='resultsTable'></table>
+                <div id='result_table' style="display: inline-block;"></div>
             </div>
             <br>
         </div>
     </main>
-
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>
     <script src='/js/bootstrap.js'></script>
     <script src='/js/d3scripts.js'></script>
+    <script src='/js/graphMaster.js'></script>
+    <script src='/js/d3/radar_graph.js'></script>
+    <script src='/js/d3/line_graph.js'></script>
 </body>
 <!-- Function to create everything -->
 <script type='text/javascript'>

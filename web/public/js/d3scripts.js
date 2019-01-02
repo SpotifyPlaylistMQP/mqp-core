@@ -31,6 +31,7 @@ function earth(file1, file2){
         .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
+            .on('mouseover', function() { console.log("Success") })
         .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -176,6 +177,24 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       .attr('y1', 0)
       .attr('y2', 0);
 
+  focus.append("circle")
+      .attr('class', 'red-circle')
+      .attr("r", 6)
+      .style("fill", "black")
+      .style("stroke", '#FF3232')
+      .attr('transform', 'translate(0, 100)')
+      .style("stroke-width", 3)
+      .style("fill-opacity", "1");
+
+  focus.append("circle")
+      .attr('class', 'blue-circle')
+      .attr("r", 6)
+      .style("fill", "black")
+      .style("stroke", 'steelblue')
+      .attr('transform', 'translate(0, 150)')
+      .style("stroke-width", 3)
+      .style("fill-opacity", "1");
+
   focus.append('text')
       .attr('class', 'mf_val')
       .attr('x', 5)
@@ -222,12 +241,18 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
 
       var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
       var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+
+
+
       focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 
       // Text Value Display
       focus.select('.n_val').text('K: '.concat(x0));
       focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
       focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
+      focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
+      focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
+
 
       // Hover lines
       focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height

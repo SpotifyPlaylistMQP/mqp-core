@@ -13,6 +13,18 @@ function d3_god(){
     });
 };
 
+// gridlines in x axis function
+function make_x_gridlines(x) {
+    return d3.axisBottom(x)
+        .ticks(20)
+}
+
+// gridlines in y axis function
+function make_y_gridlines(y) {
+    return d3.axisLeft(y)
+        .ticks(20)
+}
+
 function earth(file1, file2){
     //And d3_god said, "let there be SVG dimensions," and there was SVG dimensions
     var svg = d3.select('svg');
@@ -43,7 +55,7 @@ function earth(file1, file2){
 // builds an html string by looping through movies, adds to #results
 function build_table(data, data2) { //build_table(MF, Feature MF){..}
   html = ''
-  html = html + '<th>K Value</th>'
+  html = html + '<th class="table_index">K Value</th>'
   html = html + '<th>Matrix Factorization NDCG Score</th>'
   html = html + '<th>Feature Matrix Factorization NDCG Score</th>'
   document.getElementById('resultsTable').innerHTML = html;
@@ -54,9 +66,9 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
         var index = parseFloat(row);
         var new_row =  ''
         new_row = new_row + '<tr>'
-        new_row = new_row + '<td>'+ (index+1) +'</td>'
-        new_row = new_row + '<td class="ndcgtd">'+ data[row][' NDCG'] +'</td>'
-        new_row = new_row + '<td class="mfndcgtd">'+ data2[row][' NDCG'] +'</td>'
+        new_row = new_row + '<td class="table_index">'+ (index+1) +'</td>'
+        new_row = new_row + '<td class="ndcgtd">'+ Number.parseFloat(data[row][' NDCG']).toPrecision(5) +'</td>'
+        new_row = new_row + '<td class="mfndcgtd">'+ Number.parseFloat(data2[row][' NDCG']).toPrecision(5) +'</td>'
         new_row = new_row + '</tr>'
 
         var html = document.getElementById('resultsTable').innerHTML;
@@ -86,8 +98,8 @@ function step_one(normal_mf, feature_mf, x, y, margin, width, height, svg){
     y.domain([min-buffer, max+buffer]);
 
     create_graph(normal_mf, feature_mf, svg, width, height, x, y); // Creates the elements of the graph
-    add_normal_line(normal_mf, svg, x, y); // Adds the normal MF line
-    add_feature_line(feature_mf, svg, x, y); // Adds the feture MF line
+    add_line(normal_mf, svg, x, y, 'steelblue'); // Adds the normal MF line
+    add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feture MF line
     create_overlay(normal_mf, feature_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
 };
 
@@ -121,10 +133,27 @@ function create_graph(normal_mf, feature_mf, svg, width, height, x, y){
         .attr('text-anchor', 'start')
         .style('font-weight', 'bold')
         .text('NDCG Precision');
+
+    // add the X gridlines
+    svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(make_x_gridlines(x)
+            .tickSize(-height)
+            .tickFormat("")
+        )
+
+    // add the Y gridlines
+    svg.append("g")
+        .attr("class", "grid")
+        .call(make_y_gridlines(y)
+            .tickSize(-width)
+            .tickFormat("")
+        )
 };
 
 //Graph Functions
-function add_normal_line(data, svg, x, y){
+function add_line(data, svg, x, y, color){
     data.forEach(function(d) {
         d.n = d.n;
         d.ndcg = d.ndcg;
@@ -140,28 +169,7 @@ function add_normal_line(data, svg, x, y){
     svg.append('path')
         .data([data])
         .style('fill', 'none')
-        .style('stroke', 'steelblue')
-        .style('stroke-width', 3)
-        .attr('class', 'line')
-        .attr('d', valueline(data));
-};
-
-function add_feature_line(data, svg, x, y){
-    data.forEach(function(d) {
-        d.n = d.n;
-        d.ndcg = d.ndcg;
-        d.ndcg_feat = d.ndcg_feat;
-    });
-
-    // Define the Feature MF NDCG line
-    var valueline = d3.line()
-        .x(function(data) { var xval = data['N']; return x(xval); })
-        .y(function(data) { var yval = data[' NDCG']; return y(yval.slice(0, 7)); });
-
-    svg.append('path')
-        .data(data)
-        .style('fill', 'none')
-        .style('stroke', '#FF3232')
+        .style('stroke', color)
         .style('stroke-width', 3)
         .attr('class', 'line')
         .attr('d', valueline(data));
@@ -231,30 +239,32 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       var x0 = Math.round(x.invert(d3.mouse(this)[0])); // Mouse X value
       var y0 = y.invert(d3.mouse(this)[0]); // Mouse Y value
 
-      // Matrix Factorization Y Value
-      var d0 = normal_mf[x0 - 1][' NDCG']; // X-1 Y Value
-      var d1 = normal_mf[x0][' NDCG']; // Y Value
 
-      // Feature Matrix Factorization Y Value
-      var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
-      var c1 = feature_mf[x0][' NDCG']; // Y Value
+      try {
+          // Matrix Factorization Y Value
+          var d0 = normal_mf[x0 - 1][' NDCG']; // X-1 Y Value
+          var d1 = normal_mf[x0][' NDCG']; // Y Value
+          // Feature Matrix Factorization Y Value
+          var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
+          var c1 = feature_mf[x0][' NDCG']; // Y Value
+          var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
+          var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
 
-      var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
-      var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+          focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 
-
-
-      focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
-
-      // Text Value Display
-      focus.select('.n_val').text('K: '.concat(x0));
-      focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
-      focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
-      focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
-      focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
+          // Text Value Display
+          focus.select('.n_val').text('K: '.concat(x0));
+          focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
+          focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
+          focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
+          focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
 
 
-      // Hover lines
-      focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
-    }
+          // Hover lines
+          focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
+      }
+      catch(err) {
+          console.log("Exceeded graph bounds");
+      };
+    };
 }

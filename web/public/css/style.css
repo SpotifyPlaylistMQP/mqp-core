@@ -1,6 +1,16 @@
 body {
   padding-top: 5rem;
 }
+
+.grid line {
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke-width: 0;
+}
 .starter-template {
   padding: 3rem 1.5rem;
   text-align: center;
@@ -65,12 +75,23 @@ td {
     padding: 8px;
     background-color: #a3a3a3;
 }
+
+/* Table CSS */
 .ndcgtd{
+    padding: 1px;
     background-color: #4682B4;
+    width:25px;
 }
 .mfndcgtd{
+    padding: 1px;
     background-color: #FF3232;
+    width:25px;
 }
+.table_index{
+    padding: 1px;
+    width:25px;
+}
+
 th {
     border: 1px solid #000000;
     background-color: #dddddd;

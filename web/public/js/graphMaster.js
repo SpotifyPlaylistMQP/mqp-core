@@ -14,7 +14,6 @@ function d3_god(){
             }
             else {
                 // After loading the data create everything
-                build_legend()
                 build_table(file1, file2) // Creates the table
                 build_line_graph(file1, file2); //...and earth, why not
             }

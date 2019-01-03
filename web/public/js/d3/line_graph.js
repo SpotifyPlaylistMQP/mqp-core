@@ -2,7 +2,7 @@
 function build_line_graph(normal_mf, feature_mf){
     // SVG variables
     var svg = d3.select('svg');
-    var margin = {top: 50, right: 20, bottom: 40, left: 50};
+    var margin = {top: 50, right: 200, bottom: 40, left: 50};
     var width = +svg.attr('width') - margin.left - margin.right;
     var height = +svg.attr('height') - margin.top - margin.bottom;
     var svg = d3.select('body').select('#MatrixGraph')
@@ -36,8 +36,8 @@ function build_line_graph(normal_mf, feature_mf){
     create_plot(normal_mf, feature_mf, svg, width, height, x, y); // Creates the elements of the graph
     add_line(normal_mf, svg, x, y, 'steelblue'); // Adds the normal MF line
     add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feture MF line
+    add_legend(svg, width, normal_mf, feature_mf, x, y);
     create_overlay(normal_mf, feature_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
-
 }
 
 // gridlines in x axis function
@@ -115,13 +115,50 @@ function add_line(data, svg, x, y, color){
         .y(function(data) { var yval = data[' NDCG']; return y(yval.slice(0, 7)); });
 
     // Add the valueline path.
-    svg.append('path')
+    var path = svg.append('path')
         .data([data])
         .style('fill', 'none')
         .style('stroke', color)
         .style('stroke-width', 3)
         .attr('class', 'line')
         .attr('d', valueline(data));
+
+    var totalLength = path.node().getTotalLength();
+
+    path
+      .attr("stroke-dasharray", totalLength + " " + totalLength)
+      .attr("stroke-dashoffset", totalLength)
+      .transition()
+        .duration(3000)
+        .attr("stroke-dashoffset", 0);
+};
+
+function add_legend(svg, width, normal_mf, feature_mf, x, y){
+  width = width+10;
+  var mf_100 = normal_mf[99][' NDCG']; // Y Value
+  var feat_100 = feature_mf[99][' NDCG']; // Y Value
+
+  var legend = svg.append('g')
+      .attr('class', 'focus')
+      .style('display', 'block');
+
+  legend.append('text')
+      .attr('class', 'mf_feat_100_header')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(feat_100) + ')')
+      .style('fill', '#FF3232')
+      .attr('dy', '.31em')
+      .text("Feature Matrix Factorization");
+
+  legend.append('text')
+      .attr('class', 'mf_100_header')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
+      .style('fill', 'steelblue')
+      .attr('dy', '.31em')
+      .text("Normal Matrix Factorization");
 };
 
 function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
@@ -175,6 +212,7 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       .attr('dy', '.31em')
       .text(1);
 
+  var unclicked = true;
   svg.append('rect')
       .attr('transform', 'translate(0,0)')
       .attr('class', 'overlay')
@@ -182,38 +220,51 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       .attr('height', height)
       .on('mouseover', function() { focus.style('display', null); })
       .on('mouseout', function() { focus.style('display', 'none'); })
-      .on('mousemove', mousemove);
+      .on('mousemove', mousemove)
+      .on('click', toggle_clicked)
+
+  function toggle_clicked(){
+    unclicked = !unclicked;
+    console.log(unclicked);
+    if(!unclicked){
+        console.log("Paused");
+    };
+  };
 
   function mousemove() {
       var x0 = Math.round(x.invert(d3.mouse(this)[0])); // Mouse X value
       var y0 = y.invert(d3.mouse(this)[0]); // Mouse Y value
 
-      try {
-          // Matrix Factorization Y Value
-          var d0 = normal_mf[x0 - 1][' NDCG']; // X-1 Y Value
-          var d1 = normal_mf[x0][' NDCG']; // Y Value
+      if(unclicked){
+        try {
+            // Matrix Factorization Y Value
+            var d0 = normal_mf[x0 - 1][' NDCG']; // X-1 Y Value
+            var d1 = normal_mf[x0][' NDCG']; // Y Value
 
-          // Feature Matrix Factorization Y Value
-          var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
-          var c1 = feature_mf[x0][' NDCG']; // Y Value
+            // Feature Matrix Factorization Y Value
+            var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
+            var c1 = feature_mf[x0][' NDCG']; // Y Value
 
-          var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
-          var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+            var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
+            var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
 
-          focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
+            focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 
-          // Text Value Display
-          focus.select('.n_val').text('K: '.concat(x0));
-          focus.select('.mf_val').text('MF: '.concat(d.slice(0, 7)));
-          focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 7)));
-          focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
-          focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
+            // Text Value Display
+            focus.select('.n_val').text('K: '.concat(x0));
+            // focus.select('.mf_val').text('MF: '.concat(d.slice(0, 8)));
+            focus.select('.mf_val').text(d.slice(0, 8));
+            // focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 8)));
+            focus.select('.mf_feat_val').text(c.slice(0, 8));
+            focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
+            focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
 
-          // Hover lines
-          focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
-      }
-      catch(err) {
-          console.log("Exceeded graph bounds");
+            // Hover lines
+            focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
+        }
+        catch(err) {
+            console.log("Exceeded graph bounds");
+        };
       };
-    };
+      };
 }

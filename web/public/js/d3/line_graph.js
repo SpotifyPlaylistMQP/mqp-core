@@ -219,7 +219,7 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       .attr('width', width)
       .attr('height', height)
       .on('mouseover', function() { focus.style('display', null); })
-      .on('mouseout', function() { focus.style('display', 'none'); })
+      .on('mouseout', function() { if(unclicked){focus.style('display', 'none'); };})
       .on('mousemove', mousemove)
       .on('click', toggle_clicked)
 
@@ -247,7 +247,9 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
 
             var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
             var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
-
+        }catch(err) {};
+        
+        try {
             focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 
             // Text Value Display
@@ -262,9 +264,7 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
             // Hover lines
             focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height
         }
-        catch(err) {
-            console.log("Exceeded graph bounds");
-        };
+        catch(err) {};
       };
-      };
+    };
 }

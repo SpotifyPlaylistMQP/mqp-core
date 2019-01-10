@@ -9,8 +9,8 @@ params = {
         "alpha": 1,
         "beta": 1,
         "latent_features": 10,
-        "steps": 100,
-        "c": 0.01,
+        "steps": 200,
+        "c": 10,
     },
     "mpd_square_1000": {
         "alpha": 1,

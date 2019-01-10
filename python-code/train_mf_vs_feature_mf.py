@@ -42,8 +42,6 @@ for tid in unique_track_dict.keys():
         unique_track_dict[tid]["valence"]
     ])
 
-rec_systems = ['mf', 'feature_mf']
-
 N = 10
 
 for alpha in params["alpha_set"]:
@@ -72,7 +70,7 @@ for alpha in params["alpha_set"]:
                         matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks + T, track_playlist_matrix, unique_track_dict)
 
                     avg_ndcg = results / params['number_of_playlists_to_test']
-                    print("{}, {}, {}, {}, {}, NDCG:()".format(alpha, beta, c, latent_features, steps, avg_ndcg))
+                    print("{}, {}, {}, {}, {}, NDCG:{}".format(alpha, beta, c, latent_features, steps, avg_ndcg))
                     output.write("{}, {}, {}, {}, {}, {}\n".format(alpha, beta, c, latent_features, steps, avg_ndcg))
 
 print("Wrote results to evaluation_data/" + filename)

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+
+        <title>Spotify MQP - Home</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="/css/bootstrap.css" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="/css/style.css" rel="stylesheet">
+        <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
+    </head>
+
+    <body data-gr-c-s-loaded="true">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Spotify Playlist Continuation MQP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Explore</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="matrixfactorization.html">NDCG Precision</a>
+                            <a class="dropdown-item" href="#">Run an Evaluation</a>
+                            <!-- <a class="dropdown-item" href="#">Graph 3</a> -->
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- NOTES -->
+        <!--
+           Grey Color Scale Link: https://www.color-hex.com/color/343a40
+        -->
+        <main role="main" class="container">
+            <div class="base_template">
+                <h1>Run an Evaluation</h1>
+                    <p class="lead"></p>
+                    <div style="background-color: #999c9f; width:50%; display: inline-block;">
+                      <br>
+                      <form id="myForm">
+                        <div id="optionsDiv">
+                            <h5>Dataset</h5>
+                            <select id="op1" required>
+                                <option value="">None</option>
+                                <option value="mpd_square_100">100^2 Playlist Set</option>
+                                <option value="mpd_square_1000">1000^2 Playlist Set</option>
+                            </select>
+                            <h5>Playlist</h5>
+                            <select id="op2" class="datasetWarn" disabled required>
+                                <option value="">Select Dataset First!</option>
+                                <option value="">Select Playlist</option>
+                                <option value="1">Test_Value_For_Submit_Test</option>
+                                <!-- TODO -->
+                                <!-- 1. Make a function to fetch playlists from dataset and populate the list -->
+                                <!-- 2. Replace "Select a Dataset" with "None" -->
+                            </select>
+                            <h5>Recommendation System</h5>
+                            <select id="op3" required>
+                                <option value="">None</option>
+                                <option value="normal">Normal Matrix Factorization</option>
+                                <option value="feature">Feature Matrix Factorization</option>
+                            </select>
+                            <br><br>
+                            <input type="submit" value="Run Evaluation"></input>
+                            <!-- <input type="submit"> -->
+                            <script type="text/javascript">
+                              var warning = document.getElementById('op2');
+                                  warning.onload = function () {
+                                  warning.className = this.options[this.selectedIndex].className;
+                              }
+                              var op1Select = document.getElementById('op1');
+                                  op1Select.onchange = function () {
+                                  var op2Select = document.getElementById("op2");
+                                  var innerHTML = op2Select.options[op2Select.selectedIndex].text;
+                                  if (innerHTML == "Select Dataset First!"){
+                                      op2Select.remove(0)
+                                      op2Select.disabled = false;
+                                      op2Select.className = this.options[this.selectedIndex].className;
+                                  }
+                              }
+                            </script>
+                        </div>
+                      </form>
+                      <br>
+                    </div>
+                    <div class="formFootNote">
+                        <br>
+                        <p>To view an evaluation of the average NDCG precision of an entire data set check out the <a href='matrixfactorization.html'>NDCG Precision Graph</a></p>
+                    </div>
+            </div>
+        </main>
+        <script>
+            function sendToServer() {
+                var op1 = document.getElementById("op1").value;
+                var op2 = document.getElementById("op2").value;
+                var op3 = document.getElementById("op3").value;
+                console.log(op1);
+                console.log(op2);
+                console.log(op3);
+                document.getElementById("myForm").submit();
+            }
+
+        </script>
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="/js/popper.js"></script>
+        <script src="/js/bootstrap.js"></script>
+    </body>
+</html>

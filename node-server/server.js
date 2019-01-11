@@ -11,6 +11,7 @@ server.use(require('./logRequests'));
 
 server.use('/spotify', require('./spotify'));
 server.use('/mongodb', require('./mongodb'));
+server.use('/evaluate', require('./evaluate'));
 
 server.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);

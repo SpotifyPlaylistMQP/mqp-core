@@ -1,34 +1,12 @@
 const routes = require('express').Router();
 const MongoClient = require('mongodb').MongoClient;
-const validation = require('../validate');
 
 routes.post('/:collection', (request, response) => {
-  // Validate the request body and if OK, set (each) playlist._id to the playlist's id
-  let playlistsToInsert = [];
-  if (Array.isArray(request.body)){
-    request.body.forEach(playlist => {
-      if (validation.playlist(playlist)){
-        playlist._id = playlist.pid;
-        playlistsToInsert.push(playlist)
-      } else {
-        response.status(400).send()
-      }
-    })
-  } else {
-    if (validation.playlist(request.body)){
-      request.body._id = request.body.pid;
-      playlistsToInsert.push(request.body)
-    } else {
-      response.status(400).send()
-    }
-  }
-
-  // Insert playlistsToInsert to mongodb if there are any
-  if (playlistsToInsert.length > 0){
+  if (request.body.matrix.length > 0){
     MongoClient.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
       if (err) throw err;
-      const dbo = db.db('playlists');
-      dbo.collection(request.params.collection).insertMany(playlistsToInsert, {ordered: false}, (err, res) => {
+      const dbo = db.db('matrices');
+      dbo.collection(request.params.collection).insertOne(request.body, {ordered: false}, (err, res) => {
         response.status(204).send();
         db.close();
       });
@@ -41,7 +19,7 @@ routes.post('/:collection', (request, response) => {
 routes.get('/:collection', (request, response) => {
   MongoClient.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
     if (err) throw err;
-    const dbo = db.db('playlists');
+    const dbo = db.db('matrices');
     dbo.listCollections().toArray((err, collections) => {
       if (err) throw err;
       let collectionParamExists = false;
@@ -66,7 +44,7 @@ routes.get('/:collection', (request, response) => {
 routes.delete('/:collection', (request, response) => {
   MongoClient.connect(process.env.MONGO_URI, {useNewUrlParser: true}, (err, db) => {
     if (err) throw err;
-    const dbo = db.db('playlists');
+    const dbo = db.db('matrices');
     dbo.listCollections().toArray((err, collections) => {
       if (err) throw err;
       let collectionParamExists = false;
@@ -87,8 +65,8 @@ routes.delete('/:collection', (request, response) => {
   });
 });
 
-console.log('POST \t/mongodb/playlists/:collection');
-console.log('GET \t/mongodb/playlists/:collection');
-console.log('DELETE \t/mongodb/playlists/:collection');
+console.log('POST \t/mongodb/matrices/:collection');
+console.log('GET \t/mongodb/matrices/:collection');
+console.log('DELETE \t/mongodb/matrices/:collection');
 
 module.exports = routes;

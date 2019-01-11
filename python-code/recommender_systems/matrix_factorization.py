@@ -3,6 +3,7 @@ import scipy.sparse as sparse
 import numpy as np
 import implicit
 
+
 params = {
     "mpd_square_100": {
         "alpha": 0.1,

@@ -1,13 +1,13 @@
 import sys
-from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization
+from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization, torch_matrix_factorization
 from recommender_systems.modules import matrix, helpers, evaluation
 from mongodb import mongodb_communicate
 import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 10,
-        "number_of_playlists_to_test": 100,
+        "number_of_runs": 1,
+        "number_of_playlists_to_test": 5,
         "max_N": 100
     },
     "mpd_square_1000": {
@@ -63,7 +63,8 @@ for run in range(params["number_of_runs"]):
                 ranked_tracks = matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, mongo_collection)
             elif rec_system == 'feature_mf':
                 ranked_tracks = feature_matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, feature_matrix, mongo_collection)
-
+            elif rec_system == 'torch_mf':
+                ranked_tracks = torch_matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_playlist_matrix, feature_matrix, mongo_collection)
             for N in range(1, params["max_N"] + 1):
                 recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks)
                 ndcg_results[rec_system][N] += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)

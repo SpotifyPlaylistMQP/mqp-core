@@ -308,7 +308,7 @@ for param in params:
         "steps": param[4]
     }
     num_tests = 5
-    num_playlists = 100 if mongo_collection == 'mpd_square_100' else 500
+    num_playlists = 100
     avg_ndcg = 0
     for test in range(num_tests):
         results = 0

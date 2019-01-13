@@ -2,7 +2,7 @@ from recommender_systems.modules import similarities, helpers
 
 params = {
     "mpd_square_100": {
-        "K": 50
+        "K": 60
     },
     "mpd_square_1000": {
         "K": 40

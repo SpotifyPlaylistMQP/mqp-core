@@ -36,7 +36,10 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
-        // JS Cases
+        // JS Cases ""
+        case '/js/eval_forms/form_validation.js':
+            sendFile(res, 'public/js/eval_forms/form_validation.js', 'text/js')
+            break
         case '/js/graphMaster.js':
             sendFile(res, 'public/js/graphMaster.js', 'text/js')
             break

@@ -57,46 +57,30 @@
                       <br>
                       <form id="myForm">
                         <div id="optionsDiv">
+                            <!-- Select a dataset from Mongo -->
                             <h5>Dataset</h5>
                             <select id="op1" required>
-                                <option value="">None</option>
+                                <option value="">None Selected</option>
                                 <option value="mpd_square_100">100^2 Playlist Set</option>
                                 <option value="mpd_square_1000">1000^2 Playlist Set</option>
                             </select>
+                            <!-- Select a playlist from the dataset -->
+                            <br><br>
                             <h5>Playlist</h5>
-                            <select id="op2" class="datasetWarn" disabled required>
+                            <select id="playlists_op" class="datasetWarn" disabled required>
                                 <option value="">Select Dataset First!</option>
                                 <option value="">Select Playlist</option>
-                                <option value="1">Test_Value_For_Submit_Test</option>
-                                <!-- TODO -->
-                                <!-- 1. Make a function to fetch playlists from dataset and populate the list -->
-                                <!-- 2. Replace "Select a Dataset" with "None" -->
                             </select>
+                            <!-- Select a recommender system -->
+                            <br><br>
                             <h5>Recommendation System</h5>
-                            <select id="op3" required>
-                                <option value="">None</option>
+                            <select id="op3" class="datasetWarn" disabled required>
+                                <option value="">Select Playlist First!</option>
                                 <option value="normal">Normal Matrix Factorization</option>
                                 <option value="feature">Feature Matrix Factorization</option>
                             </select>
                             <br><br>
-                            <input type="submit" value="Run Evaluation"></input>
-                            <!-- <input type="submit"> -->
-                            <script type="text/javascript">
-                              var warning = document.getElementById('op2');
-                                  warning.onload = function () {
-                                  warning.className = this.options[this.selectedIndex].className;
-                              }
-                              var op1Select = document.getElementById('op1');
-                                  op1Select.onchange = function () {
-                                  var op2Select = document.getElementById("op2");
-                                  var innerHTML = op2Select.options[op2Select.selectedIndex].text;
-                                  if (innerHTML == "Select Dataset First!"){
-                                      op2Select.remove(0)
-                                      op2Select.disabled = false;
-                                      op2Select.className = this.options[this.selectedIndex].className;
-                                  }
-                              }
-                            </script>
+                            <input type="submit" value="Run Evaluation" onclick=sendToServer()></input>
                         </div>
                       </form>
                       <br>
@@ -107,21 +91,59 @@
                     </div>
             </div>
         </main>
+        <script type="text/javascript">
+          var warning = document.getElementById('playlists_op');
+              warning.onload = function () {
+              warning.className = this.options[this.selectedIndex].className;
+          };
+
+          var op1Select = document.getElementById('op1');
+              op1Select.onchange = function () {
+              var op2Select = document.getElementById("playlists_op");
+              var innerHTML = op2Select.options[op2Select.selectedIndex].text;
+              if (innerHTML == "Select Dataset First!"){
+                  op2Select.remove(0)
+                  op2Select.disabled = false;
+                  op2Select.className = this.options[this.selectedIndex].className;
+              }
+              // populate the playlist option
+              var sample = ["playlist 1", "playlist 2", "playlist 3"];
+              var playlist;
+              for (playlist = 0; playlist < sample.length; playlist++) {
+                  var x = document.getElementById("playlists_op");
+                  var option = document.createElement("option");
+                  option.text = sample[playlist];
+                  x.add(option);
+              }
+          };
+
+          var playlist_select = document.getElementById('playlists_op');
+              playlist_select.onchange = function () {
+
+                  var op3Select = document.getElementById("op3");
+                  var innerHTML = op3Select.options[op3Select.selectedIndex].text;
+                  if (innerHTML == "Select Playlist First!"){
+                      op3Select.remove(0)
+                      op3Select.disabled = false;
+                      op3Select.className = this.options[this.selectedIndex].className;
+                  }
+          };
+        </script>
         <script>
             function sendToServer() {
                 var op1 = document.getElementById("op1").value;
-                var op2 = document.getElementById("op2").value;
+                var op2 = document.getElementById("playlists_op").value;
                 var op3 = document.getElementById("op3").value;
                 console.log(op1);
                 console.log(op2);
                 console.log(op3);
-                document.getElementById("myForm").submit();
-            }
-
+                // document.getElementById("myForm").submit();
+            };
         </script>
 
         <!-- Bootstrap core JavaScript -->
         <script src="/js/popper.js"></script>
         <script src="/js/bootstrap.js"></script>
+        <script src="/js/eval_forms/form_validation.js"></script>
     </body>
 </html>

@@ -9,9 +9,9 @@ from recommender_systems.modules import helpers
 
 params = {
     "mpd_square_100": {
-        "alpha": .1,
-        "latent_features": 20,
-        "learning_rate": 1e-6,
+        "alpha": 100,
+        "latent_features": 6,
+        "learning_rate": 1e-6
     },
     "mpd_square_1000": {
     }
@@ -28,45 +28,40 @@ class MatrixFactorization(torch.nn.Module):
         self.item_factors = torch.nn.Embedding(n_items,
                                                n_factors,
                                                sparse=True)
+        self.user_biases = torch.nn.Embedding(n_users,
+                                              1,
+                                              sparse=True)
+        self.item_biases = torch.nn.Embedding(n_items,
+                                              1,
+                                              sparse=True)
 
     def forward(self, user, item):
-        return (self.user_factors(user) * self.item_factors(item)).sum(1)
+        pred = self.user_biases(user) + self.item_biases(item)
+        pred += (self.user_factors(user) * self.item_factors(item)).sum(1)
+        return pred
 
+# https://www.ethanrosenthal.com/2017/06/20/matrix-factorization-in-pytorch/
 def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_playlist_matrix, feature_matrix, mongo_collection):
-
     # Create the embeddings and "model"
     model = MatrixFactorization(len(indexed_pids), len(indexed_tids), params[mongo_collection]['latent_features'])
-
-    # print(track_playlist_matrix)
-    # print(type(track_playlist_matrix))
-
-    # change to numpy array
     track_playlist_matrix = np.asarray(track_playlist_matrix).T * params[mongo_collection]["alpha"]
+    loss_func = torch.nn.MSELoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=params[mongo_collection]["learning_rate"]) # learning rate
 
-    # Sort our data
+    # Train data
     rows, cols = track_playlist_matrix.nonzero()
     p = np.random.permutation(len(rows))
     rows, cols = rows[p], cols[p]
 
-    # loss function
-    loss_func = torch.nn.MSELoss()
-
-    # optimizer
-    optimizer = torch.optim.SGD(model.parameters(), lr=params[mongo_collection]["learning_rate"]) # learning rate
-
     for row, col in zip(*(rows, cols)):
         # Turn data into variables
         rating = Variable(torch.FloatTensor([track_playlist_matrix[row, col]]))
-
         row = Variable(torch.LongTensor([np.long(row)]))
         col = Variable(torch.LongTensor([np.long(col)]))
 
         # Predict and calculate loss
         prediction = model(row, col)
-
-        # print(prediction)
         loss = loss_func(prediction, rating)
-        # print(loss)
 
         # Backpropagate
         loss.backward()
@@ -74,16 +69,8 @@ def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_pl
         # Update the parameters
         optimizer.step()
 
-        # print("done")
-        # print(matrix)
-
-
-
-    # input = torch.LongTensor([[0]])
     items = np.asarray(model.item_factors.weight.data)
     users = np.asarray(model.user_factors.weight.data)
-    # print(items)
-
     factorized_matrix = np.dot(users, items.T).T.T.tolist()
 
     ranked_tracks = []

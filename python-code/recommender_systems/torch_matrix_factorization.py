@@ -28,17 +28,9 @@ class MatrixFactorization(torch.nn.Module):
         self.item_factors = torch.nn.Embedding(n_items,
                                                n_factors,
                                                sparse=True)
-        self.user_biases = torch.nn.Embedding(n_users,
-                                              1,
-                                              sparse=True)
-        self.item_biases = torch.nn.Embedding(n_items,
-                                              1,
-                                              sparse=True)
 
     def forward(self, user, item):
-        pred = self.user_biases(user) + self.item_biases(item)
-        pred += (self.user_factors(user) * self.item_factors(item)).sum(1)
-        return pred
+        return (self.user_factors(user) * self.item_factors(item)).sum(1)
 
 # https://www.ethanrosenthal.com/2017/06/20/matrix-factorization-in-pytorch/
 def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_playlist_matrix, feature_matrix, mongo_collection):
@@ -46,7 +38,7 @@ def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_pl
     model = MatrixFactorization(len(indexed_pids), len(indexed_tids), params[mongo_collection]['latent_features'])
     track_playlist_matrix = np.asarray(track_playlist_matrix).T * params[mongo_collection]["alpha"]
     loss_func = torch.nn.MSELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=params[mongo_collection]["learning_rate"]) # learning rate
+    optimizer = torch.optim.SGD(model.parameters(), lr=params[mongo_collection]["learning_rate"])
 
     # Train data
     rows, cols = track_playlist_matrix.nonzero()

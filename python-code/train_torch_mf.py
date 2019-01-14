@@ -5,12 +5,16 @@ from mongodb import mongodb_communicate
 
 all_params = {
     "mpd_square_100": {
-        "alpha_set": [100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001],
-        "latent_features_set": [5, 10, 20, 30, 40, 50, 60],
-        "learning_rate_set": [1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10],
-        "number_of_playlists_to_test": 50,
+        "alpha_set": [100000, 10000, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001],
+        "latent_features_set": [6, 10, 15, 20, 30, 50, 80, 100, 200],
+        "learning_rate_set": [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12],
+        "number_of_playlists_to_test": 5,
     },
     "mpd_square_1000": {
+        "alpha_set": [100],
+        "latent_features_set": [5, 10, 15],
+        "learning_rate_set": [1e-8, 1e-9, 1e-10, 1e-11],
+        "number_of_playlists_to_test": 5,
     }
 }
 
@@ -23,7 +27,7 @@ output = open("train_data/" + filename, "a")
 output.write("alpha, latent_features, learning_rate, NDCG\n")
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
-track_playlist_matrix = mongodb_communicate.get_matrix(mongo_collection)
+track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 
 N = 15
 

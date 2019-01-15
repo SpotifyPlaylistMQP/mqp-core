@@ -1,9 +1,9 @@
 // Builds the D3 line graph
 function build_line_graph(normal_mf, feature_mf){
     // SVG variables
-    var svg = d3.select('svg');
-    var margin = {top: 50, right: 125, bottom: 40, left: 55};
-    var width = +svg.attr('width') - margin.left - margin.right;
+    var svg = d3.select('body').select('#MatrixGraph');
+    var margin = {top: 40, right: 300, bottom: 40, left: 55};
+    var width = +svg.attr('width');
     var height = +svg.attr('height') - margin.top - margin.bottom;
     var svg = d3.select('body').select('#MatrixGraph')
         .append('svg')

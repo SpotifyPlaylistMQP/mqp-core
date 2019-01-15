@@ -5,10 +5,10 @@ from mongodb import mongodb_communicate
 
 all_params = {
     "mpd_square_100": {
-        "alpha_set": [100000, 10000, 1000, 100, 10, 1, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001],
+        "alpha_set": [1e10, 1e9, 1e8, 1e7, 1e6, 1e5, 1e4, 1e3, 1e2, 1],
         "latent_features_set": [6, 10, 15, 20, 30, 50, 80, 100, 200],
-        "learning_rate_set": [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12],
-        "number_of_playlists_to_test": 5,
+        "learning_rate_set": [1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12],
+        "number_of_playlists_to_test": 10,
     },
     "mpd_square_1000": {
         "alpha_set": [100],

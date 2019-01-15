@@ -55,6 +55,7 @@
 
 .visualization_container {
   width: 100%;
+  padding: 0px;
 }
 
 /*
@@ -62,6 +63,7 @@
 */
 #parent {
   display: flex;
+  width: 100%;
 }
 #narrow {
   width: 300px;
@@ -86,7 +88,7 @@
   width: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
-  overflow: scroll;
+  overflow: scroll !important;
 }
  
 th {

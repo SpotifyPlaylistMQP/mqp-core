@@ -9,11 +9,14 @@ from recommender_systems.modules import helpers
 
 params = {
     "mpd_square_100": {
-        "alpha": 100,
-        "latent_features": 6,
-        "learning_rate": 1e-6
+        "alpha": 100000000,
+        "latent_features": 15,
+        "learning_rate": 1e-12
     },
     "mpd_square_1000": {
+        "alpha": 10,
+        "latent_features": 5,
+        "learning_rate": 1e-9
     }
 }
 

@@ -30,7 +30,7 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   };
   html = html + '</tbody>'
   html = html + '</table>'
-  console.log(html)
+  // console.log(html)
   document.getElementById('result_table').innerHTML = html;
 };
 

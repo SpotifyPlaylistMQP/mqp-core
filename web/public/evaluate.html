@@ -49,7 +49,7 @@
             <!-- Container Div for all visualizations -->
             <div class='visualization_container'>
                 <!-- Line graph -->
-                <svg id='MatrixGraph' width='1000' height='600' align='center' ></svg>
+                <svg id='MatrixGraph' width='900' height='600' align='center' ></svg>
                 <!-- Radar graph -->
                 <!-- <svg id='RadarGraph' width='1000' height='600' align='center'></svg> -->
                 <!-- Results data table -->
@@ -69,6 +69,14 @@
 <!-- Function to create everything -->
 <script type='text/javascript'>
 function start_up(){
+  var queryString = decodeURIComponent(window.location.search);
+  queryString = queryString.substring(1);
+  var queries = queryString.split("&");
+  for (var i = 0; i < queries.length; i++){
+    console.log(queries[i].substr(6));
+    // document.write(queries[i] + "<br>");
+  };
+
   d3_god();
 }
 </script>

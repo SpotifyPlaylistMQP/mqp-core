@@ -11,6 +11,9 @@ var server = http.createServer(function (req, res) {
         case '/':
             sendFile(res, 'public/index.html')
             break
+        case '/evaluate.html':
+            sendFile(res, 'public/evaluate.html')
+            break
         case '/index.html':
             sendFile(res, 'public/index.html')
             break
@@ -37,11 +40,11 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
         // JS Cases ""
-        case '/js/eval_forms/form_validation.js':
-            sendFile(res, 'public/js/eval_forms/form_validation.js', 'text/js')
-            break
-        case '/js/graphMaster.js':
-            sendFile(res, 'public/js/graphMaster.js', 'text/js')
+        // case '/js/eval_forms/form_validation.js':
+        //     sendFile(res, 'public/js/eval_forms/form_validation.js', 'text/js')
+        //     break
+        case '/js/d3/graphMaster.js':
+            sendFile(res, 'public/js/d3/graphMaster.js', 'text/js')
             break
         case '/js/bootstrap.js':
             sendFile(res, 'public/js/bootstrap.js', 'text/javascript')

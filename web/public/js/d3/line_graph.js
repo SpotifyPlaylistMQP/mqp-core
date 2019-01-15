@@ -2,7 +2,7 @@
 function build_line_graph(normal_mf, feature_mf){
     // SVG variables
     var svg = d3.select('svg');
-    var margin = {top: 50, right: 200, bottom: 40, left: 50};
+    var margin = {top: 50, right: 125, bottom: 40, left: 55};
     var width = +svg.attr('width') - margin.left - margin.right;
     var height = +svg.attr('height') - margin.top - margin.bottom;
     var svg = d3.select('body').select('#MatrixGraph')
@@ -148,8 +148,17 @@ function add_legend(svg, width, normal_mf, feature_mf, x, y){
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(feat_100) + ')')
       .style('fill', '#FF3232')
-      .attr('dy', '.31em')
-      .text("Feature Matrix Factorization");
+      .attr('dy', '0em')
+      .text("Feature Matrix")
+
+  legend.append('text')
+      .attr('class', 'mf_feat_100_header')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(feat_100) + ')')
+      .style('fill', '#FF3232')
+      .attr('dy', '1.2em')
+      .text("Factorization")
 
   legend.append('text')
       .attr('class', 'mf_100_header')
@@ -157,8 +166,17 @@ function add_legend(svg, width, normal_mf, feature_mf, x, y){
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
       .style('fill', 'steelblue')
-      .attr('dy', '.31em')
-      .text("Normal Matrix Factorization");
+      .attr('dy', '0em')
+      .text("Normal Matrix");
+
+  legend.append('text')
+      .attr('class', 'mf_100_header')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
+      .style('fill', 'steelblue')
+      .attr('dy', '1.2em')
+      .text("Factorization");
 };
 
 function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
@@ -248,7 +266,7 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
             var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
             var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
         }catch(err) {};
-        
+
         try {
             focus.attr('transform', 'translate(' + x(x0) + ',' + 0 + ')');
 

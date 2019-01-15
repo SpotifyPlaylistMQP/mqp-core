@@ -1,7 +1,7 @@
 var http = require('http')
     , fs = require('fs')
     , url = require('url')
-    , port = 8080;
+    , port = 8088;
 
 var server = http.createServer(function (req, res) {
     var uri = url.parse(req.url)
@@ -67,6 +67,7 @@ var server = http.createServer(function (req, res) {
         case '/js/d3scripts.js':
             sendFile(res, 'public/js/d3scripts.js', 'text/javascript')
             break
+        
         // Dataset Cases
         case '/data/mf_mpd_square_100':
             sendFile(res, 'public/data/mf_mpd_square_100', 'text')

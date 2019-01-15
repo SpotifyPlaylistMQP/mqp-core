@@ -14,3 +14,16 @@ body {
 body {
     background-color: #F1F3F3
 }
+
+.bg-green{
+  background-color: #1db954!important
+}
+
+@font-face {
+  font-family: spotify-font;
+  src: url(../fonts/CircularStd-Black.woff);
+}
+
+.custom-nav {
+  /*font-family: spotify-font;*/
+}

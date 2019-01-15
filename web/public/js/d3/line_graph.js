@@ -2,8 +2,8 @@
 function build_line_graph(normal_mf, feature_mf){
     // SVG variables
     var svg = d3.select('body').select('#MatrixGraph');
-    var margin = {top: 40, right: 300, bottom: 40, left: 55};
-    var width = +svg.attr('width');
+    var margin = {top: 20, right: 95, bottom: 40, left: 55};
+    var width = +svg.attr('width') - margin.left - margin.right;
     var height = +svg.attr('height') - margin.top - margin.bottom;
     var svg = d3.select('body').select('#MatrixGraph')
         .append('svg')
@@ -143,37 +143,41 @@ function add_legend(svg, width, normal_mf, feature_mf, x, y){
       .style('display', 'block');
 
   legend.append('text')
-      .attr('class', 'mf_feat_100_header')
-      .attr('x', 0)
+      .attr('x', -5)
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(feat_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
       .style('fill', '#FF3232')
       .attr('dy', '0em')
       .text("Feature Matrix")
 
   legend.append('text')
-      .attr('class', 'mf_feat_100_header')
-      .attr('x', 0)
+      .attr('x', -5)
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(feat_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
       .style('fill', '#FF3232')
       .attr('dy', '1.2em')
       .text("Factorization")
 
   legend.append('text')
-      .attr('class', 'mf_100_header')
-      .attr('x', 0)
+      .attr('x', -5)
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
       .style('fill', 'steelblue')
       .attr('dy', '0em')
       .text("Normal Matrix");
 
   legend.append('text')
-      .attr('class', 'mf_100_header')
-      .attr('x', 0)
+      .attr('x', -5)
       .attr('y', 0)
       .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
       .style('fill', 'steelblue')
       .attr('dy', '1.2em')
       .text("Factorization");

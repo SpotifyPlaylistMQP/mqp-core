@@ -52,23 +52,41 @@
   stroke-dasharray: 3,3;
 }
 .mf_val {}
-.visualization_container {}
+
+.visualization_container {
+  width: 100%;
+}
 
 /*
     --- Data Table CSS ---
 */
+#parent {
+  display: flex;
+}
+#narrow {
+  width: 300px;
+  margin-left: 150px;
+  
+  /* Just so it's visible */
+}
+#wide {
+  flex: 2;
+  /* Grow to rest of container */
+  /* Just so it's visible */
+}
 
 .table-fill {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
-  height: 320px;
+  height: 320px !important;
   margin: auto;
   max-width: 600px;
   padding:5px;
   width: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
+  overflow: scroll;
 }
  
 th {
@@ -76,9 +94,9 @@ th {
   background:#1b1e24;
   border-bottom:4px solid #9ea7af;
   border-right: 1px solid #343a45;
-  font-size:23px;
+  font-size:14px;
   font-weight: 100;
-  padding:24px;
+  padding:4px;
   text-align:left;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align:middle;
@@ -97,7 +115,7 @@ tr {
   border-top: 1px solid #C1C3D1;
   border-bottom-: 1px solid #C1C3D1;
   color:#666B85;
-  font-size:16px;
+  font-size:8px;
   font-weight:normal;
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
 }
@@ -134,7 +152,7 @@ tr:last-child td:last-child {
  
 td {
   background:#FFFFFF;
-  padding:20px;
+  padding:6px;
   text-align:left;
   vertical-align:middle;
   font-weight:300;

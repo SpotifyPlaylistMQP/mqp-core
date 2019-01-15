@@ -29,7 +29,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="index.html">Home</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="about.html">About</a>
@@ -80,7 +80,8 @@
                                 <option value="feature">Feature Matrix Factorization</option>
                             </select>
                             <br><br>
-                            <input type="submit" value="Run Evaluation" onclick=sendToServer()></input>
+                            <!-- <input type="button" value="Run Evaluation" onclick=sendToServer()></input> -->
+                            <input type="button" value="Run Evaluation" onclick="sendToServer()"></input>
                         </div>
                       </form>
                       <br>
@@ -119,7 +120,6 @@
 
           var playlist_select = document.getElementById('playlists_op');
               playlist_select.onchange = function () {
-
                   var op3Select = document.getElementById("op3");
                   var innerHTML = op3Select.options[op3Select.selectedIndex].text;
                   if (innerHTML == "Select Playlist First!"){
@@ -137,13 +137,14 @@
                 console.log(op1);
                 console.log(op2);
                 console.log(op3);
-                // document.getElementById("myForm").submit();
+                var queryString = "?para1=" + op1 + "&para2=" + op2 + "&para3=" + op3;
+                window.location.href = "evaluate.html" + queryString;
             };
         </script>
 
         <!-- Bootstrap core JavaScript -->
         <script src="/js/popper.js"></script>
         <script src="/js/bootstrap.js"></script>
-        <script src="/js/eval_forms/form_validation.js"></script>
+        <!-- <script src="/js/eval_forms/form_validation.js"></script> -->
     </body>
 </html>

@@ -47,20 +47,14 @@
         <div class='base_template'>
             <h1>NDCG Precision Graph</h1>
             <!-- Container Div for all visualizations -->
-            
-                <div id='wide' class='visualization_container'>
-                    <div id = 'parent'>
-                        <!-- Line graph -->
-                        <svg id='MatrixGraph' width='1000' height='600' align='center' ></svg>
-                        <!-- Radar graph -->
-                        <!-- <svg id='RadarGraph' width='1000' height='600' align='center'></svg> -->
-                    <!-- Results data table -->
-                    <div id='narrow'>
-                        <div id='result_table' style="display: inline-block;"></div>
-                    </div>
-                </div>
-
-                 
+            <div class='visualization_container'>
+                <!-- Line graph -->
+                <svg id='MatrixGraph' width='900' height='600' align='center' ></svg>
+                <!-- Radar graph -->
+                <!-- <svg id='RadarGraph' width='1000' height='600' align='center'></svg> -->
+                <!-- Results data table -->
+                <div id='result_table' style="display: inline-block;"></div>
+            </div>
             <br>
         </div>
     </main>
@@ -75,6 +69,14 @@
 <!-- Function to create everything -->
 <script type='text/javascript'>
 function start_up(){
+  var queryString = decodeURIComponent(window.location.search);
+  queryString = queryString.substring(1);
+  var queries = queryString.split("&");
+  for (var i = 0; i < queries.length; i++){
+    console.log(queries[i].substr(6));
+    // document.write(queries[i] + "<br>");
+  };
+
   d3_god();
 }
 </script>

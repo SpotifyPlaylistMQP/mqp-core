@@ -13,10 +13,10 @@ params = {
     },
     "mpd_square_1000": {
         "alpha": 1,
-        "beta": 1e-4,
-        "latent_features": 10,
-        "steps": 100,
-        "c": 10
+        "beta": 0.01,
+        "latent_features": 30,
+        "steps": 150,
+        "c": 0.001
     }
 }
 

@@ -2,7 +2,7 @@
 function build_line_graph(normal_mf, feature_mf){
     // SVG variables
     var svg = d3.select('body').select('#MatrixGraph');
-    var margin = {top: 20, right: 95, bottom: 40, left: 55};
+    var margin = {top: 20, right: 85, bottom: 40, left: 55};
     var width = +svg.attr('width') - margin.left - margin.right;
     var height = +svg.attr('height') - margin.top - margin.bottom;
     var svg = d3.select('body').select('#MatrixGraph')
@@ -11,6 +11,8 @@ function build_line_graph(normal_mf, feature_mf){
             .attr('height', height + margin.top + margin.bottom)
         .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    svg.attr('background-color', '#FFFFFF')
 
     // Graph variables
     var x = d3.scaleLinear().range([0, width]).nice(); //The horizontal he called X

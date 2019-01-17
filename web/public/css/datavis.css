@@ -2,7 +2,7 @@
     --- Line Graph CSS ---
 */
 .line_grid line {
-  stroke: lightgrey;
+  stroke: #bec2c4;
   stroke-opacity: 0.7;
   shape-rendering: crispEdges;
 }
@@ -18,7 +18,7 @@
 .axis path,
 .axis line {
   fill: none;
-  stroke: #D4D8DA;
+  stroke: #abaeb0;
   stroke-width: 2px;
   shape-rendering: crispEdges;
 }

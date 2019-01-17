@@ -2,7 +2,7 @@ from recommender_systems.modules import similarities, evaluation, matrix, helper
 
 params = {
     "mpd_square_100": {
-        "K": 30
+        "K": 20
     },
     "mpd_square_1000": {
         "K": 40

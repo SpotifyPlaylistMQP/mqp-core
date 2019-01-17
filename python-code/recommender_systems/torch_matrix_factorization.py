@@ -44,7 +44,30 @@ def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_pl
     optimizer = torch.optim.SGD(model.parameters(), lr=params[mongo_collection]["learning_rate"])
 
     # Train data
+    # indices of rows and cols for training data
+    # random sample of 0s and take all 1s
+
+
+    # All of the 1s
     rows, cols = track_playlist_matrix.nonzero()
+
+    # Put half as many zeros as 1s in the sample
+    num_zeroes = round(len(rows)/2)
+
+    # All indices of zeros
+    x, y = np.where(track_playlist_matrix == 0)
+
+    # Take random sample of zeros
+    zeros = np.random.randint(low=0, high=len(x), size=num_zeroes)
+
+    # Append random sample of 0s
+    #if index out of bounds, change this order
+    for i in zeros:
+        np.append(rows, x[i])
+        np.append(cols, y[i])
+
+
+
     p = np.random.permutation(len(rows))
     rows, cols = rows[p], cols[p]
 

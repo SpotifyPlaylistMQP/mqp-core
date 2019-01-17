@@ -8,8 +8,8 @@ params = {
     "mpd_square_100": {
         "alpha": 0.1,
         "beta": 1,
-        "latent_features": 90,
-        "steps": 150,
+        "latent_features": 30,
+        "steps": 50,
     },
     "mpd_square_1000": {
         "alpha": 1,

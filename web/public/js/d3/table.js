@@ -14,18 +14,18 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   html = html + '</thead>'
   html = html + '<tbody class="table-hover">'
 
-  for (var row in data) {
-    for(var i = 0; i < 15; i++){
-        if(data[row][' NDCG'] != undefined){
-            var index = parseFloat(row);
+  for(var i = 0; i < 15; i++){
+    // for (var row in data) {
+        if(data[i][' NDCG'] != undefined){
+            var index = i;
             var new_row =  ''
             new_row = new_row + '<tr>'
-            new_row = new_row + '<td class="text-left">'+ (index+1) +'</td>'
-            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data[row][' NDCG']).toPrecision(10) +'</td>'
-            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data2[row][' NDCG']).toPrecision(10) +'</td>'
+            new_row = new_row + '<td class="text-left">'+ (i+1) +'</td>'
+            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data[i][' NDCG']).toPrecision(10) +'</td>'
+            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data2[i][' NDCG']).toPrecision(10) +'</td>'
             new_row = new_row + '</tr>'
             html = html + new_row;
-        }
+        // }
     }
   };
   html = html + '</tbody>'

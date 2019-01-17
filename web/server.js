@@ -39,24 +39,30 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
-        // JS Cases ""
-        // case '/js/eval_forms/form_validation.js':
-        //     sendFile(res, 'public/js/eval_forms/form_validation.js', 'text/js')
-        //     break
+        // JS Cases
+        /*
+            D3 JS files
+        */
         case '/js/d3/graphMaster.js':
             sendFile(res, 'public/js/d3/graphMaster.js', 'text/js')
-            break
-        case '/js/bootstrap.js':
-            sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
-            break
-        case '/js/popper.js':
-            sendFile(res, 'public/js/popper.js', 'text/javascript')
             break
         case '/js/d3/radar_graph.js':
             sendFile(res, 'public/js/d3/radar_graph.js', 'text/javascript')
             break
         case '/js/d3/line_graph.js':
             sendFile(res, 'public/js/d3/line_graph.js', 'text/javascript')
+            break
+        case '/js/d3/table.js':
+            sendFile(res, 'public/js/d3/table.js', 'text/javascript')
+            break
+        /*
+            Other JS files
+        */
+        case '/js/bootstrap.js':
+            sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
+            break
+        case '/js/popper.js':
+            sendFile(res, 'public/js/popper.js', 'text/javascript')
             break
         case '/js/popper.min.js.map':
             sendFile(res, 'public/js/popper.min.js.map', 'text/javascript')
@@ -67,7 +73,7 @@ var server = http.createServer(function (req, res) {
         case '/js/d3scripts.js':
             sendFile(res, 'public/js/d3scripts.js', 'text/javascript')
             break
-        
+
         // Dataset Cases
         case '/data/mf_mpd_square_100':
             sendFile(res, 'public/data/mf_mpd_square_100', 'text')

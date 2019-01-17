@@ -11,11 +11,19 @@ function d3_god(){
         .await(function(error, file1, file2) {
             if (error) {
                 console.error('Not again: ' + error);
-            }
-            else {
-                // After loading the data create everything
-                build_line_graph(file1, file2); //...and earth, why not
-                build_table(file1, file2) // Creates the table
-            }
+            } else {
+                bob_the_builder(file1, file2);
+            };
     });
+};
+
+function bob_the_builder(file1, file2){
+    d3.queue()
+        .defer(build_line_graph, file1, file2)
+        // .defer(build_table, file1, file2)
+        .await(function(error) {
+            if (error) {
+                console.error('Not again: ' + error);
+            };
+        });
 };

@@ -35,17 +35,3 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   // console.log(html)
   document.getElementById('result_table').innerHTML = html;
 };
-
-/*
-SECTION 2 -- Legend Scripts
-    All the following code is for creating the legend table
-*/
-// builds an html string by looping through movies, adds to #results
-function build_legend() { //build_table(MF, Feature MF){..}
-  var html = ''
-  html = html + '<h3>Graph Legend</h3>'
-  html = html + '<div> <p class="data-name"><span class="key-dot mf"></span>Matrix Factorization</p> </div>'
-  html = html + '<div> <p class="data-name"><span class="key-dot feat_mf"></span>Feature Matrix Factorization</p> </div>'
-  html = html + '</div>'
-  document.getElementById('legendDiv').innerHTML = html;
-};

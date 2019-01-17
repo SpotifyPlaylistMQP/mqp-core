@@ -6,10 +6,10 @@ Function 1 -- Table Scripts
 function build_table(data, data2) { //build_table(MF, Feature MF){..}
   var html = '<table class="table-fill">'
   html = html + '<thead>'
-  html = html + '<tr>'
-  html = html + '<th class="text-left">K-Value</th>'
-  html = html + '<th class="text-left">Matrix Factorization NDCG Score</th>'
-  html = html + '<th class="text-left">Feature Matrix Factorization NDCG Score</th>'
+  html = html + '<tr class="dataTable">'
+  html = html + '<th class="dataTable text-left">K-Value</th>'
+  html = html + '<th class="dataTable text-left">Matrix Factorization NDCG Score</th>'
+  html = html + '<th class="dataTable text-left">Feature Matrix Factorization NDCG Score</th>'
   html = html + '</tr>'
   html = html + '</thead>'
   html = html + '<tbody class="table-hover">'
@@ -19,10 +19,10 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
         if(data[i][' NDCG'] != undefined){
             var index = i;
             var new_row =  ''
-            new_row = new_row + '<tr>'
-            new_row = new_row + '<td class="text-left">'+ (i+1) +'</td>'
-            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data[i][' NDCG']).toPrecision(10) +'</td>'
-            new_row = new_row + '<td class="text-left">'+ Number.parseFloat(data2[i][' NDCG']).toPrecision(10) +'</td>'
+            new_row = new_row + '<tr class="dataTable">'
+            new_row = new_row + '<td class="dataTable text-left">'+ (i+1) +'</td>'
+            new_row = new_row + '<td class="dataTable text-left">'+ Number.parseFloat(data[i][' NDCG']).toPrecision(10) +'</td>'
+            new_row = new_row + '<td class="dataTable text-left">'+ Number.parseFloat(data2[i][' NDCG']).toPrecision(10) +'</td>'
             new_row = new_row + '</tr>'
             html = html + new_row;
         // }

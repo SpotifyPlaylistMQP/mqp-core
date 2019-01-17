@@ -85,6 +85,20 @@
   /* Just so it's visible */
 }
 
+table.graphHolder {
+  width: 100%;
+  border: 0px;
+  overflow: hidden;
+}
+
+td.graphCell{
+  max-width: 70%;
+}
+
+td.tableCell{
+  max-width:30%;
+}
+
 .table-fill {
   background: white;
   border-radius:3px;
@@ -99,7 +113,7 @@
   overflow: scroll !important;
 }
 
-th {
+th.dataTable {
   color:#D5DDE5;;
   background:#1b1e24;
   border-bottom:4px solid #9ea7af;
@@ -112,16 +126,16 @@ th {
   vertical-align:middle;
 }
 
-th:first-child {
+th.dataTable:first-child {
   border-top-left-radius:3px;
 }
 
-th:last-child {
+th.dataTable:last-child {
   border-top-right-radius:3px;
   border-right:none;
 }
 
-tr {
+tr.dataTable {
   border-top: 1px solid #C1C3D1;
   border-bottom-: 1px solid #C1C3D1;
   color:#666B85;
@@ -130,25 +144,25 @@ tr {
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
 }
 
-tr:hover td {
+tr.dataTable:hover td {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
 }
 
-tr:first-child {
+tr.dataTable:first-child {
   border-top:none;
 }
 
-tr:last-child {
+tr.dataTable:last-child {
   border-bottom:none;
 }
 
-tr:nth-child(odd) td {
+tr.dataTable:nth-child(odd) td {
   background:#EBEBEB;
 }
 
-tr:nth-child(odd):hover td {
+tr.dataTable:nth-child(odd):hover td {
   background:#4E5066;
 }
 
@@ -156,11 +170,11 @@ tr:last-child td:first-child {
   border-bottom-left-radius:3px;
 }
 
-tr:last-child td:last-child {
+tr.dataTable:last-child td:last-child {
   border-bottom-right-radius:3px;
 }
 
-td {
+td.dataTable {
   background:#FFFFFF;
   padding:6px;
   text-align:left;
@@ -171,7 +185,7 @@ td {
   border-right: 1px solid #C1C3D1;
 }
 
-td:last-child {
+td.dataTable:last-child {
   border-right: 0px;
 }
 

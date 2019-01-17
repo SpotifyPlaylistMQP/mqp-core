@@ -47,7 +47,7 @@
         <!-- <div class='base_template'> -->
         <h1 align='center'>NDCG Precision Graph</h1>
 
-        <div style="background-color: #999c9f; width:50%; display: flex; align-items: center;">
+        <div style="background-color: #999c9f; width:50%; align-items: center;">
           <form id="myForm">
             <div id="optionsDiv">
                 <!-- Select a dataset from Mongo -->
@@ -76,18 +76,33 @@
             </div>
           </form>
         </div>
+        <br>
+
+
+        <!-------- NDCG line GRAPH -------->
+
 
         <!-- Container Div for all visualizations -->
-            <div id='wide' class='visualization_container'>
-                <!-- <div id = 'parent'> -->
-                <div id="first">
-                    <svg id='MatrixGraph' width='1000' height='600'></svg>
-                </div>
-                <!-- Results data table -->
-                <div id='narrow'>
-                    <div id='result_table' style="display: inline-block;"></div>
-                </div>
-            </div>
+        <table>
+            <tr>
+                <td class="graphCell">  
+                    <!-- <div id = 'parent'> -->
+                    <div id="first">
+                        <svg id='MatrixGraph' width='1000' height='600'></svg>
+                    </div>
+                </td>
+
+
+                <td class="tableCell">
+                    <!-- Results data table -->
+                    <div id='narrow'>
+                        <div id='result_table' style="display: inline-block;"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+            
+           
         <br>
         <!-- </div> -->
     </main>

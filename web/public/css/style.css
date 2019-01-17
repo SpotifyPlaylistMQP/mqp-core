@@ -37,6 +37,7 @@ hr {
     color: white; /* old IE */
     background-color: white; /* Modern Browsers */
     width: 65%;
+    align-content: left;
 }
 
 

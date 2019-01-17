@@ -68,11 +68,19 @@
 #narrow {
   width: 300px;
   margin-left: 50px;
-
+  overflow: hidden;
+  display: inline-block;
+}
   /* Just so it's visible */
+ #first {
+   width: 1000px;
+   float: left;
+   display: inline-block;
 }
 #wide {
-  flex: 2;
+  width:100%;
+  overflow: hidden;
+
   /* Grow to rest of container */
   /* Just so it's visible */
 }

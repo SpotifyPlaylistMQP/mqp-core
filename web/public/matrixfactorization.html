@@ -44,37 +44,27 @@
         </div>
     </nav>
     <main role='main' class='container'>
-        <!-- <div class='base_template'> -->
         <h1 align='center'>NDCG Precision Graph</h1>
 
-        <div style="background-color: #999c9f; width:50%; display: flex; align-items: center;">
+        <div style="background-color: #999c9f; display:flex; justify-content: space-around;">
           <form id="myForm">
-            <div id="optionsDiv">
-                <!-- Select a dataset from Mongo -->
+            <div style="display:flex; flex-direction: column; float: left; padding-left: 50px; padding-right:50px; padding-top:10px; padding-bottom:10px">
                 <h5>Dataset</h5>
                 <select id="op1" required>
                     <option value="">None Selected</option>
                     <option value="mpd_square_100">100^2 Playlist Set</option>
                     <option value="mpd_square_1000">1000^2 Playlist Set</option>
-                </select>
-                <!-- Select a playlist from the dataset -->
+                  </select>
+            </div>
+            <div style="display:flex; flex-direction: column; float: right;  padding-left: 50px; padding-right:50px; padding-top:10px; padding-bottom:10px">
                 <h5>Playlist</h5>
                 <select id="playlists_op" class="datasetWarn" disabled required>
                     <option value="">Select Dataset First!</option>
                     <option value="">Select Playlist</option>
                 </select>
-                <!-- Select a recommender system -->
-                <!-- <h5>Recommendation System</h5>
-                <select id="op3" class="datasetWarn" disabled required>
-                    <option value="">Select Playlist First!</option>
-                    <option value="normal">Normal Matrix Factorization</option>
-                    <option value="feature">Feature Matrix Factorization</option>
-                </select> -->
-                <hr>
-                <!-- <input type="button" value="Run Evaluation" onclick=sendToServer()></input> -->
-                <input type="button" value="Run Evaluation" onclick="sendToServer()"></input>
             </div>
           </form>
+          <input type="button" value="Run Evaluation" onclick="sendToServer()"></input>
         </div>
 
         <!-- Container Div for all visualizations -->

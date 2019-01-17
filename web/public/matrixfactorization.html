@@ -65,11 +65,6 @@
           <input type="button" value="Run Evaluation" onclick="sendToServer()"></input>
         </div>
         <br>
-
-
-        <!-------- NDCG line GRAPH -------->
-
-
         <!-- Container Div for all visualizations -->
         <table>
             <tr>
@@ -79,8 +74,6 @@
                         <svg id='MatrixGraph' width='900' height='600'></svg>
                     </div>
                 </td>
-
-
                 <td class="tableCell">
                     <!-- Results data table -->
                     <div id='narrow'>
@@ -89,10 +82,7 @@
                 </td>
             </tr>
         </table>
-
-
         <br>
-        <!-- </div> -->
     </main>
     <script type="text/javascript">
       var warning = document.getElementById('playlists_op');
@@ -119,27 +109,12 @@
               x.add(option);
           }
       };
-
-      // var playlist_select = document.getElementById('playlists_op');
-      //     playlist_select.onchange = function () {
-      //         var op3Select = document.getElementById("op3");
-      //         var innerHTML = op3Select.options[op3Select.selectedIndex].text;
-      //         if (innerHTML == "Select Playlist First!"){
-      //             op3Select.remove(0)
-      //             op3Select.disabled = false;
-      //             op3Select.className = this.options[this.selectedIndex].className;
-      //         }
-      // };
-    </script>
-    <script>
-        function sendToServer() {
-            var op1 = document.getElementById("op1").value;
-            var op2 = document.getElementById("playlists_op").value;
-            // var op3 = document.getElementById("op3").value;
-            console.log(op1);
-            console.log(op2);
-            // console.log(op3);
-        };
+      function sendToServer() {
+          var op1 = document.getElementById("op1").value;
+          var op2 = document.getElementById("playlists_op").value;
+          console.log(op1);
+          console.log(op2);
+      };
     </script>
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>

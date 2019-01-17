@@ -20,7 +20,7 @@ function d3_god(){
 function bob_the_builder(file1, file2){
     d3.queue()
         .defer(build_line_graph, file1, file2)
-        // .defer(build_table, file1, file2)
+        .defer(build_table, file1, file2)
         .await(function(error) {
             if (error) {
                 console.error('Not again: ' + error);

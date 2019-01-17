@@ -16,8 +16,8 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   html = html + '</thead>'
   html = html + '<tbody class="table-hover">'
 
-  var dataFifteen = data.splice(0,15)
-  for (var row in dataFifteen) {
+  for (var row in data) {
+    for(var i = 0; i < 15; i++){
     if(data[row][' NDCG'] != undefined){
         var index = parseFloat(row);
         var new_row =  ''
@@ -28,6 +28,7 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
         new_row = new_row + '</tr>'
 
         html = html + new_row;
+    }
     }
   };
   html = html + '</tbody>'

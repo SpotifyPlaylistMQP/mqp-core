@@ -46,9 +46,38 @@
     <main role='main' class='container'>
         <!-- <div class='base_template'> -->
         <h1 align='center'>NDCG Precision Graph</h1>
-        
-        <!-- Container Div for all visualizations -->
 
+        <div style="background-color: #999c9f; width:50%; display: flex; align-items: center;">
+          <form id="myForm">
+            <div id="optionsDiv">
+                <!-- Select a dataset from Mongo -->
+                <h5>Dataset</h5>
+                <select id="op1" required>
+                    <option value="">None Selected</option>
+                    <option value="mpd_square_100">100^2 Playlist Set</option>
+                    <option value="mpd_square_1000">1000^2 Playlist Set</option>
+                </select>
+                <!-- Select a playlist from the dataset -->
+                <h5>Playlist</h5>
+                <select id="playlists_op" class="datasetWarn" disabled required>
+                    <option value="">Select Dataset First!</option>
+                    <option value="">Select Playlist</option>
+                </select>
+                <!-- Select a recommender system -->
+                <!-- <h5>Recommendation System</h5>
+                <select id="op3" class="datasetWarn" disabled required>
+                    <option value="">Select Playlist First!</option>
+                    <option value="normal">Normal Matrix Factorization</option>
+                    <option value="feature">Feature Matrix Factorization</option>
+                </select> -->
+                <hr>
+                <!-- <input type="button" value="Run Evaluation" onclick=sendToServer()></input> -->
+                <input type="button" value="Run Evaluation" onclick="sendToServer()"></input>
+            </div>
+          </form>
+        </div>
+
+        <!-- Container Div for all visualizations -->
             <div id='wide' class='visualization_container'>
                 <!-- <div id = 'parent'> -->
                 <div>
@@ -62,6 +91,53 @@
         <br>
         <!-- </div> -->
     </main>
+    <script type="text/javascript">
+      var warning = document.getElementById('playlists_op');
+          warning.onload = function () {
+          warning.className = this.options[this.selectedIndex].className;
+      };
+
+      var op1Select = document.getElementById('op1');
+          op1Select.onchange = function () {
+          var op2Select = document.getElementById("playlists_op");
+          var innerHTML = op2Select.options[op2Select.selectedIndex].text;
+          if (innerHTML == "Select Dataset First!"){
+              op2Select.remove(0)
+              op2Select.disabled = false;
+              op2Select.className = this.options[this.selectedIndex].className;
+          }
+          // populate the playlist option
+          var sample = ["playlist 1", "playlist 2", "playlist 3"];
+          var playlist;
+          for (playlist = 0; playlist < sample.length; playlist++) {
+              var x = document.getElementById("playlists_op");
+              var option = document.createElement("option");
+              option.text = sample[playlist];
+              x.add(option);
+          }
+      };
+
+      // var playlist_select = document.getElementById('playlists_op');
+      //     playlist_select.onchange = function () {
+      //         var op3Select = document.getElementById("op3");
+      //         var innerHTML = op3Select.options[op3Select.selectedIndex].text;
+      //         if (innerHTML == "Select Playlist First!"){
+      //             op3Select.remove(0)
+      //             op3Select.disabled = false;
+      //             op3Select.className = this.options[this.selectedIndex].className;
+      //         }
+      // };
+    </script>
+    <script>
+        function sendToServer() {
+            var op1 = document.getElementById("op1").value;
+            var op2 = document.getElementById("playlists_op").value;
+            // var op3 = document.getElementById("op3").value;
+            console.log(op1);
+            console.log(op2);
+            // console.log(op3);
+        };
+    </script>
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>
     <script src='/js/bootstrap.js'></script>

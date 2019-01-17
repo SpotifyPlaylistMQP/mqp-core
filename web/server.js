@@ -23,9 +23,6 @@ var server = http.createServer(function (req, res) {
         case '/matrixfactorization.html':
             sendFile(res, 'public/matrixfactorization.html')
             break
-        case '/run.html':
-            sendFile(res, 'public/run.html')
-            break
         // CSS Cases
         case '/css/bootstrap.css':
             sendFile(res, 'public/css/bootstrap.css', 'text/css')

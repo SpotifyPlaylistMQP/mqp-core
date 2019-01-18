@@ -6,6 +6,7 @@ from scipy.sparse import rand as sprand
 import torch
 from torch.autograd import Variable
 from recommender_systems.modules import helpers
+import random
 
 params = {
     "mpd_square_100": {
@@ -66,7 +67,12 @@ def get_ranked_tracks(input_playlist_index, indexed_tids, indexed_pids, track_pl
         np.append(rows, x[i])
         np.append(cols, y[i])
 
+    # shuffle the indices to mix up 1s and 0s
+    indices = np.arange(rows.shape[0])
+    np.random.shuffle(indices)
 
+    rows = rows[indices]
+    cols = cols[indices]
 
     p = np.random.permutation(len(rows))
     rows, cols = rows[p], cols[p]

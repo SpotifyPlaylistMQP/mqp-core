@@ -1,4 +1,4 @@
-from recommender_systems.modules import similarities, evaluation, matrix, helpers
+from recommender_systems.modules import similarities, helpers
 
 params = {
     "mpd_square_100": {

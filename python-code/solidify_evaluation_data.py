@@ -29,7 +29,7 @@ for rec_system in rec_systems:
                 header += rec_system + ', '
                 line_count += 1
             else:
-                results[row[0]] += str(row[2]) + ", "
+                results[row[0]] += str(row[1]) + ", "
                 line_count += 1
 
 output.write(header + "\n")

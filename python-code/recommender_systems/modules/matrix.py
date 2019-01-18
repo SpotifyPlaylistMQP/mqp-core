@@ -15,20 +15,20 @@ def create(playlist_dict, unique_track_dict):
     return matrix
 
 # Returns the sparsity value of the matrix
-def sparsity(playlist_track_matrix):
+def sparsity(track_playlist_matrix):
     playlist_track_matches = 0
     total_cells = 0
-    for row in playlist_track_matrix:
+    for row in track_playlist_matrix:
         for cell in row:
             total_cells += 1
             if cell == 1:
                 playlist_track_matches += 1
-    return round(playlist_track_matches / total_cells, 5)
+    return playlist_track_matches / total_cells
 
 # Removes 20% of input_playlist_id's tracks and returns a list of those original 20%
 def split_playlist(input_playlist_id, playlist_dict):
     random_indexes_to_split = []
-    for i in range(round(len(playlist_dict[input_playlist_id]['tracks']) / 5)):
+    while len(random_indexes_to_split) < round(len(playlist_dict[input_playlist_id]['tracks']) / 5):
         random_index = random.randint(0, len(playlist_dict[input_playlist_id]['tracks']) - 1)
         if random_index not in random_indexes_to_split:
             random_indexes_to_split.append(random_index)
@@ -63,4 +63,3 @@ def update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, matr
             matrix[index][input_playlist_index] = 1
         else:
             matrix[index][input_playlist_index] = 0
-    return matrix

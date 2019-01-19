@@ -9,14 +9,14 @@ default_params = {
         "beta": 1,
         "latent_features": 30,
         "steps": 50,
-        "c": 100
+        "c": 1e-4
     },
     "mpd_square_1000": {
         "alpha": 1,
         "beta": 10,
         "latent_features": 30,
         "steps": 200,
-        "c": 1
+        "c": 1e-5
     }
 }
 

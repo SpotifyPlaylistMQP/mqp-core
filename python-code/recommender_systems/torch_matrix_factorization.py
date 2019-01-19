@@ -50,7 +50,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     rows, cols = track_playlist_matrix.nonzero()
 
     # Put half as many zeros as 1s in the sample
-    num_zeroes = round(len(rows) / params["percent_zeros"])
+    num_zeroes = round(len(rows) * params["percent_zeros"])
 
     # All indices of zeros
     x, y = np.where(track_playlist_matrix == 0)

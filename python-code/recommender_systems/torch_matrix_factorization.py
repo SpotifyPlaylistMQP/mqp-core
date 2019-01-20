@@ -5,10 +5,10 @@ from recommender_systems.modules import helpers
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 100000000,
-        "latent_features": 15,
-        "learning_rate": 1e-12,
-        "percent_zeros": 0.5,
+        "alpha": 10000,
+        "latent_features": 50,
+        "learning_rate": 1e-8,
+        "percent_zeros": 5,
         "optimizer": "SGD"
     },
     "mpd_square_1000": {

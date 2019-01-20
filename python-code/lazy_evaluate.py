@@ -13,7 +13,7 @@ params = {
     "mpd_square_1000": {
         "number_of_runs": 5,
         "number_of_playlists_to_test": 1000,
-        "max_N": 10
+        "max_N": 100
     }
 }
 

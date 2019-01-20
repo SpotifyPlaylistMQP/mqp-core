@@ -15,10 +15,10 @@ all_params = {
         "number_of_runs": 5
     },
     "mpd_square_1000": {
-        "alpha_set": [1e10, 1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
-        "latent_features_set": [6, 10, 20, 50, 75, 100, 200],
-        "learning_rate_set": [1e10, 1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
-        "percent_zeros_set": [-0.5, 0.25],
+        "alpha_set": [1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
+        "latent_features_set": [6, 10, 25, 50, 75, 100, 200],
+        "learning_rate_set": [1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
+        "percent_zeros_set": [0.5, 0.25],
         "optimizer_set": ["SGD", "Adam"],
         "number_of_playlists_to_test": 1000,
         "number_of_runs": 1

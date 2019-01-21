@@ -6,9 +6,9 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "alpha_set": [1e14, 1e12, 1e10, 1e8, 1e6, 1e4, 1e2, 1],
-        "latent_features_set": [10, 25, 50, 100, 200],
-        "learning_rate_set": [1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10, 1e-12, 1e-14],
+        "alpha_set": [1e18, 1e16, 1e14, 1e12, 1e10, 1e8],
+        "latent_features_set": [50, 100, 200, 250, 300, 400],
+        "learning_rate_set": [1e-8, 1e-10, 1e-12, 1e-14, 1e-16, 1e-18],
         "percent_zeros_set": [2, 1, 0.5, 0.1],
         "optimizer_set": ["SGD"],
         "number_of_playlists_to_test": 100,

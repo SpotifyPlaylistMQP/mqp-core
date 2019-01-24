@@ -6,6 +6,7 @@ from recommender_systems.modules import helpers
 default_params = {
     "mpd_square_100": {
         "alpha": 1000000,
+        "beta": 100,
         "latent_features": 200,
         "learning_rate": 1e-10,
         "percent_zeros": 0.5,
@@ -49,7 +50,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     model = MatrixFactorization(len(track_playlist_matrix[0]), len(track_playlist_matrix), params['latent_features'], params['embeddings'])
     track_playlist_matrix = np.asarray(track_playlist_matrix).T * params["alpha"]
     loss_func = torch.nn.MSELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=params["learning_rate"]) if params["optimizer"] == "SGD"\
+    optimizer = torch.optim.SGD(model.parameters(), lr=params["learning_rate"], weight_decay=params["beta"]) if params["optimizer"] == "SGD"\
         else torch.optim.SparseAdam(model.parameters(), lr=params["learning_rate"])
 
     # Train data

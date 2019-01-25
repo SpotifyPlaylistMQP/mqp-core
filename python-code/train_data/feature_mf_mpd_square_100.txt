@@ -1,0 +1,2 @@
+alpha, beta, latent_features, steps, C, NDCG
+0.1, 1, 30, 50, 10000, 0.5052212472644162

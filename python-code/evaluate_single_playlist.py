@@ -1,5 +1,5 @@
 import sys
-from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization
+from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization, torch_matrix_factorization
 from recommender_systems.modules import matrix, helpers, evaluation
 from mongodb import mongodb_communicate
 
@@ -35,7 +35,8 @@ for run in range(num_runs):
     elif rec_system == 'user':
         ranked_tracks = user_based.get_ranked_tracks(input_pid, input_playlist_index, playlist_dict, unique_track_dict, track_playlist_matrix, mongo_collection)
     elif rec_system == 'mf':
-        ranked_tracks = matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, mongo_collection)
+        factorized_matrix = matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
+        ranked_tracks = matrix_factorization.get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids)
     elif rec_system == 'feature_mf':
         feature_matrix = []
         for tid in unique_track_dict.keys():
@@ -44,7 +45,11 @@ for run in range(num_runs):
                 unique_track_dict[tid]["energy"],
                 unique_track_dict[tid]["valence"]
             ])
-        ranked_tracks = feature_matrix_factorization.get_ranked_tracks(input_playlist_index, indexed_tids, track_playlist_matrix, feature_matrix, mongo_collection)
+        factorized_matrix = feature_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matrix)
+        ranked_tracks = feature_matrix_factorization.get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids)
+    elif rec_system == 'torch_mf':
+        factorized_matrix = torch_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
+        ranked_tracks = torch_matrix_factorization.get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids)
 
     for N in range(1, max_N + 1):
         recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks)

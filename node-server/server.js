@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 require('dotenv').load();
 
 server.use(require('cors')());
+server.use(bodyParser({limit: '50mb'}));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 

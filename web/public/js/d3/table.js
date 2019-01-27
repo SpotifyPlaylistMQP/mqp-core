@@ -14,7 +14,7 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   html = html + '</thead>'
   html = html + '<tbody class="table-hover">'
 
-  for(var i = 0; i < 15; i++){
+  for(var i = 0; i < 100; i++){
     // for (var row in data) {
         if(data[i][' NDCG'] != undefined){
             var index = i;

@@ -5,11 +5,10 @@ from recommender_systems.modules import helpers
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 0.1,
-        "beta": 1,
-        "latent_features": 30,
-        "learning_rate": 1e-10,
-        "percent_zeros": 0.5,
+        "alpha": 1e4,
+        "latent_features": 150,
+        "learning_rate": 1e-8,
+        "percent_zeros": 2,
     },
     "mpd_square_1000": {
         "alpha": 10,
@@ -27,6 +26,7 @@ class MatrixFactorization(torch.nn.Module):
         self.item_factors = torch.nn.Embedding(n_items, n_factors)
 
     def forward(self, user, item):
+        # Dot product of two feature vectors
         return (self.user_factors(user) * self.item_factors(item)).sum(1)
 
 # https://www.ethanrosenthal.com/2017/06/20/matrix-factorization-in-pytorch/
@@ -38,30 +38,19 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     model = MatrixFactorization(len(track_playlist_matrix[0]), len(track_playlist_matrix), params['latent_features'])
     track_playlist_matrix = np.asarray(track_playlist_matrix).T * params["alpha"]
     loss_func = torch.nn.MSELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=params["learning_rate"], weight_decay=params['beta'])
-
-    # Train data
-    # indices of rows and cols for training data
-    # random sample of 0s and take all 1s
+    optimizer = torch.optim.SGD(model.parameters(), lr=params["learning_rate"])
 
     # All of the 1s
     rows, cols = track_playlist_matrix.nonzero()
 
-    # Put half as many zeros    as 1s in the sample
-    num_zeroes = round(len(rows) * params["percent_zeros"])
-
-    # All indices of zeros
+    # Add a random sample of zeroes
     x, y = np.where(track_playlist_matrix == 0)
-
-    # Take random sample of zeros
-    zeros = np.random.randint(low=0, high=len(x), size=num_zeroes)
-
-    # Append random sample of 0s
-    # if index out of bounds, change this order
+    zeros = np.random.randint(low=0, high=len(x), size=round(len(rows) * params["percent_zeros"]))
     for i in zeros:
         np.append(rows, x[i])
         np.append(cols, y[i])
 
+    # Shuffle the list of 1s and 0s
     p = np.random.permutation(len(rows))
     rows, cols = rows[p], cols[p]
 
@@ -72,10 +61,8 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
         col = Variable(torch.LongTensor([np.long(col)]))
 
         # Predict and calculate loss
-        prediction = model(row, col)
+        prediction = model.forward(row, col)
         loss = loss_func(prediction, rating)
-
-        # Backpropagate
         loss.backward()
 
         # Update the parameters

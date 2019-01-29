@@ -5,9 +5,8 @@ var http = require('http')
 
 var server = http.createServer(function (req, res) {
     var uri = url.parse(req.url)
-    //console.log('Fetching ' + uri.pathname + "!")
     switch (uri.pathname) {
-        // HTML Cases
+        // - - - - - HTML Cases - - - - -
         case '/':
             sendFile(res, 'public/index.html')
             break
@@ -23,7 +22,7 @@ var server = http.createServer(function (req, res) {
         case '/matrixfactorization.html':
             sendFile(res, 'public/matrixfactorization.html')
             break
-        // CSS Cases
+        // - - - - - CSS Cases - - - - -
         case '/css/bootstrap.css':
             sendFile(res, 'public/css/bootstrap.css', 'text/css')
             break
@@ -36,9 +35,9 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
-        // JS Cases
+        // - - - - - JS Cases - - - - -
         /*
-            D3 JS files
+            Section 1: D3 JS files
         */
         case '/js/d3/graphMaster.js':
             sendFile(res, 'public/js/d3/graphMaster.js', 'text/js')
@@ -53,7 +52,7 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/js/d3/table.js', 'text/javascript')
             break
         /*
-            Other JS files
+            Section 2: Other JS files
         */
         case '/js/bootstrap.js':
             sendFile(res, 'public/js/bootstrap.js', 'text/javascript')
@@ -67,22 +66,14 @@ var server = http.createServer(function (req, res) {
         case '/js/bootstrap.min.js.map':
             sendFile(res, 'public/js/bootstrap.min.js.map', 'text/javascript')
             break
-        case '/js/d3scripts.js':
-            sendFile(res, 'public/js/d3scripts.js', 'text/javascript')
-            break
-
-        // Dataset Cases
+        // - - - - - Data Cases - - - - -
         case '/data/mf_mpd_square_100':
-            console.log("Got mf_mpd_square_100")
             sendFile(res, 'public/data/mf_mpd_square_100', 'text')
             break
         case '/data/feature_mf_mpd_square_100':
             sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
             break
         case '/data/data.json':
-            console.log("Got data.json")
-            // res.setHeader('Content-Type', 'application/json');
-            // res.send(JSON.stringify({ a: 1 }, null, 3));
             sendFile(res, 'public/data/data.json', 'application/json; charset=UTF8')
             break
         default:

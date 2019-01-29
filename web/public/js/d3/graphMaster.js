@@ -2,8 +2,8 @@
 // When called loads two CSV files with data and creates the D3 visualizations
 // 1. Creates a table from the data ordered by K value
 // 2. Creates an interactive line graph with MF and Feature MF data
-var width = 300,
-    height = 300;
+var width = 500,
+    height = 500;
 
 // Config for the Radar chart
 var config = {

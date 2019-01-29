@@ -76,6 +76,14 @@ var server = http.createServer(function (req, res) {
         case '/data/data.json':
             sendFile(res, 'public/data/data.json', 'application/json; charset=UTF8')
             break
+        // - - - - - Data Cases - - - - -
+        case '/css/cocogoose-classic-medium-trial-webfont.woff':
+            sendFile(res, 'public/css/fonts/cocogoose-classic-medium-trial-webfont.woff', 'text')
+            break
+        case '/css/cocogoose-classic-medium-trial-webfont.woff2':
+            sendFile(res, 'public/css/fonts/cocogoose-classic-medium-trial-webfont.woff2', 'text')
+            break
+        // - - - - - Default Cases - - - - -
         default:
             console.log('Error 404 ' + uri.pathname + " not found!")
             res.end('404 not found')

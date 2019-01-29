@@ -73,13 +73,17 @@ var server = http.createServer(function (req, res) {
 
         // Dataset Cases
         case '/data/mf_mpd_square_100':
+            console.log("Got mf_mpd_square_100")
             sendFile(res, 'public/data/mf_mpd_square_100', 'text')
             break
         case '/data/feature_mf_mpd_square_100':
             sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
             break
-        case '/data/radar_data.json':
-            sendFile(res, 'public/data/radar_data.json', 'text')
+        case '/data/data.json':
+            console.log("Got data.json")
+            // res.setHeader('Content-Type', 'application/json');
+            // res.send(JSON.stringify({ a: 1 }, null, 3));
+            sendFile(res, 'public/data/data.json', 'application/json; charset=UTF8')
             break
         default:
             console.log('Error 404 ' + uri.pathname + " not found!")

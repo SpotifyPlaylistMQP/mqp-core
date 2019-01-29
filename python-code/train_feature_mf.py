@@ -6,12 +6,12 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "number_of_runs": 100,
-        "alpha_set": [0.1],
-        "beta_set": [1],
-        "latent_features_set": [30],
-        "steps_set": [50],
-        "c_set": [10000, 1000, 100, 10, 1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 0],
+        "number_of_runs": 1,
+        "alpha_set": [1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10],
+        "beta_set": [1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10],
+        "latent_features_set": [3, 5, 10, 15, 20],
+        "steps_set": [1, 50, 100, 150, 200],
+        "c_set": [1000, 100, 1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 0],
         "number_of_playlists_to_test": 100,
     },
     "mpd_square_1000": {

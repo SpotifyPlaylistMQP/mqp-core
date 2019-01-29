@@ -31,8 +31,10 @@ body {
 }
 #chart {
 	position: absolute;
-	top: 50px;
-	left: 100px;
+    padding: 25px;
+    margin: 25px;
+    text-align: center;
+
 }
 </style>
 
@@ -66,7 +68,7 @@ body {
         <h1 class="header" align='center'>NDCG Precision Graph</h1>
         <br>
         <!-- Container Div for all visualizations -->
-        <table>
+        <table class="graphHolder">
             <tr>
                 <td class="graphCell">
                     <!-- <div id = 'parent'> -->
@@ -81,8 +83,14 @@ body {
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td class="bigCell" colspan="2">
+                    `<div id="chart"></div>
+                </td>
+            </tr>
+
         </table>
-        <div id="chart"></div>
+        
         <br>
     </main>
 

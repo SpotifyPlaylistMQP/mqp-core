@@ -105,6 +105,7 @@ h1.header {
 table.graphHolder {
   width: 100%;
   border: 0px;
+  min-height: 100%;
   overflow: hidden;
 }
 
@@ -114,6 +115,11 @@ td.graphCell{
 
 td.tableCell{
   max-width:30%;
+}
+
+td.bigCell{
+  max-width: 100%;
+  min-width: 100%;
 }
 
 

@@ -1,10 +1,15 @@
-/* html {
+ /* html {
   height: 100%;
-} */
+}  */
 
 body {
   padding-top: 5rem;
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  /*background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);*/
+  background: rgb(34,193,195);
+  background: -moz-linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
+  background: -webkit-linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
+  background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endColorstr="#5b84fb",GradientType=1);      
   height: 100%;
 }
 
@@ -21,15 +26,6 @@ body {
   background-color: #1db954!important
 }
 
-@font-face {
-  font-family: spotify-font;
-  src: url('../fonts/CircularStd-Black.woff');
-}
-
-.custom-nav {
-  /*font-family: spotify-font;*/
-}
-
 hr {
     border: none;
     height: 1px;
@@ -43,4 +39,13 @@ hr {
 
 h1 {
   color: dark-gray;
+}
+
+@font-face {
+    font-family: 'cocogoose_classic_trialmedium';
+    src: url('cocogoose-classic-medium-trial-webfont.woff2') format('woff2'),
+         url('cocogoose-classic-medium-trial-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }

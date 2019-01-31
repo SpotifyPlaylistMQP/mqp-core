@@ -62,6 +62,7 @@ for run in range(params["number_of_runs"]):
         factorized_matrices['feature_mf'] = feature_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matrix)
     if 'torch_mf' in rec_systems:
         factorized_matrices['torch_mf'] = torch_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
+        print(factorized_matrices['torch_mf'])
 
     for input_playlist_index in range(params["number_of_playlists_to_test"]):
         input_pid = indexed_pids[input_playlist_index]

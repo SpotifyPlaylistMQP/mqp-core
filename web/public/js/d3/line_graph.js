@@ -55,14 +55,14 @@ function make_y_gridlines(y) {
 }
 
 function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
-    // Add the X Axis
+    // Add the X axis text
     svg.append('g')
         .attr('class', 'axis')
         .attr('transform', 'translate(0,' + height + ')')
         .call(d3.axisBottom(x)
             .ticks(25))
         .append('text')
-        .attr('x', (width/2)-5)
+        .attr('x', (width/2)-40)
         .attr('y', 35)
         .attr('dx', '0.71em')
         .attr('fill', '#000')
@@ -70,15 +70,15 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
         .style('font-weight', 'bold')
         .text('K Value');;
 
-    // Add the Y Axis
+    // Add the Y Axis text
     svg.append('g')
         .attr('class', 'axis')
         .call(d3.axisLeft(y)
             .ticks(20))
         .append('text')
         .attr('transform', 'rotate(-90)')
-        .attr('x', -250)
-        .attr('y', -50)
+        .attr('x', -320)
+        .attr('y', -54)
         .attr('dy', '0.71em')
         .attr('fill', '#000')
         .attr('text-anchor', 'start')

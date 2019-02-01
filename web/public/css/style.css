@@ -27,7 +27,7 @@ body {
     }
 
     @-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
-    {
+    /* {
       0%   {background: red;}
       25%  {background: yellow;}
       50%  {background: blue;}

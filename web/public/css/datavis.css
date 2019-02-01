@@ -4,7 +4,7 @@
 
 h1.header {
   text-align: center;
-  font-size: 3em;
+  font-size: 4em;
   margin-bottom: 10px;
   text-transform: uppercase;
   color: grey;
@@ -12,6 +12,14 @@ h1.header {
   font-family: 'cocogoose_classic_trialmedium';
   font-weight: 'lighter';
   color: whitesmoke;
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+
+p.description{
+  text-align: center;
+  padding-bottom: 4em;
+
 }
 
 /*

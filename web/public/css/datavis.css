@@ -135,6 +135,7 @@ td.tableCell{
 td.bigCell{
   max-width: 100%;
   min-width: 100%;
+  text-align: center;
 }
 
 
@@ -269,3 +270,11 @@ td.text-right {
 /*
     --- Radar Chart CSS ---
  */
+
+ 
+
+ table.album-holder{
+   min-width: 100%;
+   border-width: 0px;
+   text-align: center;
+ }

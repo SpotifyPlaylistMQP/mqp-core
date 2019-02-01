@@ -1,0 +1,10 @@
+[
+    [
+      {"area": "Acousticness ", "value": 0.5},
+      {"area": "Danceability", "value": 0.5},
+      {"area": "Energy ", "value": 0.5},
+      {"area": "Instrumentalness ", "value": 0.5},
+      {"area": "Valence", "value": 0.5},
+      {"area": "Tempo ", "value": 0.5}
+  	]
+]

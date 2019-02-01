@@ -27,7 +27,7 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
         case '/css/spot.png':
-            sendFile(res, '/css/spot.png', 'image/png')
+            sendFile(res, 'image/png')
             break
         // - - - - - JS Cases - - - - -
         /*

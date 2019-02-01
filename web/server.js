@@ -26,6 +26,9 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
+        case '/css/spot.png':
+            sendFile(res, '/css/spot.png', 'img/png')
+            break
         // - - - - - JS Cases - - - - -
         /*
             Section 1: D3 JS files

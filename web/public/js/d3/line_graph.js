@@ -55,7 +55,7 @@ function make_y_gridlines(y) {
 }
 
 function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
-    // Add the X Axis
+    // Add the X axis text
     svg.append('g')
         .attr('class', 'axis')
         .attr('transform', 'translate(0,' + height + ')')
@@ -70,7 +70,7 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
         .style('font-weight', 'bold')
         .text('K Value');;
 
-    // Add the Y Axis
+    // Add the Y Axis text
     svg.append('g')
         .attr('class', 'axis')
         .call(d3.axisLeft(y)

@@ -26,12 +26,12 @@ var RadarChart = {
       }
     }
 
-    cfg.maxValue = 100;
+    cfg.maxValue = 1;
 
     var allAxis = (d[0].map(function(i, j){return i.area}));
     var total = allAxis.length;
     var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
-    var Format = d3.format('%');
+    var Format = d3.format('.2f');
     d3.select(id).select("svg").remove();
 
     var g = d3.select(id)
@@ -43,7 +43,7 @@ var RadarChart = {
 
 		var tooltip;
 
-    //Circular segments
+    //Circular segments (Spider web lines)
     for(var j=0; j<cfg.levels; j++){
       var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
       g.selectAll(".levels")
@@ -55,13 +55,12 @@ var RadarChart = {
        .attr("x2", function(d, i){return levelFactor*(1-cfg.factor*Math.sin((i+1)*cfg.radians/total));})
        .attr("y2", function(d, i){return levelFactor*(1-cfg.factor*Math.cos((i+1)*cfg.radians/total));})
        .attr("class", "line")
-       .style("stroke", "grey")
-       .style("stroke-opacity", "0.75")
-       .style("stroke-width", "0.3px")
+       .style("stroke", "#bec2c4")
+       .style("stroke-width", "1px")
        .attr("transform", "translate(" + (cfg.w/2-levelFactor) + ", " + (cfg.h/2-levelFactor) + ")");
     }
 
-    //Text indicating at what % each level is
+    //Text indicating at what % each level is (on spider lines)
     for(var j=0; j<cfg.levels; j++){
       var levelFactor = cfg.factor*radius*((j+1)/cfg.levels);
       g.selectAll(".levels")
@@ -74,8 +73,8 @@ var RadarChart = {
        .style("font-family", "sans-serif")
        .style("font-size", "10px")
        .attr("transform", "translate(" + (cfg.w/2-levelFactor + cfg.ToRight) + ", " + (cfg.h/2-levelFactor) + ")")
-       .attr("fill", "#737373")
-       .text((j+1)*100/cfg.levels);
+       .attr("fill", "#000")
+       .text((j+1)/cfg.levels);
     }
 
     series = 0;
@@ -86,14 +85,13 @@ var RadarChart = {
         .append("g")
         .attr("class", "axis");
 
+    // Feature lines (Axis)
     axis.append("line")
       .attr("x1", cfg.w/2)
       .attr("y1", cfg.h/2)
       .attr("x2", function(d, i){return cfg.w/2*(1-cfg.factor*Math.sin(i*cfg.radians/total));})
       .attr("y2", function(d, i){return cfg.h/2*(1-cfg.factor*Math.cos(i*cfg.radians/total));})
-      .attr("class", "line")
-      .style("stroke", "grey")
-      .style("stroke-width", "1px");
+      .attr("class", "axis");
 
     axis.append("text")
       .attr("class", "legend")
@@ -101,7 +99,9 @@ var RadarChart = {
       .style("font-family", "sans-serif")
       .style("font-size", "11px")
       .attr("text-anchor", "middle")
-      .attr("dy", "1.5em")
+      .attr('dy', '0.71em')
+      .attr('fill', '#000')
+      .style('font-weight', 'bold')
       .attr("transform", function(d, i){return "translate(0, -10)"})
       .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
       .attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
@@ -175,7 +175,7 @@ var RadarChart = {
       .style("stroke", cfg.color(series)).style("fill-opacity", .9)
       .on('mouseover', function (d){
             newX =  parseFloat(d3.select(this).attr('cx')) - 10;
-            newY =  parseFloat(d3.select(this).attr('cy')) - 5;
+            newY =  parseFloat(d3.select(this).attr('cy')) - 10;
 
             tooltip
               .attr('x', newX)
@@ -200,11 +200,11 @@ var RadarChart = {
               .transition(200)
               .style("fill-opacity", cfg.opacityArea);
             })
-      .append("svg:title")
-      .text(function(j){return Math.max(j.value, 0)});
-
+      // .append("svg:title")
+      // .text(function(j){return Math.max(j.value, 0)});
       series++;
     });
+
     //Tooltip
     tooltip = g.append('text')
            .style('opacity', 0)

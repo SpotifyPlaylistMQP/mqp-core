@@ -14,10 +14,21 @@ h1.header {
   color: whitesmoke;
 }
 
-
 /*
-    --- Line Graph CSS ---
+    Shared CSS between graphs, DANGER ZONE: DO NOT EDIT
 */
+/* CSS for X and Y axis lines */
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 2.5px;
+  shape-rendering: crispEdges;
+}
+.axis {
+  font: 10px sans-serif;
+}
+/* CSS for gridlines */
 .line_grid line {
   stroke: #bec2c4;
   stroke-opacity: 0.7;
@@ -26,21 +37,15 @@ h1.header {
 .line_grid path {
   stroke-width: 0;
 }
+
+/*
+    --- Line Graph CSS ---
+*/
 .mf {
   background: #4682B4;
 }
 .feat_mf {
   background: #FF3232;
-}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #abaeb0;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
-}
-.axis {
-  font: 10px sans-serif;
 }
 .data-name {margin: 0 !important;}
 .key-dot {
@@ -256,6 +261,3 @@ td.text-right {
 /*
     --- Radar Chart CSS ---
  */
-
-
- 

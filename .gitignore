@@ -12,4 +12,3 @@ yarn.lock
 **/__pycache__/
 *.pyc
 
-**.png

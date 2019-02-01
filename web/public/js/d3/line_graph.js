@@ -62,12 +62,13 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
         .call(d3.axisBottom(x)
             .ticks(25))
         .append('text')
-        .attr('x', (width/2)-40)
+        .attr('x', (width/2)-28)
         .attr('y', 35)
-        .attr('dx', '0.71em')
+        // .attr('dx', '0.71em')
         .attr('fill', '#000')
         .attr('text-anchor', 'start')
         .style('font-weight', 'bold')
+        .style("font-size", "12px")
         .text('K Value');;
 
     // Add the Y Axis text
@@ -77,12 +78,13 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
             .ticks(20))
         .append('text')
         .attr('transform', 'rotate(-90)')
-        .attr('x', -320)
-        .attr('y', -54)
-        .attr('dy', '0.71em')
+        .attr('x', -340)
+        .attr('y', -40)
+        // .attr('dy', '0.71em')
         .attr('fill', '#000')
         .attr('text-anchor', 'start')
         .style('font-weight', 'bold')
+        .style("font-size", "12px")
         .text('NDCG Precision');
 
     // add the X gridlines

@@ -10,17 +10,8 @@ var server = http.createServer(function (req, res) {
         case '/':
             sendFile(res, 'public/index.html')
             break
-        case '/evaluate.html':
-            sendFile(res, 'public/evaluate.html')
-            break
         case '/index.html':
             sendFile(res, 'public/index.html')
-            break
-        case '/about.html':
-            sendFile(res, 'public/about.html')
-            break
-        case '/matrixfactorization.html':
-            sendFile(res, 'public/matrixfactorization.html')
             break
         // - - - - - CSS Cases - - - - -
         case '/css/bootstrap.css':

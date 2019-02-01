@@ -1,0 +1,29 @@
+[
+    [
+      {"SID": "Song One "},
+      {"area": "Acousticness ", "value": 0.80},
+      {"area": "Danceability", "value": 0.40},
+      {"area": "Energy ", "value": 0.40},
+      {"area": "Instrumentalness ", "value": 0.90},
+      {"area": "Valence", "value": 0.60},
+      {"area": "Tempo ", "value": 0.80}
+  	],
+    [
+      {"SID": "Song Two "},
+      {"area": "Acousticness ", "value": 0.80},
+      {"area": "Danceability", "value": 0.40},
+      {"area": "Energy ", "value": 0.40},
+      {"area": "Instrumentalness ", "value": 0.90},
+      {"area": "Valence", "value": 0.60},
+      {"area": "Tempo ", "value": 0.80}
+  	],
+    [
+      {"SID": "Song Three "},
+      {"area": "Acousticness ", "value": 0.80},
+      {"area": "Danceability", "value": 0.40},
+      {"area": "Energy ", "value": 0.40},
+      {"area": "Instrumentalness ", "value": 0.90},
+      {"area": "Valence", "value": 0.60},
+      {"area": "Tempo ", "value": 0.80}
+  	]
+]

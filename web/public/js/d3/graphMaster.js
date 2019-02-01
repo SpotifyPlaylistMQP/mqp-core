@@ -27,18 +27,18 @@ function d3_god(){
                 console.error('Not again: ' + error);
             } else {
                 // console.log(file4)
-                bob_the_builder(file1, file2, file3);
+                bob_the_builder(file1, file2, file3, file4);
                 // RadarChart.draw("#chart", file3, config);
             };
     });
 };
 
 // Queue and run the D3 graphing functions
-function bob_the_builder(file1, file2, file3){
+function bob_the_builder(file1, file2, file3, file4){
     d3.queue()
         .defer(build_line_graph, file1, file2)
         .defer(build_table, file1, file2)
-        .defer(RadarChart.draw, "#chart", file3, config)
+        .defer(RadarChart.draw, "#chart", file3, file4, config)
         .await(function(error) {
             if (error) {
                 console.error('Not again: ' + error);

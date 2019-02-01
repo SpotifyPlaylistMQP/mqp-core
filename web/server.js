@@ -73,6 +73,9 @@ var server = http.createServer(function (req, res) {
         case '/data/song_average.json':
             sendFile(res, 'public/data/song_average.json', 'application/json; charset=UTF8')
             break
+        case '/data/dataset_average.json':
+            sendFile(res, 'public/data/dataset_average.json', 'application/json; charset=UTF8')
+            break
         // - - - - - Data Cases - - - - -
         case '/css/cocogoose-classic-medium-trial-webfont.woff':
             sendFile(res, 'public/css/fonts/cocogoose-classic-medium-trial-webfont.woff', 'text')

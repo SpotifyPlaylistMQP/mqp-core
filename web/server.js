@@ -64,8 +64,11 @@ var server = http.createServer(function (req, res) {
         case '/data/feature_mf_mpd_square_100':
             sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
             break
-        case '/data/data.json':
-            sendFile(res, 'public/data/data.json', 'application/json; charset=UTF8')
+        case '/data/playlist_average.json':
+            sendFile(res, 'public/data/playlist_average.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_average.json':
+            sendFile(res, 'public/data/song_average.json', 'application/json; charset=UTF8')
             break
         // - - - - - Data Cases - - - - -
         case '/css/cocogoose-classic-medium-trial-webfont.woff':

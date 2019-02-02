@@ -9,11 +9,11 @@ from numpy import dot
 default_params = {
     "mpd_square_100": {
         "alpha": 0.01,
-        "regularization": 1e-7,
-        "latent_features": 30,
-        "steps": 50,
-        "error_limit": 0.000001,
-        "fit_error_limit": 0.0001
+        "regularization": 1e-10,
+        "latent_features": 3,
+        "steps": 200,
+        "error_limit": 1e-6,
+        "fit_error_limit": 1e-4
 
     },
     "mpd_square_1000": {

@@ -1,7 +1,5 @@
 from recommender_systems.modules import helpers
-import scipy.sparse as sparse
 import numpy as np
-import implicit
 from scipy import linalg
 from numpy import dot
 
@@ -11,7 +9,7 @@ default_params = {
         "alpha": 0.01,
         "regularization": 1e-8,
         "latent_features": 3,
-        "steps": 950,
+        "steps": 450,
         "error_limit": 1e-6,
         "fit_error_limit": 1e-5
     },

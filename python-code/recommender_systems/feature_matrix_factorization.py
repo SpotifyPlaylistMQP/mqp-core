@@ -9,7 +9,7 @@ default_params = {
     "mpd_square_100": {
         "alpha": 0.01,
         "regularization": 1e-8,
-        "latent_features": 10,
+        "latent_features": 3,
         "steps": 950,
         "error_limit": 1e-6,
         "fit_error_limit": 1e-5,

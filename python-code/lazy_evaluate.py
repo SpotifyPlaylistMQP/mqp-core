@@ -6,7 +6,7 @@ import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 10,
+        "number_of_runs": 1,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },
@@ -52,7 +52,7 @@ for run in range(params["number_of_runs"]):
     new_playlist_tracks = {}
     for input_playlist_index in range(params["number_of_playlists_to_test"]):
         input_pid = indexed_pids[input_playlist_index]
-        T[input_pid], new_playlist_tracks[input_pid] = matrix.split_playlist(input_pid, playlist_dict)
+        T[input_pid], new_playlist_tracks[input_pid] = matrix.split_playlist_not_random(input_pid, playlist_dict)
         matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks[input_pid], track_playlist_matrix, unique_track_dict)
 
     factorized_matrices = {}

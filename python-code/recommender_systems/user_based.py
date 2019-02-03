@@ -35,4 +35,4 @@ def get_ranked_tracks(input_pid, input_playlist_index, playlist_dict, unique_tra
         ranked_tracks.append((cosine_similar_tid, similar_track_dict[cosine_similar_tid]))
     ranked_tracks.sort(reverse=True, key=helpers.sort_by_second_tuple)
 
-    return ranked_tracks[1:]
+    return ranked_tracks[2:]

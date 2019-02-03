@@ -13,7 +13,7 @@ default_params = {
         "steps": 950,
         "error_limit": 1e-6,
         "fit_error_limit": 1e-5,
-        "c": 1e-4
+        "c": 1
     },
     "mpd_square_1000": {
         "alpha": 1,
@@ -28,6 +28,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matri
     if params is None:
         params = default_params[mongo_collection]
     track_playlist_matrix = np.array(track_playlist_matrix) * params["alpha"]
+    params['latent_features'] = params['latent_features'] + 3
 
     # initial matrices. item_factors is random [0,1] and user_factors is item_factors\X.
     rows, columns = track_playlist_matrix.shape

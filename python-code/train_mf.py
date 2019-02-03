@@ -6,13 +6,14 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "number_of_runs": 10000,
-        "alpha_set": [0.01],
-        "regularization_set": [1e-8],
-        "latent_features_set": [3],
-        "steps_set": [400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 10000],
+        "number_of_runs": 1,
+        "alpha_set": [1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
+        "regularization_set": [1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8],
+        "latent_features_set": [3, 5, 10, 20, 50, 100],
+        "steps_set": [400, 500, 600, 700],
         "error_limit_set": [1e-6],
         "fit_error_limit_set": [1e-5],
+        "learning_rate": [1e-4, 1e-5, 1e-6, 1e-8],
         "number_of_playlists_to_test": 100,
     },
     "mpd_square_1000": {
@@ -50,7 +51,8 @@ for alpha in params["alpha_set"]:
                             "latent_features": latent_features,
                             "steps": steps,
                             "error_limit": error_limit,
-                            "fit_error_limit": fit_error_limit
+                            "fit_error_limit": fit_error_limit,
+                            "learning_rate": 1e-6
                         }
                         results = 0
                         for run in range(params["number_of_runs"]):

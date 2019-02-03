@@ -13,7 +13,6 @@ default_params = {
         "latent_features": 3,
         "steps": 950,
         "error_limit": 1e-6,
-        "learning_rate": 1e-6,
         "fit_error_limit": 1e-5
     },
     "mpd_square_1000": {
@@ -41,19 +40,15 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
 
     for i in range(1, params['steps'] + 1):
         # Gradient Descent from stack, not sure what it is?
-        # top = dot(track_playlist_matrix, V.T)
-        # bottom = (dot((dot(U, V)), V.T)) + length
-        # U *= top / bottom
-        # U = np.maximum(U, length)
-        #
-        # top = dot(U.T, track_playlist_matrix)
-        # bottom = dot(U.T, dot(U, V)) + length
-        # V *= top / bottom
-        # V = np.maximum(V, length)
+        top = dot(track_playlist_matrix, V.T)
+        bottom = (dot((dot(U, V)), V.T)) + length
+        U *= top / bottom
+        U = np.maximum(U, length)
 
-        # SGD
-        U = U + (params["learning_rate"] * (dot(dot(U, V), V.T) - (params["regularization"] * U)))
-        V = V + (params["learning_rate"] * (dot(U.T, dot(U, V)) - (params["regularization"] * V)))
+        top = dot(U.T, track_playlist_matrix)
+        bottom = dot(U.T, dot(U, V)) + length
+        V *= top / bottom
+        V = np.maximum(V, length)
 
         # Check if it's good enough
         if i % 5 == 0 or i == 1 or i == params['steps']:

@@ -6,7 +6,7 @@ import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 100,
+        "number_of_runs": 1,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },

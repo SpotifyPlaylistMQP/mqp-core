@@ -9,18 +9,19 @@ from numpy import dot
 default_params = {
     "mpd_square_100": {
         "alpha": 0.01,
-        "regularization": 1e-10,
+        "regularization": 1e-8,
         "latent_features": 3,
-        "steps": 200,
+        "steps": 750,
         "error_limit": 1e-6,
-        "fit_error_limit": 1e-4
-
+        "fit_error_limit": 1e-5
     },
     "mpd_square_1000": {
-        "alpha": 1,
-        "beta": 10,
-        "latent_features": 30,
-        "steps": 200,
+        "alpha": 0.01,
+        "regularization": 1e-8,
+        "latent_features": 3,
+        "steps": 750,
+        "error_limit": 1e-6,
+        "fit_error_limit": 1e-5
     }
 }
 

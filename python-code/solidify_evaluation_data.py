@@ -4,9 +4,7 @@ import csv
 rec_systems = [
     "user",
     "item",
-    "mf",
-    "feature_mf",
-    "torch_mf"
+    "mf"
 ]
 
 mongo_collection = sys.argv[1]

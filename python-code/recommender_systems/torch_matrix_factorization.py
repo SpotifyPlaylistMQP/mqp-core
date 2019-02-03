@@ -31,9 +31,9 @@ from numpy import dot
 default_params = {
     "mpd_square_100": {
         "alpha": 0.01,
-        "regularization": 1e-7,
-        "latent_features": 30,
-        "steps": 50,
+        "regularization": 1e-8,
+        "latent_features": 3,
+        "steps": 950,
         "error_limit": 0.000001,
         "fit_error_limit": 0.0001
 

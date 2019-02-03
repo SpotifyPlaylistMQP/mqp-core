@@ -6,13 +6,13 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "number_of_runs": 5,
+        "number_of_runs": 10000,
         "alpha_set": [0.01],
-        "regularization_set": [1e-7, 1e-8, 1e-9, 1e-10, 1e-11, 1e-12],
-        "latent_features_set": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        "steps_set": [150, 200, 250, 300, 350, 400, 500],
+        "regularization_set": [1e-8],
+        "latent_features_set": [3],
+        "steps_set": [400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 10000],
         "error_limit_set": [1e-6],
-        "fit_error_limit_set": [1e-4],
+        "fit_error_limit_set": [1e-5],
         "number_of_playlists_to_test": 100,
     },
     "mpd_square_1000": {

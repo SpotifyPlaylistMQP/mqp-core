@@ -2,7 +2,7 @@ from recommender_systems.modules import similarities, helpers
 
 params = {
     "mpd_square_100": {
-        "K": 100
+        "K": 20
     },
     "mpd_square_1000": {
         "K": 40
@@ -41,4 +41,4 @@ def get_ranked_tracks(new_playlist_tracks, indexed_tids, track_playlist_matrix, 
         ranked_tracks.append((similar_tid, cosine_similar_track_dict[similar_tid]))
     ranked_tracks.sort(reverse=True, key=helpers.sort_by_second_tuple)
 
-    return ranked_tracks[2:]
+    return ranked_tracks

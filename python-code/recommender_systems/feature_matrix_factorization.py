@@ -7,13 +7,14 @@ from numpy import dot
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 1000,
-        "regularization": 0.01,
-        "latent_features": 10,
+        "alpha": 10000,
+        "regularization": 1,
+        "latent_features": 100,
         "steps": 500,
         "error_limit": 1e-6,
         "fit_error_limit": 1e-5,
-        "c": 1
+        "learning_rate": 1e-7,
+        "c": 1e-8
     },
     "mpd_square_1000": {
         "alpha": 1,
@@ -33,21 +34,11 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matri
     items, users = track_playlist_matrix.shape
     item_factors = np.random.rand(items, params['latent_features'])
     user_factors = np.random.rand(users, params['latent_features'])
-
     length = params["regularization"] * ((len(item_factors) ** 2) + (len(user_factors) ** 2))
 
+    # Alternating least squares
     for i in range(1, params['steps'] + 1):
-        # Gradient Descent from stack, not sure what it is?
-        # top = dot(track_playlist_matrix, user_factors.T)
-        # bottom = (dot((dot(item_factors, user_factors)), user_factors.T)) + length
-        # item_factors *= top / bottom
-        # item_factors = np.maximum(item_factors, length)
-        #
-        # top = dot(item_factors.T, track_playlist_matrix)
-        # bottom = dot(item_factors.T, dot(item_factors, user_factors)) + length
-        # user_factors *= top / bottom
-        # user_factors = np.maximum(user_factors, length)
-
+        # Fix item factors
         e = track_playlist_matrix - dot(item_factors, user_factors.T)
         for item in range(items):
             difference = dot(e[item], user_factors) - params["regularization"] * item_factors[item]
@@ -57,7 +48,8 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matri
             item_factors[item][params["latent_features"] - 2] = feature_matrix[item][1] * params["c"]
             item_factors[item][params["latent_features"] - 1] = feature_matrix[item][2] * params["c"]
 
-        e = e.T
+        # Fix user factors
+        e = (track_playlist_matrix - dot(item_factors, user_factors.T)).T
         for user in range(users):
             difference = dot(e[user], item_factors) - params["regularization"] * user_factors[user]
             adjustment = params["learning_rate"] * difference
@@ -67,53 +59,12 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matri
         if i % 5 == 0 or i == 1 or i == params['steps']:
             estimated_ratings = dot(item_factors, user_factors.T)
             error = np.sqrt(np.sum((track_playlist_matrix - estimated_ratings)**2) + length)
-
             cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
 
             if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
                 break
 
     return dot(item_factors, user_factors.T).T.tolist()
-
-    if params is None:
-        params = default_params[mongo_collection]
-    track_playlist_matrix = np.array(track_playlist_matrix) * params["alpha"]
-    params['latent_features'] = params['latent_features'] + 3
-
-    # initial matrices. item_factors is random [0,1] and user_factors is item_factors\X.
-    rows, columns = track_playlist_matrix.shape
-    item_factors = np.random.rand(rows, params['latent_features'])
-    user_factors = linalg.lstsq(item_factors, track_playlist_matrix)[0]
-
-    length = params["regularization"] * ((len(item_factors) ** 2) + (len(user_factors) ** 2))
-    ratings = dot(item_factors, user_factors)
-
-    for i in range(1, params['steps'] + 1):
-        # Gradient Descent from stack, not sure what it is?
-        top = dot(track_playlist_matrix, user_factors.T)
-        bottom = (dot((dot(item_factors, user_factors)), user_factors.T)) + length
-        item_factors *= top / bottom
-        item_factors = np.maximum(item_factors, length)
-
-        top = dot(item_factors.T, track_playlist_matrix)
-        bottom = dot(item_factors.T, dot(item_factors, user_factors)) + length
-        user_factors *= top / bottom
-        user_factors = np.maximum(user_factors, length)
-
-
-
-        # Check if it's good enough
-        if i % 5 == 0 or i == 1 or i == params['steps']:
-            estimated_ratings = dot(item_factors, user_factors)
-            error = np.sqrt(np.sum((ratings - estimated_ratings)**2) + length)
-            ratings = estimated_ratings
-
-            cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
-
-            if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
-                break
-
-    return dot(item_factors, user_factors).T.tolist()
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
     ranked_tracks = []

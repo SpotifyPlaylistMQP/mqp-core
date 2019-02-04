@@ -21,26 +21,26 @@ function d3_god(){
         .defer(d3.csv, '/data/mf_mpd_square_100')
         .defer(d3.csv, '/data/feature_mf_mpd_square_100')
         .defer(d3.json, '/data/playlist_average.json')//play_avg
-        .defer(d3.json, '/data/song_average.json')    //song_avg
+        .defer(d3.json, '/data/song_averages/song_one.json')    //song_avg
         .defer(d3.json, '/data/dataset_average.json') //data_avg
-        .await(function(error, file1, file2, play_avg, song_avg, data_avg) {
+        .await(function(error, file1, file2, play_avg, song_one_avg, data_avg) {
             if (error) {
                 console.error('Not again: ' + error);
             } else {
                 // console.log(file4)
-                bob_the_builder(file1, file2, play_avg, song_avg, data_avg);
+                bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg);
                 // RadarChart.draw("#chart", file3, config);
             };
     });
 };
 
 // Queue and run the D3 graphing functions
-function bob_the_builder(file1, file2, play_avg, song_avg, data_avg){
+function bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg){
     d3.queue()
         .defer(build_line_graph, file1, file2)
         .defer(build_table, file1, file2)
-        .defer(RadarChart.draw, "#dataset_radar_chart", play_avg, data_avg, config)
-        .defer(RadarChart.draw, "#results_radar_chart", play_avg, song_avg, config)
+        .defer(drawRadarChart_dataset, "#dataset_radar_chart", play_avg, data_avg, config)
+        .defer(drawRadarChart_playlist, "#results_radar_chart", play_avg, song_one_avg, config)
         .await(function(error) {
             if (error) {
                 console.error('Not again: ' + error);

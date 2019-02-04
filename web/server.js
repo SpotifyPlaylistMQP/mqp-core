@@ -1,7 +1,7 @@
 var http = require('http')
     , fs = require('fs')
     , url = require('url')
-    , port = 8088;
+    , port = 8080;
 
 var server = http.createServer(function (req, res) {
     var uri = url.parse(req.url)
@@ -31,7 +31,7 @@ var server = http.createServer(function (req, res) {
             break
 
         // - - - - - PLaylist Images - - - -
-            
+
         case '/css/images/astro.jpg':
             sendFile(res, 'public/css/images/astro.jpg', 'image/jpg')
             break
@@ -78,6 +78,9 @@ var server = http.createServer(function (req, res) {
         case '/js/d3/table.js':
             sendFile(res, 'public/js/d3/table.js', 'text/javascript')
             break
+        case '/js/d3/interactive_radar.js':
+            sendFile(res, 'public/js/d3/interactive_radar.js', 'text/javascript')
+            break
         /*
             Section 2: Other JS files
         */
@@ -108,6 +111,37 @@ var server = http.createServer(function (req, res) {
             break
         case '/data/dataset_average.json':
             sendFile(res, 'public/data/dataset_average.json', 'application/json; charset=UTF8')
+            break
+        // SONG DATA
+        case '/data/song_averages/song_one.json':
+            sendFile(res, 'public/data/song_averages/song_one.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_two.json':
+            sendFile(res, 'public/data/song_averages/song_two.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_three.json':
+            sendFile(res, 'public/data/song_averages/song_three.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_four.json':
+            sendFile(res, 'public/data/song_averages/song_four.json.', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_five.json':
+            sendFile(res, 'public/data/song_averages/song_five.json.', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_six.json':
+            sendFile(res, 'public/data/song_averages/song_six.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_seven.json':
+            sendFile(res, 'public/data/song_averages/song_seven.json', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_eight.json':
+            sendFile(res, 'public/data/song_averages/song_eight.json.', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_nine.json':
+            sendFile(res, 'public/data/song_averages/song_nine.json.', 'application/json; charset=UTF8')
+            break
+        case '/data/song_averages/song_ten.json':
+            sendFile(res, 'public/data/song_averages/song_ten.json.', 'application/json; charset=UTF8')
             break
         // - - - - - Data Cases - - - - -
         case '/css/cocogoose-classic-medium-trial-webfont.woff':

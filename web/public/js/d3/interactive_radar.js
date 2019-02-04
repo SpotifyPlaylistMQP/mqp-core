@@ -35,7 +35,7 @@ function drawRadarChart_playlist(id, d, d2, options){
 
     var g = d3.select(id)
         .append("svg")
-        .attr("width", cfg.w+cfg.ExtraWidthX)
+        .attr("width", 550)
         .attr("height", cfg.h+cfg.ExtraWidthY)
         .append("g")
         .attr("transform", "translate(" + cfg.TranslateX + "," + cfg.TranslateY + ")");

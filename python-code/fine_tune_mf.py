@@ -5,30 +5,28 @@ from mongodb import mongodb_communicate
 
 params = {
     "mpd_square_100": [
-(0.1, 1, 110, 150),
-(0.1, 1, 50, 100),
-(0.1, 1, 90, 100),
-(0.1, 1, 70, 150),
-(0.1, 1, 30, 150),
-(0.1, 1, 30, 50),
-(0.1, 1, 90, 200),
-(0.1, 1, 30, 200),
-(0.1, 1, 50, 150),
-(0.1, 1, 30, 50),
-(0.1, 1, 30, 100),
-(0.1, 1, 10, 50),
-(0.1, 1, 30, 10),
-(0.1, 1, 90, 50),
-(0.1, 1, 20, 100),
-(0.1, 1, 10, 200),
-(0.1, 1, 30, 100),
-(0.1, 1, 90, 150),
-(0.1, 1, 20, 50),
-(0.1, 1, 10, 150),
-(0.1, 1, 10, 10),
-(0.1, 1, 10, 100),
-(0.1, 1, 10, 50),
-(0.1, 1, 20, 10)
+(10000, 1, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000, 0.0001, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000000, 10000, 100, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 0.01, 100, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000, 0.01, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000, 100, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000000, 1.00E-10, 100, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000, 1.00E-06, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000000, 1, 100, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 10000, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 1.00E-10, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 1.00E-06, 20, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000, 1.00E-08, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000000, 1.00E-08, 20, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 100, 100, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000, 1.00E-10, 100, 500, 1.00E-06, 1.00E-05, 1.00E-07),
+(10000000, 1, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 100, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 1.00E-06, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 0.01, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 1.00E-08, 50, 100, 1.00E-06, 1.00E-05, 1.00E-09),
+(10000000, 1, 20, 100, 1.00E-06, 1.00E-05, 1.00E-09)
     ],
     "mpd_square_1000": [
 
@@ -41,40 +39,49 @@ params = params[mongo_collection]
 filename = mongo_collection + "_mf_fine_tuning.txt"
 open("train_data/" + filename, "w").close()
 output = open("train_data/" + filename, "a")
-output.write("alpha, beta, latent_features, steps, NDCG\n")
+output.write("alpha, beta, latent_features, steps, error_limit, fit_error_limit, learning_rate, NDCG\n")
+
 
 playlist_dict, unique_track_dict, indexed_pids, indexed_tids = mongodb_communicate.get(mongo_collection)
 track_playlist_matrix = matrix.create(playlist_dict, unique_track_dict)
 
 N = 10
-
+number_of_runs = 500
+number_of_playlists_to_test = 100
 for param in params:
     train_params = {
         "alpha": param[0],
-        "beta": param[1],
+        "regularization": param[1],
         "latent_features": param[2],
-        "steps": param[3]
+        "steps": param[3],
+        "error_limit": param[4],
+        "fit_error_limit": param[5],
+        "learning_rate": param[6]
     }
-    num_tests = 10
-    num_playlists = 100
-    avg_ndcg = 0
-    for test in range(num_tests):
-        results = 0
-        for input_playlist_index in range(num_playlists):
+    results = 0
+    for run in range(number_of_runs):
+        T = {}
+        new_playlist_tracks = {}
+        for input_playlist_index in range(number_of_playlists_to_test):
+            input_pid = indexed_pids[input_playlist_index]
+            T[input_pid], new_playlist_tracks[input_pid] = matrix.split_playlist(input_pid, playlist_dict)
+            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks[input_pid],
+                                                track_playlist_matrix, unique_track_dict)
+
+        factorized_matrix = matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, train_params)
+
+        for input_playlist_index in range(number_of_playlists_to_test):
             input_pid = indexed_pids[input_playlist_index]
 
-            T, new_playlist_tracks = matrix.split_playlist(input_pid, playlist_dict)
-            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks, track_playlist_matrix, unique_track_dict)
+            ranked_tracks = matrix_factorization.get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids)
+            recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks[input_pid])
+            results += evaluation.ndcg_precision(recommended_tracks, T[input_pid], N, unique_track_dict)
 
-            ranked_tracks = matrix_factorization.train_run(input_playlist_index, indexed_tids, track_playlist_matrix, train_params)
-            recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks)
-            results += evaluation.ndcg_precision(recommended_tracks, T, N, unique_track_dict)
+            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks[input_pid] + T[input_pid],
+                                                track_playlist_matrix, unique_track_dict)
 
-            matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks + T, track_playlist_matrix, unique_track_dict)
-
-        avg_ndcg += results / num_playlists
-
-    print("{}, {}, {}, {}, NDCG:{}".format(param[0], param[1], param[2], param[3], avg_ndcg / num_tests))
-    output.write("{}, {}, {}, {}, {}\n".format(param[0], param[1], param[2], param[3], avg_ndcg / num_tests))
+    avg_ndcg = results / (number_of_playlists_to_test * number_of_runs)
+    print("{}, {}, {}, {}, {}, {}, {}, NDCG:{}".format(param[0], param[1], param[2], param[3], param[4], param[5], param[6], avg_ndcg))
+    output.write("{}, {}, {}, {}, {}, {}, {}, {}\n".format(param[0], param[1], param[2], param[3], param[4], param[5], param[6], avg_ndcg))
 
 print("Wrote results to evaluation_data/" + filename)

@@ -277,4 +277,25 @@ td.text-right {
    min-width: 100%;
    border-width: 0px;
    text-align: center;
+   min-height: 600px;
+ }
+
+ tr.album-row{
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 300px;
+ }
+
+ td.album{
+   min-width: 20%;
+   max-width: 20%;
+   height: 400px;
+   padding: 10px;
+   margin: 10px;
+   text-align: left;
+ }
+
+ img.album{
+   width: 240px;
+   height: 240px;
  }

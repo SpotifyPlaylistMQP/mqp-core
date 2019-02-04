@@ -29,6 +29,39 @@ var server = http.createServer(function (req, res) {
         case '/css/spot.png':
             sendFile(res, 'public/css/spot.png', 'image/png')
             break
+
+        // - - - - - PLaylist Images - - - -
+            
+        case '/css/images/astro.jpg':
+            sendFile(res, 'public/css/images/astro.jpg', 'image/jpg')
+            break
+        case '/css/images/coloring.jpg':
+            sendFile(res, 'public/css/images/coloring.jpg', 'image/jpg')
+            break
+        case '/css/images/currents.jpg':
+            sendFile(res, 'public/css/images/currents.jpg', 'image/jpg')
+            break
+        case '/css/images/damn.jpg':
+            sendFile(res, 'public/css/images/damn.jpg', 'image/jpg')
+            break
+        case '/css/images/dieLit.jpg':
+            sendFile(res, 'public/css/images/dieLit.jpg', 'image/jpg')
+            break
+        case '/css/images/future.jpg':
+            sendFile(res, 'public/css/images/future.jpg', 'image/jpg')
+            break
+        case '/css/images/harderthanever.jpg':
+            sendFile(res, 'public/css/images/harderthanever.jpg', 'image/jpg')
+            break
+        case '/css/images/swimming.jpg':
+            sendFile(res, 'public/css/images/swimming.jpg', 'image/jpg')
+            break
+        case '/css/images/luv2.jpg':
+            sendFile(res, 'public/css/images/luv2.jpg', 'image/jpg')
+            break
+        case '/css/images/kids.jpg':
+            sendFile(res, 'public/css/images/kids.jpg', 'image/jpg')
+            break
         // - - - - - JS Cases - - - - -
         /*
             Section 1: D3 JS files

@@ -97,12 +97,16 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/js/bootstrap.min.js.map', 'text/javascript')
             break
         // - - - - - Data Cases - - - - -
-        case '/data/mf_mpd_square_100':
-            sendFile(res, 'public/data/mf_mpd_square_100', 'text')
+        case '/data/ndcg_values/mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/mf_mpd_square_100.csv', 'text')
             break
-        case '/data/feature_mf_mpd_square_100':
-            sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
+        case '/data/ndcg_values/feature_mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/feature_mf_mpd_square_100.csv', 'text')
             break
+        case '/data/ndcg_values/torch_mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/torch_mf_mpd_square_100.csv', 'text')
+            break
+        // SET DATA
         case '/data/playlist_average.json':
             sendFile(res, 'public/data/playlist_average.json', 'application/json; charset=UTF8')
             break

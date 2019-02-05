@@ -130,7 +130,7 @@ function redraw(song_name){
   var namecase = '/data/song_averages/'.concat(song_name).concat('.json');
   console.log(namecase);
   d3.queue()
-      .defer(d3.json, '/data/song_averages/song_two.json')
+      .defer(d3.json, namecase)
       .defer(d3.json, '/data/playlist_average.json')
       .await(function(error, file1, file2) {
           if (error) {

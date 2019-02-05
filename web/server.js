@@ -62,6 +62,9 @@ var server = http.createServer(function (req, res) {
         case '/css/images/forest.jpg':
             sendFile(res, 'public/css/images/forest.jpg', 'image/jpg')
             break
+        case '/css/audio/xoTour.mp3':
+            sendFile(res, 'public/css/audio/xoTour.mp3', 'audio/mp3')
+            break
         // - - - - - JS Cases - - - - -
         /*
             Section 1: D3 JS files

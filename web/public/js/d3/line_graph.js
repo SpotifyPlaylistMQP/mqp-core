@@ -42,7 +42,7 @@ function build_line_graph(normal_mf, feature_mf, torch_mf){
     add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feature MF line
     add_line(torch_mf, svg, x, y, 'yellow'); // Adds the torch MF line
     add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y);
-    create_overlay(normal_mf, feature_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
+    create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
 }
 
 // gridlines in x axis function
@@ -211,7 +211,7 @@ function add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y){
       .text("Factorization");
 };
 
-function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
+function create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height){
   var focus = svg.append('g')
       .attr('class', 'focus')
       .style('display', 'none');
@@ -312,8 +312,13 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
             var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
             var c1 = feature_mf[x0][' NDCG']; // Y Value
 
+            // Torch Matrix Factorization Y Value
+            var e0 = torch_mf[x0 - 1][' NDCG']; // X-1 Y Value
+            var e1 = torch_mf[x0][' NDCG']; // Y Value
+
             var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
             var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+            var e = x0 - x0 - 1 > x0 - x0 ? e1 : e0;
         }catch(err) {};
 
         try {
@@ -321,12 +326,14 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
 
             // Text Value Display
             focus.select('.n_val').text('K: '.concat(x0));
-            focus.select('.mf_val').text(d.slice(0, 8));
-            focus.select('.mf_feat_val').text(c.slice(0, 8));
+            focus.select('.mf_val').text(d.slice(0, 7));
+            focus.select('.mf_feat_val').text(c.slice(0, 7));
+            focus.select('.torch_val').text(e.slice(0, 7));
 
             // Data point circles
             focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
             focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
+            focus.select('.yellow-circle').attr('transform', 'translate(0,' + y(e) + ')');
 
             // Hover lines
             focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height

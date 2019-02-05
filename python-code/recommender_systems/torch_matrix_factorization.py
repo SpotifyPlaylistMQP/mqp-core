@@ -1,11 +1,6 @@
-import numpy as np
 import torch
-from torch.autograd import Variable
 from recommender_systems.modules import helpers
-import scipy.sparse as sparse
-import numpy as np
 from scipy import linalg
-from numpy import dot
 
 # default_params = {
 #     "mpd_square_100": {
@@ -30,13 +25,13 @@ from numpy import dot
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 0.01,
-        "regularization": 1e-8,
-        "latent_features": 3,
-        "steps": 950,
-        "error_limit": 0.000001,
-        "fit_error_limit": 0.0001
-
+        "alpha": 10000,
+        "regularization": 1,
+        "latent_features": 100,
+        "steps": 500,
+        "error_limit": 1e-6,
+        "fit_error_limit": 1e-5,
+        "learning_rate": 1e-7
     },
     "mpd_square_1000": {
         "alpha": 1,
@@ -61,7 +56,52 @@ default_params = {
 
 # https://www.ethanrosenthal.com/2017/06/20/matrix-factorization-in-pytorch/
 def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
-    # if params is None:
+    if params is None:
+        params = default_params[mongo_collection]
+    track_playlist_matrix = torch.Tensor(track_playlist_matrix) * params["alpha"]
+
+    # initial matrices. item_features is random [0,1] and user_features is item_features\X.
+    items, users = track_playlist_matrix.shape
+    item_features = torch.rand(items, params['latent_features'])
+    user_features = torch.rand(users, params['latent_features'])
+    length = params["regularization"] * ((len(item_features) ** 2) + (len(user_features) ** 2))
+
+    # Alternating Least Squares
+    for i in range(1, params['steps'] + 1):
+        # Fix item features
+        e = track_playlist_matrix - torch.mm(item_features, torch.t(user_features))
+        for item in range(items):
+            difference = torch.mm(torch.unsqueeze(e[item], 0), user_features) - params["regularization"] * item_features[item]
+            adjustment = params["learning_rate"] * difference
+            item_features[item] = item_features[item] + adjustment
+
+        # Fix user features
+        e = torch.t(track_playlist_matrix - torch.mm(item_features, torch.t(user_features)))
+        for user in range(users):
+            difference = torch.mm(torch.unsqueeze(e[user], 0), item_features) - params["regularization"] * user_features[user]
+            adjustment = params["learning_rate"] * difference
+            user_features[user] = user_features[user] + adjustment
+
+        # Check if it's good enough
+        if i % 5 == 0 or i == 1 or i == params['steps']:
+            estimated_ratings = torch.mm(item_features, torch.t(user_features))
+            error = torch.sqrt(torch.sum((track_playlist_matrix - estimated_ratings)**2) + length)
+            cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
+
+            if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
+                break
+
+    return torch.t(torch.mm(item_features, torch.t(user_features))).tolist()
+
+def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
+    ranked_tracks = []
+    for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
+        ranked_tracks.append((indexed_tids[track_index], prediction))
+    ranked_tracks.sort(reverse=True, key=helpers.sort_by_second_tuple)
+    return ranked_tracks
+
+
+# if params is None:
     #     params = default_params[mongo_collection]
     #
     # # Create the embeddings and "model"
@@ -119,47 +159,3 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     # items = model.item_factors.numpy()
     # users = model.user_factors.numpy()
     # return np.dot(users, items.T).T.T.tolist()
-
-    if params is None:
-        params = default_params[mongo_collection]
-    track_playlist_matrix = torch.Tensor(track_playlist_matrix) * params["alpha"]
-
-    # initial matrices. U is random [0,1] and V is U\X.
-    rows, columns = track_playlist_matrix.shape
-    U = torch.rand(rows, params['latent_features'])
-    V = torch.Tensor(linalg.lstsq(U, track_playlist_matrix)[0])
-
-    length = params["regularization"] * ((len(U) ** 2) + (len(V) ** 2))
-    ratings = torch.mm(U, V)
-
-    for i in range(1, params['steps'] + 1):
-        # Gradient Descent
-        top = torch.mm(track_playlist_matrix, torch.t(V))
-        bottom = (torch.mm((torch.mm(U, V)), torch.t(V))) + length
-        U *= top / bottom
-        U = np.maximum(U, length)
-
-        top = torch.mm(torch.t(U), track_playlist_matrix)
-        bottom = torch.mm(torch.t(U), torch.mm(U, V)) + length
-        V *= top / bottom
-        V = np.maximum(V, length)
-
-        # Check if it's good enough
-        if i % 5 == 0 or i == 1 or i == params['steps']:
-            estimated_ratings = torch.mm(U, V)
-            error = torch.sqrt(torch.sum((ratings - estimated_ratings)**2) + length)
-            ratings = estimated_ratings
-
-            cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
-
-            if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
-                break
-
-    return torch.t(torch.mm(U, V)).tolist()
-
-def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
-    ranked_tracks = []
-    for track_index, prediction in enumerate(factorized_matrix[input_playlist_index]):
-        ranked_tracks.append((indexed_tids[track_index], prediction))
-    ranked_tracks.sort(reverse=True, key=helpers.sort_by_second_tuple)
-    return ranked_tracks

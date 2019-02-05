@@ -14,7 +14,7 @@ default_params = {
         "error_limit": 1e-6,
         "fit_error_limit": 1e-5,
         "learning_rate": 1e-7,
-        "c": 1e-8
+        "c": 1e-13
     },
     "mpd_square_1000": {
         "alpha": 1,

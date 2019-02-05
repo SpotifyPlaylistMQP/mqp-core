@@ -1,5 +1,5 @@
 // Builds the D3 line graph
-function build_line_graph(normal_mf, feature_mf){
+function build_line_graph(normal_mf, feature_mf, torch_mf){
     // SVG variables
     var svg = d3.select('body').select('#MatrixGraph');
     var margin = {top: 20, right: 85, bottom: 40, left: 55};
@@ -26,9 +26,11 @@ function build_line_graph(normal_mf, feature_mf){
     var normal_min = d3.min(normal_mf, function(d){ return d[' NDCG']; });
     var feat_max = d3.max(feature_mf, function(d) { return d[' NDCG']; });
     var feat_min = d3.min(feature_mf, function(d) { return d[' NDCG']; });
+    var torch_max = d3.max(torch_mf, function(d) { return d[' NDCG']; });
+    var torch_min = d3.min(torch_mf, function(d) { return d[' NDCG']; });
 
-    var min = Math.min(normal_min, feat_min);
-    var max = Math.max(normal_max, feat_max);
+    var min = Math.min(normal_min, feat_min, torch_min);
+    var max = Math.max(normal_max, feat_max, torch_max);
     var buffer = 0.025;
 
     // Scale the range of the data
@@ -36,10 +38,11 @@ function build_line_graph(normal_mf, feature_mf){
     y.domain([min-buffer, max+buffer]);
 
     create_plot(normal_mf, feature_mf, svg, width, height, x, y); // Creates the elements of the graph
-    add_line(normal_mf, svg, x, y, 'steelblue'); // Adds the normal MF line
-    add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feture MF line
-    add_legend(svg, width, normal_mf, feature_mf, x, y);
-    create_overlay(normal_mf, feature_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
+    add_line(normal_mf, svg, x, y, 'green'); // Adds the normal MF line
+    add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feature MF line
+    add_line(torch_mf, svg, x, y, 'yellow'); // Adds the torch MF line
+    add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y);
+    create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
 }
 
 // gridlines in x axis function
@@ -137,10 +140,11 @@ function add_line(data, svg, x, y, color){
         .attr("stroke-dashoffset", 0);
 };
 
-function add_legend(svg, width, normal_mf, feature_mf, x, y){
+function add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y){
   width = width+10;
   var mf_100 = normal_mf[99][' NDCG']; // Y Value
   var feat_100 = feature_mf[99][' NDCG']; // Y Value
+  var torch_100 = torch_mf[99][' NDCG']; // Y Value
 
   var legend = svg.append('g')
       .attr('class', 'focus')
@@ -172,7 +176,7 @@ function add_legend(svg, width, normal_mf, feature_mf, x, y){
       .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
       .style("font", "10px Arial")
       .style('font-weight', 'bold')
-      .style('fill', 'steelblue')
+      .style('fill', 'green')
       .attr('dy', '0em')
       .text("Normal Matrix");
 
@@ -182,12 +186,32 @@ function add_legend(svg, width, normal_mf, feature_mf, x, y){
       .attr('transform', 'translate(' + width + ', ' + y(mf_100) + ')')
       .style("font", "10px Arial")
       .style('font-weight', 'bold')
-      .style('fill', 'steelblue')
+      .style('fill', 'green')
+      .attr('dy', '1.2em')
+      .text("Factorization");
+
+  legend.append('text')
+      .attr('x', -5)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(torch_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
+      .style('fill', 'yellow')
+      .attr('dy', '0em')
+      .text("Torch Matrix");
+
+  legend.append('text')
+      .attr('x', -5)
+      .attr('y', 0)
+      .attr('transform', 'translate(' + width + ', ' + y(torch_100) + ')')
+      .style("font", "10px Arial")
+      .style('font-weight', 'bold')
+      .style('fill', 'yellow')
       .attr('dy', '1.2em')
       .text("Factorization");
 };
 
-function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
+function create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height){
   var focus = svg.append('g')
       .attr('class', 'focus')
       .style('display', 'none');
@@ -210,24 +234,41 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
       .attr('class', 'blue-circle')
       .attr("r", 6)
       .style("fill", "black")
-      .style("stroke", 'steelblue')
+      .style("stroke", 'green')
       .attr('transform', 'translate(0, 150)')
+      .style("stroke-width", 3)
+      .style("fill-opacity", "1");
+
+  focus.append("circle")
+      .attr('class', 'yellow-circle')
+      .attr("r", 6)
+      .style("fill", "black")
+      .style("stroke", 'yellow')
+      .attr('transform', 'translate(0, 200)')
       .style("stroke-width", 3)
       .style("fill-opacity", "1");
 
   focus.append('text')
       .attr('class', 'mf_val')
       .attr('x', 5)
-      .attr('y', 30)
-      .style('fill', 'steelblue')
+      .attr('y', 10)
+      .style('fill', 'green')
       .attr('dy', '.31em')
       .text(1);
 
   focus.append('text')
       .attr('class', 'mf_feat_val')
       .attr('x', 5)
-      .attr('y', 50)
+      .attr('y', 30)
       .style('fill', '#FF3232')
+      .attr('dy', '.31em')
+      .text(1);
+
+  focus.append('text')
+      .attr('class', 'torch_val')
+      .attr('x', 5)
+      .attr('y', 50)
+      .style('fill', 'yellow')
       .attr('dy', '.31em')
       .text(1);
 
@@ -271,8 +312,13 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
             var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
             var c1 = feature_mf[x0][' NDCG']; // Y Value
 
+            // Torch Matrix Factorization Y Value
+            var e0 = torch_mf[x0 - 1][' NDCG']; // X-1 Y Value
+            var e1 = torch_mf[x0][' NDCG']; // Y Value
+
             var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
             var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;
+            var e = x0 - x0 - 1 > x0 - x0 ? e1 : e0;
         }catch(err) {};
 
         try {
@@ -280,12 +326,14 @@ function create_overlay(normal_mf, feature_mf, svg, x, y, width, height){
 
             // Text Value Display
             focus.select('.n_val').text('K: '.concat(x0));
-            // focus.select('.mf_val').text('MF: '.concat(d.slice(0, 8)));
-            focus.select('.mf_val').text(d.slice(0, 8));
-            // focus.select('.mf_feat_val').text('Feat MF: '.concat(c.slice(0, 8)));
-            focus.select('.mf_feat_val').text(c.slice(0, 8));
+            focus.select('.mf_val').text(d.slice(0, 7));
+            focus.select('.mf_feat_val').text(c.slice(0, 7));
+            focus.select('.torch_val').text(e.slice(0, 7));
+
+            // Data point circles
             focus.select('.red-circle').attr('transform', 'translate(0,' + y(c) + ')');
             focus.select('.blue-circle').attr('transform', 'translate(0,' + y(d) + ')');
+            focus.select('.yellow-circle').attr('transform', 'translate(0,' + y(e) + ')');
 
             // Hover lines
             focus.select('.x-hover-line').attr('y2', height); //510 - inverse current pixel height

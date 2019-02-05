@@ -9,26 +9,27 @@ var width = 400,
 function d3_god(){
     //In the beginning d3_god created the CSV and the Data
     d3.queue()
-        .defer(d3.csv, '/data/mf_mpd_square_100')
-        .defer(d3.csv, '/data/feature_mf_mpd_square_100')
+        .defer(d3.csv, '/data/ndcg_values/mf_mpd_square_100.csv')
+        .defer(d3.csv, '/data/ndcg_values/feature_mf_mpd_square_100.csv')
+        .defer(d3.csv, '/data/ndcg_values/torch_mf_mpd_square_100.csv')
         .defer(d3.json, '/data/playlist_average.json')//play_avg
         .defer(d3.json, '/data/song_averages/song_one.json')    //song_avg
         .defer(d3.json, '/data/dataset_average.json') //data_avg
         .defer(d3.json, '/data/song_averages/song_two.json')    //song_avg
-        .await(function(error, file1, file2, play_avg, song_one_avg, data_avg, file6) {
+        .await(function(error, file1, file2, file3, play_avg, song_one_avg, data_avg, file6) {
             if (error) {
                 console.error('Not again: ' + error);
             } else {
-                bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg);
+                bob_the_builder(file1, file2, file3, play_avg, song_one_avg, data_avg);
             };
     });
 };
 
 // Queue and run the D3 graphing functions
-function bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg){
+function bob_the_builder(file1, file2, file3, play_avg, song_one_avg, data_avg){
     d3.queue()
         //Build the line graph
-        .defer(build_line_graph, file1, file2)
+        .defer(build_line_graph, file1, file2, file3)
         //Build the table
         .defer(build_table, file1, file2)
         //Build Playlist vs Dataset radar graph

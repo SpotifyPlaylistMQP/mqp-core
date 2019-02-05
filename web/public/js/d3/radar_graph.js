@@ -16,7 +16,16 @@ var cfg = {
  color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
 };
 
-function drawRadarChart_dataset(id, d, d2, options){
+// Config for the Radar chart
+var options = {
+    w: width,
+    h: height,
+    maxValue: 100,
+    levels: 5,
+    ExtraWidthX: 300
+}
+
+function drawRadarChart(id, d, d2){
     if('undefined' !== typeof options){
       for(var i in options){
       if('undefined' !== typeof options[i]){
@@ -114,6 +123,22 @@ function drawRadarChart_dataset(id, d, d2, options){
     //Draw the playlist average
     draw_data(d, g, cfg, total, tooltip, Format);
     draw_data(d2, g, cfg, total, tooltip, Format);
+};
+
+function redraw(song_name){
+  // var test_name = 'song_two';
+  var namecase = '/data/song_averages/'.concat(song_name).concat('.json');
+  console.log(namecase);
+  d3.queue()
+      .defer(d3.json, '/data/song_averages/song_two.json')
+      .defer(d3.json, '/data/playlist_average.json')
+      .await(function(error, file1, file2) {
+          if (error) {
+              console.error('Not again: ' + error);
+          } else {
+              drawRadarChart("#results_radar_chart", file2, file1);
+          };
+  });
 };
 
 function draw_data(d,g,cfg,total, tooltip, Format){

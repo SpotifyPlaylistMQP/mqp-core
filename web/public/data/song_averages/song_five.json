@@ -1,10 +1,12 @@
 [
     [
-      {"area": "Acousticness ", "value": 0.80},
-      {"area": "Danceability", "value": 0.90},
-      {"area": "Energy ", "value": 0.1},
-      {"area": "Instrumentalness ", "value": 0.70},
-      {"area": "Valence", "value": 0.75},
-      {"area": "Tempo ", "value": 0.75}
+      {"area": "Energy", "value": 0.5},
+      {"area": "Loudness", "value": 0.5},
+      {"area": "Speech", "value": 0.5},
+      {"area": "Valence", "value": 0.5},
+      {"area": "Tempo", "value": 0.5},
+      {"area": "Dance ", "value": 0.5},
+      {"area": "Instrumental", "value": 0.5},
+      {"area": "Accoustic", "value": 0.5}
   	]
 ]

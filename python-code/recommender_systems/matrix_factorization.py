@@ -29,38 +29,38 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
         params = default_params[mongo_collection]
     track_playlist_matrix = np.array(track_playlist_matrix) * params["alpha"]
 
-    # initial matrices. item_factors is random [0,1] and user_factors is item_factors\X.
+    # initial matrices. item_features is random [0,1] and user_features is item_features\X.
     items, users = track_playlist_matrix.shape
-    item_factors = np.random.rand(items, params['latent_features'])
-    user_factors = np.random.rand(users, params['latent_features'])
-    length = params["regularization"] * ((len(item_factors) ** 2) + (len(user_factors) ** 2))
+    item_features = np.random.rand(items, params['latent_features'])
+    user_features = np.random.rand(users, params['latent_features'])
+    length = params["regularization"] * ((len(item_features) ** 2) + (len(user_features) ** 2))
 
     # Alternating least squares
     for i in range(1, params['steps'] + 1):
         # Fix item factors
-        e = track_playlist_matrix - dot(item_factors, user_factors.T)
+        e = track_playlist_matrix - dot(item_features, user_features.T)
         for item in range(items):
-            difference = dot(e[item], user_factors) - params["regularization"] * item_factors[item]
+            difference = dot(e[item], user_features) - params["regularization"] * item_features[item]
             adjustment = params["learning_rate"] * difference
-            item_factors[item] = item_factors[item] + adjustment
+            item_features[item] = item_features[item] + adjustment
 
         # Fix user factors
-        e = (track_playlist_matrix - dot(item_factors, user_factors.T)).T
+        e = (track_playlist_matrix - dot(item_features, user_features.T)).T
         for user in range(users):
-            difference = dot(e[user], item_factors) - params["regularization"] * user_factors[user]
+            difference = dot(e[user], item_features) - params["regularization"] * user_features[user]
             adjustment = params["learning_rate"] * difference
-            user_factors[user] = user_factors[user] + adjustment
+            user_features[user] = user_features[user] + adjustment
 
         # Check if it's good enough
         if i % 5 == 0 or i == 1 or i == params['steps']:
-            estimated_ratings = dot(item_factors, user_factors.T)
+            estimated_ratings = dot(item_features, user_features.T)
             error = np.sqrt(np.sum((track_playlist_matrix - estimated_ratings)**2) + length)
             cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
 
             if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
                 break
 
-    return dot(item_factors, user_factors.T).T.tolist()
+    return dot(item_features, user_features.T).T.tolist()
 
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):

@@ -106,9 +106,6 @@ var server = http.createServer(function (req, res) {
         case '/data/playlist_average.json':
             sendFile(res, 'public/data/playlist_average.json', 'application/json; charset=UTF8')
             break
-        case '/data/song_average.json':
-            sendFile(res, 'public/data/song_average.json', 'application/json; charset=UTF8')
-            break
         case '/data/dataset_average.json':
             sendFile(res, 'public/data/dataset_average.json', 'application/json; charset=UTF8')
             break
@@ -123,10 +120,10 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/data/song_averages/song_three.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_four.json':
-            sendFile(res, 'public/data/song_averages/song_four.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_four.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_five.json':
-            sendFile(res, 'public/data/song_averages/song_five.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_five.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_six.json':
             sendFile(res, 'public/data/song_averages/song_six.json', 'application/json; charset=UTF8')
@@ -135,13 +132,13 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/data/song_averages/song_seven.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_eight.json':
-            sendFile(res, 'public/data/song_averages/song_eight.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_eight.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_nine.json':
-            sendFile(res, 'public/data/song_averages/song_nine.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_nine.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_ten.json':
-            sendFile(res, 'public/data/song_averages/song_ten.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_ten.json', 'application/json; charset=UTF8')
             break
         // - - - - - Data Cases - - - - -
         case '/css/cocogoose-classic-medium-trial-webfont.woff':

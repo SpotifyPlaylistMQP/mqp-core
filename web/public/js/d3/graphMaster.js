@@ -5,15 +5,6 @@
 var width = 400,
     height = 400;
 
-// Config for the Radar chart
-var config = {
-    w: width,
-    h: height,
-    maxValue: 100,
-    levels: 5,
-    ExtraWidthX: 300
-}
-
 // Queue and load the dataset (JSON/CSV) files
 function d3_god(){
     //In the beginning d3_god created the CSV and the Data
@@ -23,13 +14,12 @@ function d3_god(){
         .defer(d3.json, '/data/playlist_average.json')//play_avg
         .defer(d3.json, '/data/song_averages/song_one.json')    //song_avg
         .defer(d3.json, '/data/dataset_average.json') //data_avg
-        .await(function(error, file1, file2, play_avg, song_one_avg, data_avg) {
+        .defer(d3.json, '/data/song_averages/song_two.json')    //song_avg
+        .await(function(error, file1, file2, play_avg, song_one_avg, data_avg, file6) {
             if (error) {
                 console.error('Not again: ' + error);
             } else {
-                // console.log(file4)
                 bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg);
-                // RadarChart.draw("#chart", file3, config);
             };
     });
 };
@@ -37,10 +27,15 @@ function d3_god(){
 // Queue and run the D3 graphing functions
 function bob_the_builder(file1, file2, play_avg, song_one_avg, data_avg){
     d3.queue()
+        //Build the line graph
         .defer(build_line_graph, file1, file2)
+        //Build the table
         .defer(build_table, file1, file2)
-        .defer(drawRadarChart_dataset, "#dataset_radar_chart", play_avg, data_avg, config)
-        .defer(drawRadarChart_playlist, "#results_radar_chart", play_avg, song_one_avg, config)
+        //Build Playlist vs Dataset radar graph
+        .defer(drawRadarChart, "#dataset_radar_chart", play_avg, data_avg)
+        //Build Recommended Songs vs Playlist radar graph
+        .defer(drawRadarChart_playlist, "#results_radar_chart", play_avg, song_one_avg)
+        //Wait for successful completion
         .await(function(error) {
             if (error) {
                 console.error('Not again: ' + error);

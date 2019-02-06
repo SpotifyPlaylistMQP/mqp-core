@@ -1,7 +1,7 @@
 var http = require('http')
     , fs = require('fs')
     , url = require('url')
-    , port = 8080;
+    , port = 8088;
 
 var server = http.createServer(function (req, res) {
     var uri = url.parse(req.url)
@@ -29,38 +29,41 @@ var server = http.createServer(function (req, res) {
         case '/css/spot.png':
             sendFile(res, 'public/css/spot.png', 'image/png')
             break
-
+        case '/css/images/play.png':
+            sendFile(res, 'public/css/images/play.png', 'image/png')
+            break
+            
         // - - - - - PLaylist Images - - - -
 
-        case '/css/images/astro.jpg':
-            sendFile(res, 'public/css/images/astro.jpg', 'image/jpg')
+        case '/css/images/jungle.jpg':
+            sendFile(res, 'public/css/images/jungle.jpg', 'image/jpg')
             break
-        case '/css/images/coloring.jpg':
-            sendFile(res, 'public/css/images/coloring.jpg', 'image/jpg')
+        case '/css/images/wattba.jpg':
+            sendFile(res, 'public/css/images/wattba.jpg', 'image/jpg')
             break
-        case '/css/images/currents.jpg':
-            sendFile(res, 'public/css/images/currents.jpg', 'image/jpg')
+        case '/css/images/chill.jpg':
+            sendFile(res, 'public/css/images/chill.jpg', 'image/jpg')
             break
-        case '/css/images/damn.jpg':
-            sendFile(res, 'public/css/images/damn.jpg', 'image/jpg')
+        case '/css/images/theworld.jpg':
+            sendFile(res, 'public/css/images/theworld.jpg', 'image/jpg')
             break
-        case '/css/images/dieLit.jpg':
-            sendFile(res, 'public/css/images/dieLit.jpg', 'image/jpg')
+        case '/css/images/fetty.jpg':
+            sendFile(res, 'public/css/images/fetty.jpg', 'image/jpg')
             break
-        case '/css/images/future.jpg':
-            sendFile(res, 'public/css/images/future.jpg', 'image/jpg')
+        case '/css/images/savage.jpg':
+            sendFile(res, 'public/css/images/savage.jpg', 'image/jpg')
             break
-        case '/css/images/harderthanever.jpg':
-            sendFile(res, 'public/css/images/harderthanever.jpg', 'image/jpg')
-            break
-        case '/css/images/swimming.jpg':
-            sendFile(res, 'public/css/images/swimming.jpg', 'image/jpg')
+        case '/css/images/sremm.jpg':
+            sendFile(res, 'public/css/images/sremm.jpg', 'image/jpg')
             break
         case '/css/images/luv2.jpg':
             sendFile(res, 'public/css/images/luv2.jpg', 'image/jpg')
             break
-        case '/css/images/kids.jpg':
-            sendFile(res, 'public/css/images/kids.jpg', 'image/jpg')
+        case '/css/images/forest.jpg':
+            sendFile(res, 'public/css/images/forest.jpg', 'image/jpg')
+            break
+        case '/css/audio/xoTour.mp3':
+            sendFile(res, 'public/css/audio/xoTour.mp3', 'audio/mp3')
             break
         // - - - - - JS Cases - - - - -
         /*
@@ -97,17 +100,18 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/js/bootstrap.min.js.map', 'text/javascript')
             break
         // - - - - - Data Cases - - - - -
-        case '/data/mf_mpd_square_100':
-            sendFile(res, 'public/data/mf_mpd_square_100', 'text')
+        case '/data/ndcg_values/mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/mf_mpd_square_100.csv', 'text')
             break
-        case '/data/feature_mf_mpd_square_100':
-            sendFile(res, 'public/data/feature_mf_mpd_square_100', 'text')
+        case '/data/ndcg_values/feature_mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/feature_mf_mpd_square_100.csv', 'text')
             break
+        case '/data/ndcg_values/torch_mf_mpd_square_100.csv':
+            sendFile(res, 'public/data/ndcg_values/torch_mf_mpd_square_100.csv', 'text')
+            break
+        // SET DATA
         case '/data/playlist_average.json':
             sendFile(res, 'public/data/playlist_average.json', 'application/json; charset=UTF8')
-            break
-        case '/data/song_average.json':
-            sendFile(res, 'public/data/song_average.json', 'application/json; charset=UTF8')
             break
         case '/data/dataset_average.json':
             sendFile(res, 'public/data/dataset_average.json', 'application/json; charset=UTF8')
@@ -123,10 +127,10 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/data/song_averages/song_three.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_four.json':
-            sendFile(res, 'public/data/song_averages/song_four.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_four.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_five.json':
-            sendFile(res, 'public/data/song_averages/song_five.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_five.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_six.json':
             sendFile(res, 'public/data/song_averages/song_six.json', 'application/json; charset=UTF8')
@@ -135,13 +139,13 @@ var server = http.createServer(function (req, res) {
             sendFile(res, 'public/data/song_averages/song_seven.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_eight.json':
-            sendFile(res, 'public/data/song_averages/song_eight.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_eight.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_nine.json':
-            sendFile(res, 'public/data/song_averages/song_nine.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_nine.json', 'application/json; charset=UTF8')
             break
         case '/data/song_averages/song_ten.json':
-            sendFile(res, 'public/data/song_averages/song_ten.json.', 'application/json; charset=UTF8')
+            sendFile(res, 'public/data/song_averages/song_ten.json', 'application/json; charset=UTF8')
             break
         // - - - - - Data Cases - - - - -
         case '/css/cocogoose-classic-medium-trial-webfont.woff':

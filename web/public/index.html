@@ -17,7 +17,10 @@
 </head>
 <!-- Body -->
 <body data-gr-c-s-loaded='true' onload="start_up()">
-    <nav class=' navbar transparent navbar-inverse custom-nav navbar navbar-expand-md fixed-top'>
+<audio id="X0">
+  <source src="/css/audio/xoTour.mp3" type="audio/mpeg">
+</audio>
+    <nav class='navbar transparent navbar-inverse custom-nav navbar navbar-expand-md fixed-top'>
 
         <img class="icon" src="/css/spot.png"> &nbsp; MQP
 
@@ -26,6 +29,27 @@
         </button>
 
 
+    </nav>
+    <nav class="nav" style="opacity: 1;">
+        <a href="#" class="t1">
+            The Basics
+            <div class="underline"></div>
+        </a>
+
+        <a href="#" class="t1">
+            Data visualizations
+            <div class="underline"></div>
+        </a>
+
+        <a href="#" class="t1">
+            The Evaluation
+            <div class="underline"></div>
+        </a>
+
+        <a href="#" class="t1">
+            Results
+            <div class="underline"></div>
+        </a>
     </nav>
     <main role='main' class='container'>
         <h1 class="header" align='center'>Let's Start with the Basics</h1>
@@ -83,75 +107,145 @@
                     <table class="album-holder">
                         <tr class="album-row">
                             <td class="album">
-                                <img class="album" src ="/css/images/astro.jpg">
-                                Travis Scott
-                                <br>
-                                <i>Coffee Bean<i>
+                                <img class="album" src ="/css/images/luv2.jpg" onclick="redraw('song_one')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img onclick="playAudio()" class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Lil Uzi Vert</b>
+                                        <br>
+                                        <i>XO Tour Liif3<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/coloring.jpg">
-                                Chance the Rapper
-                                <br>
-                                <i>Same Drugs<i>
+                                <img class="album" src ="/css/images/forest.jpg" onclick="redraw('song_two')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>J Cole</b>
+                                        <br>
+                                        <i>No Role Modelz<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/currents.jpg">
-                                Tame Impala
-                                <br>
-                                <i>The Less I Know the Better<i>
+                                <img class="album" src ="/css/images/wattba.jpg" onclick="redraw('song_three')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Drake & Future</b>
+                                        <br>
+                                        <i>Jumpman<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/damn.jpg">
-                                Kendrick Lamar
-                                <br>
-                                <i>LOVE.<i>
+                                <img class="album" src ="/css/images/theworld.jpg" onclick="redraw('song_four')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Lil Uzi Vert</b>
+                                        <br>
+                                        <i>You Was Right<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/dieLit.jpg">
-                                Playboi Carti
-                                <br>
-                                <i>Middle of the Summer<i>
+                                <img class="album" src ="/css/images/chill.jpg" onclick="redraw('song_five')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Rob Stone</b>
+                                        <br>
+                                        <i>Chill Bill<i>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
 
                         <tr class="album-row">
                             <td class="album">
-                                <img class="album" src ="/css/images/future.jpg">
-                                Future
-                                <br>
-                                <i>Draco<i>
+                                <img class="album" src ="/css/images/theworld.jpg" onclick="redraw('song_six')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Lil Uzi Vert</b>
+                                        <br>
+                                        <i>Money Longer<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/harderthanever.jpg">
-                                Lil Baby
-                                <br>
-                                <i>Yes Indeed<i>
+                                <img class="album" src ="/css/images/sremm.jpg" onclick="redraw('song_seven')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Rae Sremmurd</b>
+                                        <br>
+                                        <i>Swang<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/kids.jpg">
-                                KIDS SEE GHOSTS
-                                <br>
-                                <i>4th Dimension<i>
+                                <img class="album" src ="/css/images/savage.jpg" onclick="redraw('song_eight')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>21 Savage ft. Future</b>
+                                        <br>
+                                        <i>X<i>
+                                    </div>
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/luv2.jpg">
-                                Lil Uzi Vert
-                                <br>
-                                <i>20 Min<i>
+                                <img class="album" src ="/css/images/fetty.jpg" onclick="redraw('song_nine')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>Fetty Wap</b>
+                                        <br>
+                                        <i>Trap Queen<i>
+                                    </div>
+                                </div>    
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/swimming.jpg">
-                                Mac Miller
-                                <br>
-                                <i>2009<i>
+                                <img class="album" src ="/css/images/jungle.jpg" onclick="redraw('song_ten')">
+                                <div class="holder">
+                                    <div class="playMusic">
+                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                    </div>
+                                    <div class="songInfo">
+                                        <b>French Montana</b>
+                                        <br>
+                                        <i>Unforgettable<i>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -180,5 +274,13 @@
 function start_up(){
   d3_god();
 }
+</script>
+
+<script>
+var x = document.getElementById("X0"); 
+
+function playAudio() { 
+  x.play(); 
+} 
 </script>
 </html>

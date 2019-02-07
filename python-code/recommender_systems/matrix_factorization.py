@@ -33,32 +33,20 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     items, users = track_playlist_matrix.shape
     item_features = np.random.rand(items, params['latent_features'])
     user_features = np.random.rand(users, params['latent_features'])
-    length = params["regularization"] * ((len(item_features) ** 2) + (len(user_features) ** 2))
 
     # Alternating least squares
     for i in range(1, params['steps'] + 1):
         # Fix item factors
-        e = track_playlist_matrix - dot(item_features, user_features.T)
+        error = track_playlist_matrix - dot(item_features, user_features.T)
         for item in range(items):
-            difference = dot(e[item], user_features) - params["regularization"] * item_features[item]
-            adjustment = params["learning_rate"] * difference
-            item_features[item] = item_features[item] + adjustment
+            gradient = dot(error[item], user_features) - params["regularization"] * item_features[item]
+            item_features[item] = item_features[item] + params["learning_rate"] * gradient
 
         # Fix user factors
-        e = (track_playlist_matrix - dot(item_features, user_features.T)).T
+        error = (track_playlist_matrix - dot(item_features, user_features.T)).T
         for user in range(users):
-            difference = dot(e[user], item_features) - params["regularization"] * user_features[user]
-            adjustment = params["learning_rate"] * difference
-            user_features[user] = user_features[user] + adjustment
-
-        # Check if it's good enough
-        if i % 5 == 0 or i == 1 or i == params['steps']:
-            estimated_ratings = dot(item_features, user_features.T)
-            error = np.sqrt(np.sum((track_playlist_matrix - estimated_ratings)**2) + length)
-            cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
-
-            if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
-                break
+            gradient = dot(error[user], item_features) - params["regularization"] * user_features[user]
+            user_features[user] = user_features[user] + params["learning_rate"] * gradient
 
     return dot(item_features, user_features.T).T.tolist()
 

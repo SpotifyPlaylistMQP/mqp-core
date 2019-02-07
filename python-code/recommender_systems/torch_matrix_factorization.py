@@ -64,32 +64,20 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     items, users = track_playlist_matrix.shape
     item_features = torch.rand(items, params['latent_features'])
     user_features = torch.rand(users, params['latent_features'])
-    length = params["regularization"] * ((len(item_features) ** 2) + (len(user_features) ** 2))
 
     # Alternating Least Squares
     for i in range(1, params['steps'] + 1):
         # Fix item features
-        e = track_playlist_matrix - torch.mm(item_features, torch.t(user_features))
+        error = track_playlist_matrix - torch.mm(item_features, torch.t(user_features))
         for item in range(items):
-            difference = torch.mm(torch.unsqueeze(e[item], 0), user_features) - params["regularization"] * item_features[item]
-            adjustment = params["learning_rate"] * difference
-            item_features[item] = item_features[item] + adjustment
+            gradient = torch.mm(torch.unsqueeze(error[item], 0), user_features) - params["regularization"] * item_features[item]
+            item_features[item] = item_features[item] + params["learning_rate"] * gradient
 
         # Fix user features
-        e = torch.t(track_playlist_matrix - torch.mm(item_features, torch.t(user_features)))
+        error = torch.t(track_playlist_matrix - torch.mm(item_features, torch.t(user_features)))
         for user in range(users):
-            difference = torch.mm(torch.unsqueeze(e[user], 0), item_features) - params["regularization"] * user_features[user]
-            adjustment = params["learning_rate"] * difference
-            user_features[user] = user_features[user] + adjustment
-
-        # Check if it's good enough
-        if i % 5 == 0 or i == 1 or i == params['steps']:
-            estimated_ratings = torch.mm(item_features, torch.t(user_features))
-            error = torch.sqrt(torch.sum((track_playlist_matrix - estimated_ratings)**2) + length)
-            cur_res = linalg.norm(track_playlist_matrix - estimated_ratings, ord='fro')
-
-            if cur_res < params["error_limit"] or error < params["fit_error_limit"]:
-                break
+            gradient = torch.mm(torch.unsqueeze(error[user], 0), item_features) - params["regularization"] * user_features[user]
+            user_features[user] = user_features[user] + params["learning_rate"] * gradient
 
     return torch.t(torch.mm(item_features, torch.t(user_features))).tolist()
 

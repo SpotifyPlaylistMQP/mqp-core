@@ -4,16 +4,21 @@
 
 body {
   padding-top: 10rem;
-  /*background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);*/
-  background: rgb(34,193,195);
+
+  /* background: rgb(34,193,195);
   background: -moz-linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
   background: -webkit-linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
   background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(91,132,251,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endColorstr="#5b84fb",GradientType=1);       
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#22c1c3",endColorstr="#5b84fb",GradientType=1);   */
+  
+  background: rgb(63,94,251);
+  background: -moz-radial-gradient(circle, rgba(63,94,251,1) 2%, rgba(255,59,83,1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(63,94,251,1) 2%, rgba(255,59,83,1) 100%);
+  background: radial-gradient(circle, rgba(63,94,251,1) 2%, rgba(255,59,83,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#ff3b53",GradientType=1);
+
   height: 100%;
-  /* animation: colorchange 50s; /* animation-name followed by duration in seconds*/
-  /* you could also use milliseconds (ms) or something like 2.5s */
-  /* -webkit-animation: colorchange 50s;  Chrome and Safari  */ 
+
 }
 
 img.icon {

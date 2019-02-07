@@ -52,6 +52,9 @@
         </a>
     </nav>
     <main role='main' class='container'>
+
+
+
         <h1 class="header" align='center'>Let's Start with the Basics</h1>
         <!--<span class="sexy_line"></span>-->
         <br>
@@ -60,7 +63,34 @@
             <br><br>
             Services like Spotify have detailed recommender systems already in place utilizing state-of-the-art approaches like matrix factorization and collaborative filtering for recommending songs based on user preferences. Below, we'll walk you through how we went about optimizing our system along with performing a demo on an example playlist.
         </p>
-        <!-- Container Div for all visualizations -->
+        <br>
+
+
+        <h1 class="header" align='center'>State-of-the-Art Approaches</h1>
+        <br>
+        <table class="graphHolder">
+            <tr>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>collaborative filtering</h1>
+                </td>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>matrix factorization</h1>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+
+
+
+        <h1 class="header" align='center'>The Data</h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <h1 class="header" align='center'>Evaluation Results</h1>
+                    <!-- Container Div for all visualizations -->
         <table class="graphHolder">
             <tr>
                 <td class="graphCell">
@@ -81,6 +111,10 @@
         <br>
         <br>
         <br>
+
+
+
+
         <h1 class="header" align='center'>So, How did we do?</h1>
         <br>
 
@@ -110,7 +144,7 @@
                                 <img class="album" src ="/css/images/luv2.jpg" onclick="redraw('song_one')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img onclick="playAudio()" class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic" onclick="changeImage(); playorpause()" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Lil Uzi Vert</b>
@@ -124,7 +158,7 @@
                                 <img class="album" src ="/css/images/forest.jpg" onclick="redraw('song_two')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic" onclick="changeImage()" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>J Cole</b>
@@ -277,10 +311,35 @@ function start_up(){
 </script>
 
 <script>
+
 var x = document.getElementById("X0"); 
 
-function playAudio() { 
-  x.play(); 
-} 
+var nextState = "Play"
+
+function playorpause() {
+    if (nextState == "Play") {
+        x.play();
+        nextState == "Pause";
+    }
+    if (nextState == "Pause") {
+        x.pause();
+        nextState == "Play";
+    }
+}
+
+var newsrc = "PAUSE.jpg"
+
+function changeImage() {
+  if (newsrc == "PAUSE.jpg" ) {
+    document.images["pic"].src = "/css/images/PAUSE.png";
+    newsrc = "play.png";
+  }
+  else {
+    document.images["pic"].src = "/css/images/play.png";
+    newsrc = "PAUSE.png";
+  }
+}
+
+
 </script>
 </html>

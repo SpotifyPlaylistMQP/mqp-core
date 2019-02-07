@@ -32,6 +32,9 @@ var server = http.createServer(function (req, res) {
         case '/css/images/play.png':
             sendFile(res, 'public/css/images/play.png', 'image/png')
             break
+        case '/css/images/PAUSE.png':
+            sendFile(res, 'public/css/images/PAUSE.png', 'image/png')
+            break
             
         // - - - - - PLaylist Images - - - -
 

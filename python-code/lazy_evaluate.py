@@ -6,7 +6,7 @@ import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 30,
+        "number_of_runs": 10,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },
@@ -81,6 +81,12 @@ for run in range(params["number_of_runs"]):
                 ranked_tracks = torch_matrix_factorization.get_ranked_tracks(factorized_matrices['torch_mf'], input_playlist_index, indexed_tids)
             for N in range(1, params["max_N"] + 1):
                 recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks[input_pid])
+                # me = []
+                # if N == 10:
+                #     print(input_pid)
+                #     for track in recommended_tracks:
+                #         me.append(track[0])
+                #     print(me)
                 ndcg_results[rec_system][N] += evaluation.ndcg_precision(recommended_tracks, T[input_pid], N, unique_track_dict)
                 r_results[rec_system][N] += evaluation.r_precision(recommended_tracks, T[input_pid])
 

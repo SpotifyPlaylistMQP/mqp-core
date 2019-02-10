@@ -1,31 +1,12 @@
-var cfg = {
- radius: 5,
- w: 600,
- h: 600,
- factor: 1,
- factorLegend: .85,
- levels: 3,
- maxValue: 0,
- radians: 2 * Math.PI,
- opacityArea: 0.5,
- ToRight: 5,
- TranslateX: 80,
- TranslateY: 30,
- ExtraWidthX: 50,
- ExtraWidthY: 50,
- color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
-};
-
-// Config for the Radar chart
-var options = {
-    w: width,
-    h: height,
-    maxValue: 100,
-    levels: 5,
-    ExtraWidthX: 300
-}
-
-function drawRadarChart(id, d, d2){
+function drawRadarChart(id, d, d2, cfg){
+    // Config for the Radar chart
+    var options = {
+        w: width,
+        h: height,
+        maxValue: 100,
+        levels: 5,
+        ExtraWidthX: 300
+    }
     if('undefined' !== typeof options){
       for(var i in options){
       if('undefined' !== typeof options[i]){
@@ -126,6 +107,24 @@ function drawRadarChart(id, d, d2){
 };
 
 function redraw(song_name){
+  //
+  var cfg_3 = {
+      radius: 5,
+      w: 600,
+      h: 600,
+      factor: 1,
+      factorLegend: .85,
+      levels: 3,
+      maxValue: 0,
+      radians: 2 * Math.PI,
+      opacityArea: 0.5,
+      ToRight: 5,
+      TranslateX: 80,
+      TranslateY: 30,
+      ExtraWidthX: 50,
+      ExtraWidthY: 50,
+      color: d3.scaleOrdinal().range(["#F6F270", "#25FFF0"])
+  };
   // var test_name = 'song_two';
   var namecase = '/data/song_averages/'.concat(song_name).concat('.json');
   console.log(namecase);
@@ -136,7 +135,7 @@ function redraw(song_name){
           if (error) {
               console.error('Not again: ' + error);
           } else {
-              drawRadarChart("#results_radar_chart", file2, file1);
+              drawRadarChart("#results_radar_chart", file2, file1, cfg_3);
           };
   });
 };

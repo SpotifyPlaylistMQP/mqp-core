@@ -1,22 +1,30 @@
-var cfg = {
- radius: 5,
- w: 600,
- h: 600,
- factor: 1,
- factorLegend: .85,
- levels: 3,
- maxValue: 0,
- radians: 2 * Math.PI,
- opacityArea: 0.5,
- ToRight: 5,
- TranslateX: 80,
- TranslateY: 30,
- ExtraWidthX: 100,
- ExtraWidthY: 100,
- color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
-};
-
 function drawRadarChart_playlist(id, d, d2, options){
+    //
+    var cfg = {
+     radius: 5,
+     w: 600,
+     h: 600,
+     factor: 1,
+     factorLegend: .85,
+     levels: 3,
+     maxValue: 0,
+     radians: 2 * Math.PI,
+     opacityArea: 0.5,
+     ToRight: 5,
+     TranslateX: 80,
+     TranslateY: 30,
+     ExtraWidthX: 100,
+     ExtraWidthY: 100,
+     color: d3.scaleOrdinal().range(["#F6F270", "#25FFF0"])
+    };
+    // Config for the Radar chart
+    var options = {
+        w: width,
+        h: height,
+        maxValue: 100,
+        levels: 5,
+        ExtraWidthX: 300
+    }
     if('undefined' !== typeof options){
       for(var i in options){
       if('undefined' !== typeof options[i]){

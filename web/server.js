@@ -26,6 +26,7 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
+        // - - - - - Image Cases - - - - -
         case '/css/spot.png':
             sendFile(res, 'public/css/spot.png', 'image/png')
             break
@@ -35,7 +36,13 @@ var server = http.createServer(function (req, res) {
         case '/css/images/PAUSE.png':
             sendFile(res, 'public/css/images/PAUSE.png', 'image/png')
             break
-            
+        case '/css/images/equations/collab.svg':
+            sendFile(res, 'public/css/images/equations/collab.svg', 'image/svg+xml')
+            break
+        case '/css/images/equations/mf.svg':
+            sendFile(res, 'public/css/images/equations/mf.svg', 'image/svg+xml')
+            break
+
         // - - - - - PLaylist Images - - - -
 
         case '/css/images/jungle.jpg':
@@ -65,7 +72,7 @@ var server = http.createServer(function (req, res) {
         case '/css/images/forest.jpg':
             sendFile(res, 'public/css/images/forest.jpg', 'image/jpg')
             break
-        
+
         // - - - - - AUDIO CASES - - - -
 
         case '/css/audio/xotour.mp3':
@@ -100,7 +107,7 @@ var server = http.createServer(function (req, res) {
             break
         // - - - - - END AUDIO CASES - - - - -
 
-        
+
         // - - - - - JS Cases - - - - -
         /*
             Section 1: D3 JS files

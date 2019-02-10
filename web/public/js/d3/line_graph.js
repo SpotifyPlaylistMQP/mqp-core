@@ -292,10 +292,6 @@ function create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, heigh
 
   function toggle_clicked(){
     unclicked = !unclicked;
-    console.log(unclicked);
-    if(!unclicked){
-        console.log("Paused");
-    };
   };
 
   function mousemove() {

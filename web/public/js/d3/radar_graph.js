@@ -91,7 +91,7 @@ function drawRadarChart(id, d, d2, cfg){
       .attr('dy', '0.71em')
       .attr('fill', '#000')
       .style('font-weight', 'bold')
-      .attr("transform", function(d, i){return "translate(0, -10)"})
+      .attr("transform", function(d, i){return "translate(5, -10)"})
       .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
       .attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
 
@@ -140,7 +140,7 @@ function redraw(song_name){
   });
 };
 
-function draw_data(d,g,cfg,total, tooltip, Format){
+function draw_data(d, g, cfg, total, tooltip, Format){
   d.forEach(function(y, x){
     dataValues = [];
     g.selectAll(".nodes")
@@ -194,9 +194,9 @@ function draw_data(d,g,cfg,total, tooltip, Format){
     .attr('r', cfg.radius)
     .attr("alt", function(j){return Math.max(j.value, 0)})
     .attr("cx", function(j, i){
-      dataValues.push([
-      cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
-      cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
+        dataValues.push([
+        cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
+        cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
     ]);
     return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total));
     })

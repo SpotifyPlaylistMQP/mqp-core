@@ -6,7 +6,6 @@ var width = 400,
     height = 400;
 
 //
-//
 var cfg = {
     radius: 5,
     w: 600,

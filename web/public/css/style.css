@@ -164,6 +164,7 @@ div.songInfo{
 img.playButton {
   height: 40px;
   width: 40px;
+  opacity: 0.7;
 }
 
 /* Grow */
@@ -246,4 +247,61 @@ img.playButton {
   animation-fill-mode: forwards;
   -webkit-animation-direction: normal, alternate;
   animation-direction: normal, alternate;
+}
+
+
+/* SIDE BAR */
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 60px;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  opacity: 0.85;
+
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+  margin-bottom: 15px;
+  font-size: 0.8rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+ 
+.sidebar a.active {
+  color: #4CAF50;
+  text-decoration: bold;
+  opacity: 1;
+}
+
+.sidebar a:hover:not(.active) {
+  color: white;
+}
+
+div.content {
+  margin-left: 50px;
+  padding: 1px 16px;
+  min-height: 100%;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
 }

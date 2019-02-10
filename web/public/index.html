@@ -19,6 +19,14 @@
 
 <!-- Body -->
 <body data-gr-c-s-loaded='true' onload="start_up()">
+<div class="sidebar">
+  <a class="active" href="#basics">The Basics</a>
+  <a href="#state">State-of-the-Art</a>
+  <a href="#dataset">The Datatset</a>
+  <a href="#eval">Evaluations</a>
+  <a href="#conclusions">Conclusions</a>
+</div>
+
 
 <!-- AUDIO DECLARATIONS -->
 <audio id="X0">
@@ -53,7 +61,7 @@
 </audio>
 
 <!-- END AUDIO DECLARATIONS -->
-
+<div class="content">
     <nav class='navbar transparent navbar-inverse custom-nav navbar navbar-expand-md fixed-top'>
 
         <img class="icon" src="/css/spot.png"> &nbsp; MQP
@@ -62,34 +70,11 @@
             <span class='navbar-toggler-icon'></span>
         </button>
 
-
     </nav>
-    <nav class="nav" style="opacity: 1;">
-        <a href="#" class="t1">
-            The Basics
-            <div class="underline"></div>
-        </a>
 
-        <a href="#" class="t1">
-            Data visualizations
-            <div class="underline"></div>
-        </a>
-
-        <a href="#" class="t1">
-            The Evaluation
-            <div class="underline"></div>
-        </a>
-
-        <a href="#" class="t1">
-            Results
-            <div class="underline"></div>
-        </a>
-    </nav>
     <main role='main' class='container'>
 
-
-
-        <h1 class="header" align='center'>Let's Start with the Basics</h1>
+        <h1 id="basics" class="header" align='center'>Let's Start with the Basics</h1>
         <!--<span class="sexy_line"></span>-->
         <br>
         <p class="description">
@@ -100,7 +85,7 @@
         <br>
 
 
-        <h1 class="header" align='center'>State-of-the-Art Approaches</h1>
+        <h1 id="state" class="header" align='center'>State-of-the-Art Approaches</h1>
         <br>
         <table class="graphHolder">
             <tr>
@@ -116,8 +101,19 @@
         <br>
         <br>
 
-        <h1 class="header" align='center'>The Data</h1>
-       
+        <h1 id="dataset" class="header" align='center'>The Data</h1>
+        <table class="graphHolder">
+            <tr>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>MPD Dataset</h1>
+                </td>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>Sample Playlist</h1>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
         <table class="graphHolder">
         <!-- First Radar Graph -->
             <tr class="padding-fix">
@@ -126,7 +122,9 @@
                 </td>
             </tr>
         </table>
-        <h1 class="header" align='center'>Evaluation Results</h1>
+        
+
+        <h1 id="eval" class="header" align='center'>Evaluation Results</h1>
                     <!-- Container Div for all visualizations -->
         <table class="graphHolder">
             <tr>
@@ -152,7 +150,7 @@
 
 
 
-        <h1 class="header" align='center'>So, How did we do?</h1>
+        <h1 id="conclusions" class="header" align='center'>So, How did we do?</h1>
         <br>
 
         <!-- START CONTENT FRAME -->
@@ -328,6 +326,7 @@
 
         <br>
     </main>
+</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>

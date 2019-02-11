@@ -304,3 +304,11 @@ div.content {
     float: none;
   }
 }
+
+img.collabIMG {
+  width: 300px;
+  height: 300px;
+  padding: 15px;
+  border-radius: 25px;
+  text-align: left;
+}

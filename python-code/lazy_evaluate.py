@@ -1,12 +1,12 @@
 import sys
-from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization, torch_matrix_factorization
+from recommender_systems import user_based, item_based, matrix_factorization, feature_matrix_factorization, torch_matrix_factorization, nn_mf
 from recommender_systems.modules import matrix, helpers, evaluation
 from mongodb import mongodb_communicate
 import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 10,
+        "number_of_runs": 1,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },
@@ -62,7 +62,8 @@ for run in range(params["number_of_runs"]):
         factorized_matrices['feature_mf'] = feature_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matrix)
     if 'torch_mf' in rec_systems:
         factorized_matrices['torch_mf'] = torch_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
-        # print(factorized_matrices['torch_mf'])
+    if 'nn_mf' in rec_systems:
+        factorized_matrices['nn_mf'] = nn_mf.get_factorized_matrix(mongo_collection, track_playlist_matrix)
 
     for input_playlist_index in range(params["number_of_playlists_to_test"]):
         input_pid = indexed_pids[input_playlist_index]
@@ -79,6 +80,8 @@ for run in range(params["number_of_runs"]):
                 ranked_tracks = feature_matrix_factorization.get_ranked_tracks(factorized_matrices['feature_mf'], input_playlist_index, indexed_tids)
             elif rec_system == 'torch_mf':
                 ranked_tracks = torch_matrix_factorization.get_ranked_tracks(factorized_matrices['torch_mf'], input_playlist_index, indexed_tids)
+            elif rec_system == 'nn_mf':
+                ranked_tracks = nn_mf.get_ranked_tracks(factorized_matrices['nn_mf'], input_playlist_index, indexed_tids)
             for N in range(1, params["max_N"] + 1):
                 recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks[input_pid])
                 # me = []

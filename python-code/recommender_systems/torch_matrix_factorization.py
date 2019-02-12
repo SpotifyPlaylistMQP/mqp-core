@@ -79,6 +79,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
             gradient = torch.mm(torch.unsqueeze(error[user], 0), item_features) - params["regularization"] * user_features[user]
             user_features[user] = user_features[user] + params["learning_rate"] * gradient
 
+    print(torch.t(torch.mm(item_features, torch.t(user_features))).tolist())
     return torch.t(torch.mm(item_features, torch.t(user_features))).tolist()
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):

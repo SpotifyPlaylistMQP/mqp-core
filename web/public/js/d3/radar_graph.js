@@ -1,31 +1,12 @@
-var cfg = {
- radius: 5,
- w: 600,
- h: 600,
- factor: 1,
- factorLegend: .85,
- levels: 3,
- maxValue: 0,
- radians: 2 * Math.PI,
- opacityArea: 0.5,
- ToRight: 5,
- TranslateX: 80,
- TranslateY: 30,
- ExtraWidthX: 50,
- ExtraWidthY: 50,
- color: d3.scaleOrdinal().range(["#6F257F", "#CA0D59"])
-};
-
-// Config for the Radar chart
-var options = {
-    w: width,
-    h: height,
-    maxValue: 100,
-    levels: 5,
-    ExtraWidthX: 300
-}
-
-function drawRadarChart(id, d, d2){
+function drawRadarChart(id, d, d2, cfg){
+    // Config for the Radar chart
+    var options = {
+        w: width,
+        h: height,
+        maxValue: 100,
+        levels: 5,
+        ExtraWidthX: 300
+    }
     if('undefined' !== typeof options){
       for(var i in options){
       if('undefined' !== typeof options[i]){
@@ -110,7 +91,7 @@ function drawRadarChart(id, d, d2){
       .attr('dy', '0.71em')
       .attr('fill', '#000')
       .style('font-weight', 'bold')
-      .attr("transform", function(d, i){return "translate(0, -10)"})
+      .attr("transform", function(d, i){return "translate(5, -10)"})
       .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
       .attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
 
@@ -126,6 +107,24 @@ function drawRadarChart(id, d, d2){
 };
 
 function redraw(song_name){
+  //
+  var cfg_3 = {
+      radius: 5,
+      w: 600,
+      h: 600,
+      factor: 1,
+      factorLegend: .85,
+      levels: 3,
+      maxValue: 0,
+      radians: 2 * Math.PI,
+      opacityArea: 0.5,
+      ToRight: 5,
+      TranslateX: 80,
+      TranslateY: 30,
+      ExtraWidthX: 50,
+      ExtraWidthY: 50,
+      color: d3.scaleOrdinal().range(["#F6F270", "#25FFF0"])
+  };
   // var test_name = 'song_two';
   var namecase = '/data/song_averages/'.concat(song_name).concat('.json');
   console.log(namecase);
@@ -136,12 +135,12 @@ function redraw(song_name){
           if (error) {
               console.error('Not again: ' + error);
           } else {
-              drawRadarChart("#results_radar_chart", file2, file1);
+              drawRadarChart("#results_radar_chart", file2, file1, cfg_3);
           };
   });
 };
 
-function draw_data(d,g,cfg,total, tooltip, Format){
+function draw_data(d, g, cfg, total, tooltip, Format){
   d.forEach(function(y, x){
     dataValues = [];
     g.selectAll(".nodes")
@@ -195,9 +194,9 @@ function draw_data(d,g,cfg,total, tooltip, Format){
     .attr('r', cfg.radius)
     .attr("alt", function(j){return Math.max(j.value, 0)})
     .attr("cx", function(j, i){
-      dataValues.push([
-      cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
-      cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
+        dataValues.push([
+        cfg.w/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total)),
+        cfg.h/2*(1-(parseFloat(Math.max(j.value, 0))/cfg.maxValue)*cfg.factor*Math.cos(i*cfg.radians/total))
     ]);
     return cfg.w/2*(1-(Math.max(j.value, 0)/cfg.maxValue)*cfg.factor*Math.sin(i*cfg.radians/total));
     })

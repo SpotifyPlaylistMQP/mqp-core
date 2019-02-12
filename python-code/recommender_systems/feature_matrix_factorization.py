@@ -17,10 +17,13 @@ default_params = {
         "c": 1e-13
     },
     "mpd_square_1000": {
-        "alpha": 1,
-        "beta": 10,
-        "latent_features": 30,
-        "steps": 200,
+        "alpha": 10000,
+        "regularization": 100,
+        "latent_features": 100,
+        "steps": 300,
+        "error_limit": 1e-6,
+        "fit_error_limit": 1e-5,
+        "learning_rate": 1e-7,
         "c": 1e-5
     }
 }

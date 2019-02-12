@@ -5,6 +5,45 @@
 var width = 400,
     height = 400;
 
+//
+var cfg = {
+    radius: 5,
+    w: 600,
+    h: 600,
+    factor: 1,
+    factorLegend: .85,
+    levels: 3,
+    maxValue: 0,
+    radians: 2 * Math.PI,
+    opacityArea: 0.5,
+    ToRight: 5,
+    TranslateX: 80,
+    TranslateY: 30,
+    ExtraWidthX: 50,
+    ExtraWidthY: 50,
+    color: d3.scaleOrdinal().range(["#F6F270", "#FF5733"])
+};
+
+//
+var cfg_2 = {
+    radius: 5,
+    w: 600,
+    h: 600,
+    factor: 1,
+    factorLegend: .85,
+    levels: 3,
+    maxValue: 0,
+    radians: 2 * Math.PI,
+    opacityArea: 0.5,
+    ToRight: 5,
+    TranslateX: 80,
+    TranslateY: 30,
+    ExtraWidthX: 50,
+    ExtraWidthY: 50,
+    color: d3.scaleOrdinal().range(["#F6F270", "#25FFF0"])
+};
+
+
 // Queue and load the dataset (JSON/CSV) files
 function d3_god(){
     //In the beginning d3_god created the CSV and the Data
@@ -33,9 +72,9 @@ function bob_the_builder(file1, file2, file3, play_avg, song_one_avg, data_avg){
         //Build the table
         .defer(build_table, file1, file2)
         //Build Playlist vs Dataset radar graph
-        .defer(drawRadarChart, "#dataset_radar_chart", play_avg, data_avg)
+        .defer(drawRadarChart, "#dataset_radar_chart", play_avg, data_avg, cfg)
         //Build Recommended Songs vs Playlist radar graph
-        .defer(drawRadarChart_playlist, "#results_radar_chart", play_avg, song_one_avg)
+        .defer(drawRadarChart, "#results_radar_chart", play_avg, song_one_avg, cfg_2)
         //Wait for successful completion
         .await(function(error) {
             if (error) {

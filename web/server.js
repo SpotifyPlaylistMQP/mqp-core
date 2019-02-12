@@ -26,13 +26,26 @@ var server = http.createServer(function (req, res) {
         case '/css/bootstrap.min.css.map':
             sendFile(res, 'public/css/bootstrap.min.css.map', 'text/javascript')
             break
+        // - - - - - Image Cases - - - - -
         case '/css/spot.png':
             sendFile(res, 'public/css/spot.png', 'image/png')
             break
         case '/css/images/play.png':
             sendFile(res, 'public/css/images/play.png', 'image/png')
             break
-            
+        case '/css/images/PAUSE.png':
+            sendFile(res, 'public/css/images/PAUSE.png', 'image/png')
+            break
+        case '/css/images/equations/collabGIF.gif':
+            sendFile(res, 'public/css/images/equations/collabGIF.gif', 'image/gif')
+            break
+        case '/css/images/equations/collab.svg':
+            sendFile(res, 'public/css/images/equations/collab.svg', 'image/svg+xml')
+            break
+        case '/css/images/equations/mf.svg':
+            sendFile(res, 'public/css/images/equations/mf.svg', 'image/svg+xml')
+            break
+
         // - - - - - PLaylist Images - - - -
 
         case '/css/images/jungle.jpg':
@@ -62,9 +75,42 @@ var server = http.createServer(function (req, res) {
         case '/css/images/forest.jpg':
             sendFile(res, 'public/css/images/forest.jpg', 'image/jpg')
             break
-        case '/css/audio/xoTour.mp3':
+
+        // - - - - - AUDIO CASES - - - -
+
+        case '/css/audio/xotour.mp3':
             sendFile(res, 'public/css/audio/xoTour.mp3', 'audio/mp3')
             break
+        case '/css/audio/modelz.mp3':
+            sendFile(res, 'public/css/audio/modelz.mp3', 'audio/mp3')
+            break
+        case '/css/audio/chill.mp3':
+            sendFile(res, 'public/css/audio/chill.mp3', 'audio/mp3')
+            break
+        case '/css/audio/x.mp3':
+            sendFile(res, 'public/css/audio/x.mp3', 'audio/mp3')
+            break
+        case '/css/audio/youwasright.mp3':
+            sendFile(res, 'public/css/audio/youwasright.mp3', 'audio/mp3')
+            break
+        case '/css/audio/moneylonger.mp3':
+            sendFile(res, 'public/css/audio/moneylonger.mp3', 'audio/mp3')
+            break
+        case '/css/audio/trapqueen.mp3':
+            sendFile(res, 'public/css/audio/trapqueen.mp3', 'audio/mp3')
+            break
+        case '/css/audio/unforgettable.mp3':
+            sendFile(res, 'public/css/audio/unforgettable.mp3', 'audio/mp3')
+            break
+        case '/css/audio/swang.mp3':
+            sendFile(res, 'public/css/audio/swang.mp3', 'audio/mp3')
+            break
+        case '/css/audio/jumpman.mp3':
+            sendFile(res, 'public/css/audio/jumpman.mp3', 'audio/mp3')
+            break
+        // - - - - - END AUDIO CASES - - - - -
+
+
         // - - - - - JS Cases - - - - -
         /*
             Section 1: D3 JS files

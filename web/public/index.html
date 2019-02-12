@@ -15,44 +15,66 @@
     <link href='/css/datavis.css' rel='stylesheet'>
     <style>#content > #right > .dose > .dosesingle,#content > #center > .dose > .dosesingle{display:none !important;}</style>
 </head>
+
+
 <!-- Body -->
 <body data-gr-c-s-loaded='true' onload="start_up()">
+<div class="sidebar">
+  <a class="active" href="#basics">The Basics</a>
+  <a href="#state">State-of-the-Art</a>
+  <a href="#dataset">The Datatset</a>
+  <a href="#eval">Evaluations</a>
+  <a href="#conclusions">Conclusions</a>
+</div>
+
+
+<!-- AUDIO DECLARATIONS -->
 <audio id="X0">
-  <source src="/css/audio/xoTour.mp3" type="audio/mpeg">
+  <source src="/css/audio/xotour.mp3" type="audio/mpeg">
 </audio>
+<audio id="MODELZ">
+  <source src="/css/audio/modelz.mp3" type="audio/mpeg">
+</audio>
+<audio id="JUMP">
+  <source src="/css/audio/jumpman.mp3" type="audio/mpeg">
+</audio>
+<audio id="RIGHT">
+  <source src="/css/audio/youwasright.mp3" type="audio/mpeg">
+</audio>
+<audio id="CHILL">
+  <source src="/css/audio/chill.mp3" type="audio/mpeg">
+</audio>
+<audio id="MONEY">
+  <source src="/css/audio/moneylonger.mp3" type="audio/mpeg">
+</audio>
+<audio id="SWANG">
+  <source src="/css/audio/swang.mp3" type="audio/mpeg">
+</audio>
+<audio id="X">
+  <source src="/css/audio/x.mp3" type="audio/mpeg">
+</audio>
+<audio id="QUEEN">
+  <source src="/css/audio/trapqueen.mp3" type="audio/mpeg">
+</audio>
+<audio id="FORGET">
+  <source src="/css/audio/unforgettable.mp3" type="audio/mpeg">
+</audio>
+
+<!-- END AUDIO DECLARATIONS -->
+<div class="content">
     <nav class='navbar transparent navbar-inverse custom-nav navbar navbar-expand-md fixed-top'>
 
-        <img class="icon" src="/css/spot.png"> &nbsp; MQP
+        <img class="icon" src="/css/spot.png">
 
         <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarsExampleDefault' aria-controls='navbarsExampleDefault' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
         </button>
 
-
     </nav>
-    <nav class="nav" style="opacity: 1;">
-        <a href="#" class="t1">
-            The Basics
-            <div class="underline"></div>
-        </a>
 
-        <a href="#" class="t1">
-            Data visualizations
-            <div class="underline"></div>
-        </a>
-
-        <a href="#" class="t1">
-            The Evaluation
-            <div class="underline"></div>
-        </a>
-
-        <a href="#" class="t1">
-            Results
-            <div class="underline"></div>
-        </a>
-    </nav>
     <main role='main' class='container'>
-        <h1 class="header" align='center'>Let's Start with the Basics</h1>
+
+        <h1 id="basics" class="header" align='center'>Let's Start with the Basics</h1>
         <!--<span class="sexy_line"></span>-->
         <br>
         <p class="description">
@@ -60,7 +82,69 @@
             <br><br>
             Services like Spotify have detailed recommender systems already in place utilizing state-of-the-art approaches like matrix factorization and collaborative filtering for recommending songs based on user preferences. Below, we'll walk you through how we went about optimizing our system along with performing a demo on an example playlist.
         </p>
-        <!-- Container Div for all visualizations -->
+        <br>
+
+
+        <h1 id="state" class="header" align='center'>State-of-the-Art Approaches</h1>
+        <br>
+        <table class="graphHolder">
+            <tr>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'><u>Collaborative Filtering</u></h2>
+                        <br>
+                        <div>
+                            <object class="collabEquation" data="/css/images/equations/collab.svg" type="image/svg+xml"></object>
+                            <br>
+                            <img class="collabIMG" src="/css/images/equations/collabGIF.gif"></img>
+                            <br>
+                        </div>
+                </td>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'><u>Matrix Factorization</u></h2>
+                        <br>
+                        <div>
+                            <object class="mfEquation" data="/css/images/equations/mf.svg" type="image/svg+xml"></object>
+                        </div>
+                </td>
+            </tr>
+            <tr>
+                <br>
+                <td colspan="2">
+                    <h2 class="subHeader" align='center'>Our Approach</h2>
+                    <br>
+                </td>
+            </tr>
+
+        </table>
+        <br>
+        <br>
+        <br>
+
+        <h1 id="dataset" class="header" align='center'>The Data</h1>
+        <table class="graphHolder">
+            <tr>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>MPD Dataset</h1>
+                </td>
+                <td class="fitty">
+                    <h2 class="subHeader" align='center'>Sample Playlist</h1>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <table class="graphHolder">
+        <!-- First Radar Graph -->
+            <tr class="padding-fix">
+                <td class="bigCell" colspan="2">
+                    <div id="dataset_radar_chart"></div>
+                </td>
+            </tr>
+        </table>
+        
+
+        <h1 id="eval" class="header" align='center'>Evaluation Results</h1>
+                    <!-- Container Div for all visualizations -->
         <table class="graphHolder">
             <tr>
                 <td class="graphCell">
@@ -81,7 +165,11 @@
         <br>
         <br>
         <br>
-        <h1 class="header" align='center'>So, How did we do?</h1>
+
+
+
+
+        <h1 id="conclusions" class="header" align='center'>So, How did we do?</h1>
         <br>
 
         <!-- START CONTENT FRAME -->
@@ -107,10 +195,10 @@
                     <table class="album-holder">
                         <tr class="album-row">
                             <td class="album">
-                                <img class="album" src ="/css/images/luv2.jpg" onclick="redraw('song_one')">
+                                <img class="album hvr-bob" src ="/css/images/luv2.jpg" onclick="redraw('song_one')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img onclick="playAudio()" class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic1" onclick="changeImage(xo, 'pic1')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Lil Uzi Vert</b>
@@ -121,10 +209,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/forest.jpg" onclick="redraw('song_two')">
+                                <img class="album hvr-bob" src ="/css/images/forest.jpg" onclick="redraw('song_two')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic2" onclick="changeImage(modelz, 'pic2')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>J Cole</b>
@@ -135,10 +223,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/wattba.jpg" onclick="redraw('song_three')">
+                                <img class="album hvr-bob" src ="/css/images/wattba.jpg" onclick="redraw('song_three')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic3" onclick="changeImage(jump, 'pic3')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Drake & Future</b>
@@ -149,10 +237,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/theworld.jpg" onclick="redraw('song_four')">
+                                <img class="album hvr-bob" src ="/css/images/theworld.jpg" onclick="redraw('song_four')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic4" onclick="changeImage(right, 'pic4')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Lil Uzi Vert</b>
@@ -163,10 +251,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/chill.jpg" onclick="redraw('song_five')">
+                                <img class="album hvr-bob" src ="/css/images/chill.jpg" onclick="redraw('song_five')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic5" onclick="changeImage(chill, 'pic5')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Rob Stone</b>
@@ -179,10 +267,10 @@
 
                         <tr class="album-row">
                             <td class="album">
-                                <img class="album" src ="/css/images/theworld.jpg" onclick="redraw('song_six')">
+                                <img class="album hvr-bob" src ="/css/images/theworld.jpg" onclick="redraw('song_six')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic6" onclick="changeImage(money, 'pic6')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Lil Uzi Vert</b>
@@ -193,10 +281,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/sremm.jpg" onclick="redraw('song_seven')">
+                                <img class="album hvr-bob" src ="/css/images/sremm.jpg" onclick="redraw('song_seven')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic7" onclick="changeImage(swang, 'pic7')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Rae Sremmurd</b>
@@ -207,10 +295,10 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/savage.jpg" onclick="redraw('song_eight')">
+                                <img class="album hvr-bob" src ="/css/images/savage.jpg" onclick="redraw('song_eight')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic8" onclick="changeImage(x, 'pic8')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>21 Savage ft. Future</b>
@@ -221,24 +309,24 @@
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/fetty.jpg" onclick="redraw('song_nine')">
+                                <img class="album hvr-bob" src ="/css/images/fetty.jpg" onclick="redraw('song_nine')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic9" onclick="changeImage(queen, 'pic9')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>Fetty Wap</b>
                                         <br>
                                         <i>Trap Queen<i>
                                     </div>
-                                </div>    
+                                </div>
                             </td>
 
                             <td class="album">
-                                <img class="album" src ="/css/images/jungle.jpg" onclick="redraw('song_ten')">
+                                <img class="album hvr-bob" src ="/css/images/jungle.jpg" onclick="redraw('song_ten')">
                                 <div class="holder">
                                     <div class="playMusic">
-                                        <img class="playButton hvr-grow" src="/css/images/play.png">
+                                        <img id="pic10" onclick="changeImage(forget, 'pic10')" class="playButton hvr-grow" src="/css/images/play.png">
                                     </div>
                                     <div class="songInfo">
                                         <b>French Montana</b>
@@ -257,6 +345,7 @@
 
         <br>
     </main>
+</div>
 
     <!-- Bootstrap core JavaScript -->
     <script src='/js/popper.js'></script>
@@ -277,10 +366,37 @@ function start_up(){
 </script>
 
 <script>
-var x = document.getElementById("X0"); 
 
-function playAudio() { 
-  x.play(); 
-} 
+/* SONG VARIABLE DECLARATIONS */
+var xo = document.getElementById("X0");
+var modelz = document.getElementById("MODELZ");
+var jump = document.getElementById("JUMP");
+var right = document.getElementById("RIGHT");
+var chill = document.getElementById("CHILL");
+var money = document.getElementById("MONEY");
+var swang = document.getElementById("SWANG");
+var x = document.getElementById("X");
+var queen = document.getElementById("QUEEN");
+var forget = document.getElementById("FORGET");
+/* END SONG DECLARATIONS */
+
+
+var newsrc = "PAUSE.png"
+
+function changeImage(song, pic) {
+  if (newsrc == "PAUSE.png" ) {
+    document.images[pic].src = "/css/images/PAUSE.png";
+    song.play();
+    newsrc = "play.png";
+
+  }
+  else {
+    document.images[pic].src = "/css/images/play.png";
+    song.pause();
+    newsrc = "PAUSE.png";
+  }
+}
+
+
 </script>
 </html>

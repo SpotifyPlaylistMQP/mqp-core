@@ -6,14 +6,11 @@ from recommender_systems.modules import helpers
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 1000000,
-        "regularization": 100,
-        "steps": 50,
-        "latent_features": 200,
-        "learning_rate": 1e-10,
-        "percent_zeros": 0.5,
-        "optimizer": "SGD",
-        "embeddings": 0
+        "alpha": 10000000,
+        "regularization": 1e-09,
+        "latent_features": 100,
+        "learning_rate": 1e-11,
+        "percent_zeros": 1
     },
     "mpd_square_1000": {
         "alpha": 10,
@@ -61,9 +58,9 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
 
     for row, col in zip(*(rows, cols)):
         # Turn data into variables
-        rating = Variable(torch.FloatTensor([track_playlist_matrix[row, col]]))
-        row = Variable(torch.LongTensor([np.long(row)]))
-        col = Variable(torch.LongTensor([np.long(col)]))
+        rating = torch.FloatTensor([track_playlist_matrix[row, col]])
+        row = torch.LongTensor([np.long(row)])
+        col = torch.LongTensor([np.long(col)])
 
         # Predict and calculate loss
         prediction = model.forward(row, col)

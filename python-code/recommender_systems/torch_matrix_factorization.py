@@ -1,14 +1,13 @@
 import torch
 from recommender_systems.modules import helpers
-from torch.autograd import Variable
 
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 10000,
-        "latent_features": 100,
-        "steps": 500,
-        "learning_rate": 1e-7
+        "alpha": 1,
+        "latent_features": 300,
+        "steps": 250,
+        "learning_rate": 1e-3
     },
     "mpd_square_1000": {
         "alpha": 10000,
@@ -17,6 +16,9 @@ default_params = {
         "learning_rate": 1e-7
     }
 }
+
+def sigmoid(x):
+    return 1 / (1 + torch.exp(-x))
 
 def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     if params is None:
@@ -29,7 +31,9 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
 
     # Alternating Least Squares
     for i in range(1, params['steps'] + 1):
-        loss = (track_playlist_matrix - torch.mm(item_features, torch.t(user_features))).pow(2).sum()
+        # predictions = sigmoid(torch.mm(item_features, torch.t(user_features))) * params["alpha"]
+        predictions = torch.mm(item_features, torch.t(user_features))
+        loss = (track_playlist_matrix - predictions).pow(2).sum()
         loss.backward()
         with torch.no_grad():
             item_features -= params["learning_rate"] * item_features.grad

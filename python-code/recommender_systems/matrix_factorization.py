@@ -1,31 +1,24 @@
 from recommender_systems.modules import helpers
 import numpy as np
-from scipy import linalg
 from numpy import dot
-
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 10000,
-        "regularization": 1,
-        "latent_features": 100,
-        "steps": 500,
-        "error_limit": 1e-6,
-        "fit_error_limit": 1e-5,
-        "learning_rate": 1e-7
+        "alpha": 1,
+        "latent_features": 300,
+        "steps": 250,
+        "learning_rate": 1e-3,
+        "spotify_feature_weight": 1e-5
     },
     "mpd_square_1000": {
-        "alpha": 10000,
-        "regularization": 100,
-        "latent_features": 100,
-        "steps": 300,
-        "error_limit": 1e-6,
-        "fit_error_limit": 1e-5,
+        "alpha": 1e4,
+        "latent_features": 300,
+        "steps": 250,
         "learning_rate": 1e-7
     }
 }
 
-def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
+def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None, feature_matrix=None):
     if params is None:
         params = default_params[mongo_collection]
     track_playlist_matrix = np.array(track_playlist_matrix) * params["alpha"]
@@ -38,16 +31,18 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     # Alternating least squares
     for i in range(1, params['steps'] + 1):
         # Fix item factors
-        error = track_playlist_matrix - dot(item_features, user_features.T)
+        loss = track_playlist_matrix - dot(item_features, user_features.T)
         for item in range(items):
-            gradient = dot(error[item], user_features) - params["regularization"] * item_features[item]
-            item_features[item] = item_features[item] + params["learning_rate"] * gradient
+            item_features[item] += 2 * params["learning_rate"] * dot(loss[item], user_features)
+            if feature_matrix is not None:
+                item_features[item][params["latent_features"] - 3] = feature_matrix[item][0] * params["spotify_feature_weight"]
+                item_features[item][params["latent_features"] - 2] = feature_matrix[item][1] * params["spotify_feature_weight"]
+                item_features[item][params["latent_features"] - 1] = feature_matrix[item][2] * params["spotify_feature_weight"]
 
         # Fix user factors
-        error = (track_playlist_matrix - dot(item_features, user_features.T)).T
+        loss = (track_playlist_matrix - dot(item_features, user_features.T)).T
         for user in range(users):
-            gradient = dot(error[user], item_features) - params["regularization"] * user_features[user]
-            user_features[user] = user_features[user] + params["learning_rate"] * gradient
+            user_features[user] += 2 * params["learning_rate"] * dot(loss[user], item_features)
 
     return dot(item_features, user_features.T).T.tolist()
 

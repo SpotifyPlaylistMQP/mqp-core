@@ -33,29 +33,27 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matri
         params = default_params[mongo_collection]
     track_playlist_matrix = np.array(track_playlist_matrix) * params["alpha"]
 
-    # initial matrices. item_factors is random [0,1] and user_factors is item_factors\X.
+    # initial matrices. item_features is random [0,1] and user_features is item_features\X.
     items, users = track_playlist_matrix.shape
-    item_factors = np.random.rand(items, params['latent_features'])
-    user_factors = np.random.rand(users, params['latent_features'])
+    item_features = np.random.rand(items, params['latent_features'])
+    user_features = np.random.rand(users, params['latent_features'])
 
     # Alternating least squares
     for i in range(1, params['steps'] + 1):
         # Fix item factors
-        error = track_playlist_matrix - dot(item_factors, user_factors.T)
+        loss = track_playlist_matrix - dot(item_features, user_features.T)
         for item in range(items):
-            gradient = dot(error[item], user_factors) - params["regularization"] * item_factors[item]
-            item_factors[item] = item_factors[item] + params["learning_rate"] * gradient
-            item_factors[item][params["latent_features"] - 3] = feature_matrix[item][0] * params["c"]
-            item_factors[item][params["latent_features"] - 2] = feature_matrix[item][1] * params["c"]
-            item_factors[item][params["latent_features"] - 1] = feature_matrix[item][2] * params["c"]
+            item_features[item] += 2 * params["learning_rate"] * dot(loss[item], user_features)
+            item_features[item][params["latent_features"] - 3] = feature_matrix[item][0] * params["spotify_feature_weight"]
+            item_features[item][params["latent_features"] - 2] = feature_matrix[item][1] * params["spotify_feature_weight"]
+            item_features[item][params["latent_features"] - 1] = feature_matrix[item][2] * params["spotify_feature_weight"]
 
         # Fix user factors
-        error = (track_playlist_matrix - dot(item_factors, user_factors.T)).T
+        loss = (track_playlist_matrix - dot(item_features, user_features.T)).T
         for user in range(users):
-            gradient = dot(error[user], item_factors) - params["regularization"] * user_factors[user]
-            user_factors[user] = user_factors[user] + params["learning_rate"] * gradient
+            user_features[user] += 2 * params["learning_rate"] * dot(loss[user], item_features)
 
-    return dot(item_factors, user_factors.T).T.tolist()
+    return dot(item_features, user_features.T).T.tolist()
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
     ranked_tracks = []

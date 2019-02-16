@@ -6,7 +6,7 @@ import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 10,
+        "number_of_runs": 1,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },
@@ -59,7 +59,7 @@ for run in range(params["number_of_runs"]):
     if 'mf' in rec_systems:
         factorized_matrices['mf'] = matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
     if 'feature_mf' in rec_systems:
-        factorized_matrices['feature_mf'] = feature_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matrix)
+        factorized_matrices['feature_mf'] = matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix, feature_matrix=feature_matrix)
     if 'torch_mf' in rec_systems:
         factorized_matrices['torch_mf'] = torch_matrix_factorization.get_factorized_matrix(mongo_collection, track_playlist_matrix)
     if 'nn_mf' in rec_systems:

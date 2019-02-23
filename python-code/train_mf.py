@@ -6,14 +6,14 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "number_of_runs": 10,
-        "alpha_set": [1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10],
-        "regularization_set": [1e10, 1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10],
-        "latent_features_set": [5, 10, 20, 50, 75, 100],
-        "steps_set": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+        "number_of_runs": 1,
+        "alpha_set": [1],
+        "regularization_set": [1],
+        "latent_features_set": [5, 10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 10000],
+        "steps_set": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
         "error_limit_set": [1e-6],
         "fit_error_limit_set": [1e-5],
-        "learning_rate_set": [1e-6, 1e-7, 1e-8, 1e-10],
+        "learning_rate_set": [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-7, 1e-9, 1e-10, 1e-11],
         "number_of_playlists_to_test": 100,
     },
     "mpd_square_1000": {

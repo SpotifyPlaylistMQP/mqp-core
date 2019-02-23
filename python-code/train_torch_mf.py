@@ -7,11 +7,11 @@ import time
 all_params = {
     "mpd_square_100": {
         "alpha_set": [1],
-        "latent_features_set": [300],
-        "steps_set": [250],
-        "learning_rate_set": [1, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8, 1e-9, 1e-10],
+        "latent_features_set": [50, 100, 150, 200, 250, 300, 400, 500],
+        "steps_set": [200, 300, 400, 500, 600, 700, 800, 900, 1000],
+        "learning_rate_set": [1, 5e-1, 1e-1, 5e-2],
         "number_of_playlists_to_test": 100,
-        "number_of_runs": 30
+        "number_of_runs": 10
     },
     "mpd_square_1000": {
         "alpha_set": [1e6, 1e4, 1e2, 1, 1e-2, 1e-4],

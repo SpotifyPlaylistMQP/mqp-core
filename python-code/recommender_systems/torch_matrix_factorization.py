@@ -4,10 +4,10 @@ from recommender_systems.modules import helpers
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 1e4,
-        "latent_features": 300,
-        "steps": 250,
-        "learning_rate": 1e-7
+        "alpha": 1,
+        "latent_features": 150,
+        "steps": 900,
+        "learning_rate": 0.1
     },
     "mpd_square_1000": {
         "alpha": 10000,
@@ -18,21 +18,24 @@ default_params = {
 }
 
 def sigmoid(x):
-    return 1 / (1 + torch.exp(-x))
+    return 1 / (1 + torch.exp(-10* x + 5))
+
+def normalize(x):
+    return (x - torch.min(x).item())/(torch.max(x).item() - torch.min(x).item())
 
 def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     if params is None:
         params = default_params[mongo_collection]
 
     # initial matrices. item_features is random [0,1] and user_features is item_features\X.
-    track_playlist_matrix = torch.Tensor(track_playlist_matrix) * params["alpha"]
+    track_playlist_matrix = torch.Tensor(track_playlist_matrix)
     item_features = torch.rand(len(track_playlist_matrix), params['latent_features'], requires_grad=True)
     user_features = torch.rand(len(track_playlist_matrix[0]), params['latent_features'], requires_grad=True)
 
     # Alternating Least Squares
     for i in range(1, params['steps'] + 1):
-        # predictions = sigmoid(torch.mm(item_features, torch.t(user_features))) * params["alpha"]
-        predictions = torch.mm(item_features, torch.t(user_features))
+        # predictions = sigmoid(normalize(torch.mm(item_features, torch.t(user_features))))
+        predictions = normalize(torch.mm(item_features, torch.t(user_features)))
         loss = (track_playlist_matrix - predictions).pow(2).sum()
         loss.backward()
         with torch.no_grad():
@@ -41,7 +44,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
             item_features.grad.zero_()
             user_features.grad.zero_()
 
-    return torch.t(torch.mm(item_features, torch.t(user_features))).tolist()
+    return normalize(torch.t(torch.mm(item_features, torch.t(user_features)))).tolist()
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
     ranked_tracks = []

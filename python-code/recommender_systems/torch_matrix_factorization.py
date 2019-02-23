@@ -7,7 +7,8 @@ default_params = {
         "alpha": 1,
         "latent_features": 150,
         "steps": 900,
-        "learning_rate": 0.1
+        "learning_rate": 0.1,
+        "sigmoid": False
     },
     "mpd_square_1000": {
         "alpha": 10000,
@@ -34,8 +35,11 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
 
     # Alternating Least Squares
     for i in range(1, params['steps'] + 1):
+
         # predictions = sigmoid(normalize(torch.mm(item_features, torch.t(user_features))))
-        predictions = normalize(torch.mm(item_features, torch.t(user_features)))
+        predictions = sigmoid(normalize(torch.mm(item_features, torch.t(user_features)))) \
+            if params["sigmoid"] \
+            else normalize(torch.mm(item_features, torch.t(user_features)))
         loss = (track_playlist_matrix - predictions).pow(2).sum()
         loss.backward()
         with torch.no_grad():
@@ -44,7 +48,8 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
             item_features.grad.zero_()
             user_features.grad.zero_()
 
-    return normalize(torch.t(torch.mm(item_features, torch.t(user_features)))).tolist()
+    return sigmoid(normalize(torch.t(torch.mm(item_features, torch.t(user_features))))).tolist() \
+        if params["sigmoid"] else normalize(torch.t(torch.mm(item_features, torch.t(user_features)))).tolist()
 
 def get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids):
     ranked_tracks = []

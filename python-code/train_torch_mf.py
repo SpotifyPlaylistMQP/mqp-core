@@ -8,8 +8,8 @@ all_params = {
     "mpd_square_100": {
         "alpha_set": [1],
         "latent_features_set": [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
-        "steps_set": [100, 200, 300, 400, 500, 600, 700],
-        "learning_rate_set": [0.1, 0.75, 0.05],
+        "steps_set": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+        "learning_rate_set": [1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001],
         "number_of_playlists_to_test": 100,
         "number_of_runs": 10
     },

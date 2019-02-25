@@ -10,24 +10,22 @@ default_params = {
         "learning_rate": 0.9
     },
     "mpd_square_1000": {
-        "alpha": 10000,
-        "latent_features": 100,
-        "steps": 500,
-        "learning_rate": 1e-7
+        "alpha": 1,
+        "latent_features": 75,
+        "steps": 75,
+        "learning_rate": 100
     }
 }
-
-# If sigmoid, 1, 350, 1000
-
-def sigmoid(x):
-    return 1 / (1 + torch.exp(-10* x + 5))
-
-def normalize(x):
-    return (x - torch.min(x).item())/(torch.max(x).item() - torch.min(x).item())
 
 def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     if params is None:
         params = default_params[mongo_collection]
+
+    def sigmoid(x):
+        return 1 / (1 + torch.exp(-10 * x + 5)) if mongo_collection == "mpd_square_100" else x
+
+    def normalize(x):
+        return (x - torch.min(x).item())/(torch.max(x).item() - torch.min(x).item()) if mongo_collection == "mpd_square_100" else torch.nn.functional.normalize(x)
 
     # initial matrices. item_features is random [0,1] and user_features is item_features\X.
     track_playlist_matrix = torch.t(torch.Tensor(track_playlist_matrix))

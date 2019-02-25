@@ -11,9 +11,9 @@ default_params = {
     },
     "mpd_square_1000": {
         "alpha": 1,
-        "latent_features": 75,
-        "steps": 75,
-        "learning_rate": 100
+        "latent_features": 25,
+        "steps": 50,
+        "learning_rate": 1
     }
 }
 

@@ -11,10 +11,11 @@ default_params = {
         "spotify_feature_weight": 1e-5
     },
     "mpd_square_1000": {
-        "alpha": 1e4,
-        "latent_features": 300,
-        "steps": 250,
-        "learning_rate": 1e-7
+        "alpha": 10000,
+        "latent_features": 20,
+        "steps": 500,
+        "learning_rate": 1e-6,
+        "spotify_feature_weight": 1e-5
     }
 }
 

@@ -5,9 +5,9 @@ from recommender_systems.modules import helpers
 default_params = {
     "mpd_square_100": {
         "alpha": 1,
-        "latent_features": 350,
-        "steps": 200,
-        "learning_rate": 0.5
+        "latent_features": 700,
+        "steps": 105,
+        "learning_rate": 0.9
     },
     "mpd_square_1000": {
         "alpha": 10000,

@@ -7,20 +7,17 @@ import time
 all_params = {
     "mpd_square_100": {
         "alpha_set": [1],
-        "latent_features_set": [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
-        "steps_set": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
-        "learning_rate_set": [1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001],
+        "latent_features_set": [450, 500, 550, 600, 650, 700, 750, 800],
+        "steps_set": [80, 85, 90, 95, 100, 105, 110],
+        "learning_rate_set": [0.95, 0.9, 0.85, 0.80, 0.75, 0.7],
         "number_of_playlists_to_test": 100,
-        "number_of_runs": 10
+        "number_of_runs": 150
     },
     "mpd_square_1000": {
-        "alpha_set": [1e6, 1e4, 1e2, 1, 1e-2, 1e-4],
-        "beta_set": [0], #[1e8, 1e6, 1e4, 1e2, 1, 1e-2, 1e-4, 1e-6, 1e-8, 1e-10, 1e-12],
-        "latent_features_set": [100],
-        "learning_rate_set": [1e-8, 1e-10, 1e-12, 1e-14],
-        "percent_zeros_set": [0.5, 0.25],
-        "optimizer_set": ["SGD"],
-        "embeddings_set": [0],
+        "alpha_set": [1],
+        "latent_features_set": [5, 10, 25, 50, 75, 100, 150, 200, 300, 400, 500, 800],
+        "steps_set": [25, 50, 100, 150, 200, 250, 300, 350, 500],
+        "learning_rate_set": [1000, 100, 10, 1, .1, .01, .001, .0001, .00001],
         "number_of_playlists_to_test": 1000,
         "number_of_runs": 1
     }

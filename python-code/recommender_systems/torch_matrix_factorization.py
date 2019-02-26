@@ -5,9 +5,9 @@ from recommender_systems.modules import helpers
 default_params = {
     "mpd_square_100": {
         "alpha": 1,
-        "latent_features": 700,
-        "steps": 105,
-        "learning_rate": 0.9
+        "latent_features": 1000,
+        "steps": 200,
+        "learning_rate": 1000
     },
     "mpd_square_1000": {
         "alpha": 1,
@@ -24,16 +24,11 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     sig_fn = torch.nn.Sigmoid()
 
     def sigmoid(x):
-        # return 1 / (1 + torch.exp(-10 * x + 5))
-        return sig_fn(10*torch.nn.functional.normalize(x) - 5)
+        return sig_fn(20*normalize(x) - 10) # 1, 1000, 550, 700, with rand NOT randn = .530
         # return sig_fn(x)
 
     def normalize(x):
-        # max = torch.unsqueeze(torch.max(x, 1)[0], 1)
-        # min = torch.unsqueeze(torch.min(x, 1)[0], 1)
-        # return (x - min) / (max - min)
         return torch.nn.functional.normalize(x)
-        # return (x - torch.min(x).item())/(torch.max(x).item() - torch.min(x).item())
 
     track_playlist_matrix = torch.t(torch.Tensor(track_playlist_matrix))
     item_features = torch.rand(len(track_playlist_matrix[0]), params['latent_features'], requires_grad=True)

@@ -7,11 +7,11 @@ import time
 all_params = {
     "mpd_square_100": {
         "alpha_set": [1],
-        "latent_features_set": [800],
-        "steps_set": [150, 175, 200, 225],
-        "learning_rate_set": [1550],
+        "latent_features_set": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400],
+        "steps_set": [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],
+        "learning_rate_set": [1600, 1400, 1200, 1000, 800, 600, 400, 200, 100, 50],
         "number_of_playlists_to_test": 100,
-        "number_of_runs": 50
+        "number_of_runs": 2
     },
     "mpd_square_1000": {
         "alpha_set": [1],
@@ -69,5 +69,5 @@ for alpha in params["alpha_set"]:
                 avg_ndcg = results / (params['number_of_playlists_to_test'] * params["number_of_runs"])
                 print("{}, {}, {}, {}, NDCG:{}".format(alpha, latent_features, steps, learning_rate, avg_ndcg))
                 output.write("{}, {}, {}, {}, {}\n".format(alpha, latent_features, steps, learning_rate, avg_ndcg))
-                if avg_ndcg > 0.5: print("--------------------------")
+                if avg_ndcg > 0.53: print("--------------------------")
 print("Wrote results to train_data/" + filename)

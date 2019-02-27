@@ -4,10 +4,10 @@ from recommender_systems.modules import helpers
 
 default_params = {
     "mpd_square_100": {
-        "alpha": 1,
-        "latent_features": 1000,
-        "steps": 200,
-        "learning_rate": 1000
+        "alpha": 25,
+        "latent_features": 400,
+        "steps": 300,
+        "learning_rate": 100
     },
     "mpd_square_1000": {
         "alpha": 1,
@@ -24,7 +24,7 @@ def get_factorized_matrix(mongo_collection, track_playlist_matrix, params=None):
     sig_fn = torch.nn.Sigmoid()
 
     def sigmoid(x):
-        return sig_fn(20*normalize(x) - 10) # 1, 1000, 550, 700, with rand NOT randn = .530
+        return sig_fn(50 * normalize(x) - params["alpha"])
         # return sig_fn(x)
 
     def normalize(x):

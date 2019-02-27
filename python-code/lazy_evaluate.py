@@ -6,12 +6,12 @@ import time
 
 params = {
     "mpd_square_100": {
-        "number_of_runs": 1,
+        "number_of_runs": 5,
         "number_of_playlists_to_test": 100,
         "max_N": 100
     },
     "mpd_square_1000": {
-        "number_of_runs": 5,
+        "number_of_runs": 1,
         "number_of_playlists_to_test": 1000,
         "max_N": 100
     }
@@ -90,7 +90,7 @@ for run in range(params["number_of_runs"]):
                 #     for track in recommended_tracks:
                 #         me.append(track[0])
                 #     print(me)
-                ndcg_results[rec_system][N] += evaluation.ndcg_precision(recommended_tracks, T[input_pid], N, unique_track_dict)
+                ndcg_results[rec_system][N] += evaluation.ndcg_precision(recommended_tracks, T[input_pid])
                 r_results[rec_system][N] += evaluation.r_precision(recommended_tracks, T[input_pid])
 
     for input_playlist_index in range(params["number_of_playlists_to_test"]):

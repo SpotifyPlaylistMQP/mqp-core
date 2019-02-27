@@ -6,18 +6,18 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "alpha_set": [1],
-        "latent_features_set": [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400],
-        "steps_set": [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],
-        "learning_rate_set": [1600, 1400, 1200, 1000, 800, 600, 400, 200, 100, 50],
+        "alpha_set": [25, 30, 35, 40, 45],
+        "latent_features_set": [100, 200, 300, 400, 500, 600, 700, 800, 2000],
+        "steps_set": [250, 300, 350, 400, 450, 500],
+        "learning_rate_set": [50, 75, 100, 125, 150, 175, 200, 500],
         "number_of_playlists_to_test": 100,
         "number_of_runs": 2
     },
     "mpd_square_1000": {
         "alpha_set": [1],
-        "latent_features_set": [50],
-        "steps_set": [100, 150, 200, 250, 300, 350, 400],
-        "learning_rate_set": [1000, 100, 10, 1, .1, .01, .001],
+        "latent_features_set": [5, 10, 50, 100, 200, 400, 600, 800, 1000, 1200],
+        "steps_set": [100, 200, 300, 400, 500, 600],
+        "learning_rate_set": [1500, 1000, 100, 10, 1],
         "number_of_playlists_to_test": 1000,
         "number_of_runs": 1
     }

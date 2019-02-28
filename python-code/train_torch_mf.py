@@ -6,18 +6,18 @@ import time
 
 all_params = {
     "mpd_square_100": {
-        "alpha_set": [25, 30, 35, 40, 45],
-        "latent_features_set": [100, 200, 300, 400, 500, 600, 700, 800, 2000],
-        "steps_set": [250, 300, 350, 400, 450, 500],
-        "learning_rate_set": [50, 75, 100, 125, 150, 175, 200, 500],
+        "alpha_set": [5],
+        "latent_features_set": [100, 250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 4000],
+        "steps_set": [50, 100, 150, 200, 250, 300],
+        "learning_rate_set": [1000, 1500],
         "number_of_playlists_to_test": 100,
         "number_of_runs": 2
     },
     "mpd_square_1000": {
-        "alpha_set": [1],
-        "latent_features_set": [5, 10, 50, 100, 200, 400, 600, 800, 1000, 1200],
-        "steps_set": [100, 200, 300, 400, 500, 600],
-        "learning_rate_set": [1500, 1000, 100, 10, 1],
+        "alpha_set": [20],
+        "latent_features_set": [10, 15, 20, 25, 30],
+        "steps_set": [150, 300],
+        "learning_rate_set": [50000, 40000, 30000, 20000, 15000, 10000],
         "number_of_playlists_to_test": 1000,
         "number_of_runs": 1
     }
@@ -62,12 +62,12 @@ for alpha in params["alpha_set"]:
 
                         ranked_tracks = torch_matrix_factorization.get_ranked_tracks(factorized_matrix, input_playlist_index, indexed_tids)
                         recommended_tracks = helpers.recommend_n_tracks(N, ranked_tracks, new_playlist_tracks[input_pid])
-                        results += evaluation.ndcg_precision(recommended_tracks, T[input_pid], N, unique_track_dict)
+                        results += evaluation.ndcg_precision(recommended_tracks, T[input_pid])
 
                         matrix.update_input_playlist_tracks(input_playlist_index, new_playlist_tracks[input_pid] + T[input_pid], track_playlist_matrix, unique_track_dict)
 
                 avg_ndcg = results / (params['number_of_playlists_to_test'] * params["number_of_runs"])
                 print("{}, {}, {}, {}, NDCG:{}".format(alpha, latent_features, steps, learning_rate, avg_ndcg))
                 output.write("{}, {}, {}, {}, {}\n".format(alpha, latent_features, steps, learning_rate, avg_ndcg))
-                if avg_ndcg > 0.53: print("--------------------------")
+                if avg_ndcg > 0.47: print("--------------------------")
 print("Wrote results to train_data/" + filename)

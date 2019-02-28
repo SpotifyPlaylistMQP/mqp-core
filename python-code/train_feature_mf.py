@@ -11,16 +11,16 @@ all_params = {
         "latent_features_set": [300],
         "steps_set": [250],
         "learning_rate_set": [1e-7],
-        "spotify_feature_weight_set": [1.5e-5, 1.25e-5, 1e-5, 7.5e-4, 5e-4],
+        "spotify_feature_weight_set": [1e-6, 7.5e-5, 5e-5, 2.5e-5, 1e-5, 7.5e-4, 5e-4, 2.5e-4, 1e-4],
         "number_of_playlists_to_test": 100,
     },
     "mpd_square_1000": {
         "number_of_runs": 10,
         "alpha_set": [10000],
-        "latent_features_set": [1],
-        "steps_set": [1],
-        "learning_rate_set": [],
-        "c_set": [ 1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 1e-14],
+        "latent_features_set": [15],
+        "steps_set": [250],
+        "learning_rate_set": [1e-6],
+        "spotify_feature_weight_set": [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10],
         "number_of_playlists_to_test": 1000,
     }
 }

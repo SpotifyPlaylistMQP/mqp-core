@@ -15,7 +15,7 @@ default_params = {
         "latent_features": 15,
         "steps": 250,
         "learning_rate": 1e-6,
-        "spotify_feature_weight": 1e-5
+        "spotify_feature_weight": 10
     }
 }
 

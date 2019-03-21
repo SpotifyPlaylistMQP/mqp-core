@@ -31,11 +31,13 @@ function build_line_graph(normal_mf, feature_mf, torch_mf){
 
     var min = Math.min(normal_min, feat_min, torch_min);
     var max = Math.max(normal_max, feat_max, torch_max);
-    var buffer = 0.025;
+    var min_buffer = 0.025;
+    var max_buffer = 0.065;
+    console.log(max);
 
     // Scale the range of the data
     x.domain(["1", "100"]);
-    y.domain([min-buffer, max+buffer]);
+    y.domain([min-min_buffer, max+max_buffer]);
 
     create_plot(normal_mf, feature_mf, svg, width, height, x, y); // Creates the elements of the graph
     add_line(normal_mf, svg, x, y, 'green'); // Adds the normal MF line
@@ -220,6 +222,14 @@ function create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, heigh
       .attr('class', 'x-hover-line hover-line')
       .attr('y1', 0)
       .attr('y2', 0);
+
+  focus.append('rect')
+      // .attr('transform', 'translate(0,0)')
+      .attr('class', 'back_up')
+      .style("fill", "#56B85A")
+      .attr('width', 60)
+      .attr('height', 60)
+      .style("fill-opacity", "0.5");
 
   focus.append("circle")
       .attr('class', 'red-circle')

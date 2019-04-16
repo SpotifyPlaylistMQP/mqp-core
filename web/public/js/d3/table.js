@@ -14,13 +14,13 @@ function build_table(data, data2) { //build_table(MF, Feature MF){..}
   html = html + '</thead>'
   html = html + '<tbody class="table-hover">'
 
-  for(var i = 0; i < 100; i++){
+  for(var i = 0; i < 21; i++){
     // for (var row in data) {
         if(data[i][' NDCG'] != undefined){
             var index = i;
             var new_row =  ''
             new_row = new_row + '<tr class="dataTable">'
-            new_row = new_row + '<td class="dataTable text-left">'+ (i+1) +'</td>'
+            new_row = new_row + '<td class="dataTable text-left">'+ (i+5) +'</td>'
             new_row = new_row + '<td class="dataTable text-left">'+ Number.parseFloat(data[i][' NDCG']).toPrecision(5) +'</td>'
             new_row = new_row + '<td class="dataTable text-left">'+ Number.parseFloat(data2[i][' NDCG']).toPrecision(5) +'</td>'
             new_row = new_row + '</tr>'

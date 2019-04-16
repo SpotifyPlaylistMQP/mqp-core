@@ -32,11 +32,11 @@ function build_line_graph(normal_mf, feature_mf, torch_mf){
     var min = Math.min(normal_min, feat_min, torch_min);
     var max = Math.max(normal_max, feat_max, torch_max);
     var min_buffer = 0.025;
-    var max_buffer = 0.065;
-    console.log(max);
+    var max_buffer = 0.05;
+    // console.log(max);
 
     // Scale the range of the data
-    x.domain(["1", "100"]);
+    x.domain(["5", "25"]);
     y.domain([min-min_buffer, max+max_buffer]);
 
     create_plot(normal_mf, feature_mf, svg, width, height, x, y); // Creates the elements of the graph
@@ -44,7 +44,7 @@ function build_line_graph(normal_mf, feature_mf, torch_mf){
     add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feature MF line
     add_line(torch_mf, svg, x, y, 'yellow'); // Adds the torch MF line
     add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y);
-    create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
+    // create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
 }
 
 // gridlines in x axis function
@@ -80,7 +80,7 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
     svg.append('g')
         .attr('class', 'axis')
         .call(d3.axisLeft(y)
-            .ticks(20))
+            .ticks(30))
         .append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -340)
@@ -128,7 +128,7 @@ function add_line(data, svg, x, y, color){
         .data([data])
         .style('fill', 'none')
         .style('stroke', color)
-        .style('stroke-width', 3)
+        .style('stroke-width', 5)
         .attr('class', 'line')
         .attr('d', valueline(data));
 
@@ -144,9 +144,9 @@ function add_line(data, svg, x, y, color){
 
 function add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y){
   width = width+10;
-  var mf_100 = normal_mf[99][' NDCG']; // Y Value
-  var feat_100 = feature_mf[99][' NDCG']; // Y Value
-  var torch_100 = torch_mf[99][' NDCG']; // Y Value
+  var mf_100 = normal_mf[20][' NDCG']; // Y Value
+  var feat_100 = feature_mf[20][' NDCG']; // Y Value
+  var torch_100 = torch_mf[20][' NDCG']; // Y Value
 
   var legend = svg.append('g')
       .attr('class', 'focus')

@@ -78,7 +78,7 @@ function bob_the_builder(file1, file2, file3, play_avg, song_one_avg, data_avg){
         //Wait for successful completion
         .await(function(error) {
             if (error) {
-                console.error('Not again: ' + error);
+                console.error('Not again #1: ' + error);
             };
         });
 };

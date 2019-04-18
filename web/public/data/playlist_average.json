@@ -5,8 +5,8 @@
       {"area": "Speech", "value": 0.4},
       {"area": "Valence", "value": 0.3},
       {"area": "Tempo", "value": 0.9},
-      {"area": "Dance ", "value": 0.2},
-      {"area": "Instrumental", "value": 0.8},
+      {"area": "Dance ", "value": 0.55},
+      {"area": "Instrumental", "value": 0.3},
       {"area": "Accoustic", "value": 0.1}
   	]
 ]

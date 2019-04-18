@@ -44,7 +44,7 @@ function build_line_graph(normal_mf, feature_mf, torch_mf){
     add_line(feature_mf, svg, x, y, '#FF3232'); // Adds the feature MF line
     add_line(torch_mf, svg, x, y, 'yellow'); // Adds the torch MF line
     add_legend(svg, width, normal_mf, feature_mf, torch_mf, x, y);
-    // create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
+    create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, height); // Creates the interactive layover with mouse events
 }
 
 // gridlines in x axis function
@@ -80,7 +80,7 @@ function create_plot(normal_mf, feature_mf, svg, width, height, x, y){
     svg.append('g')
         .attr('class', 'axis')
         .call(d3.axisLeft(y)
-            .ticks(30))
+            .ticks(20))
         .append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -340)
@@ -311,16 +311,16 @@ function create_overlay(normal_mf, feature_mf, torch_mf, svg, x, y, width, heigh
       if(unclicked){
         try {
             // Matrix Factorization Y Value
-            var d0 = normal_mf[x0 - 1][' NDCG']; // X-1 Y Value
-            var d1 = normal_mf[x0][' NDCG']; // Y Value
+            var d0 = normal_mf[x0 - 5][' NDCG']; // X-1 Y Value
+            var d1 = normal_mf[x0 - 4][' NDCG']; // Y Value
 
             // Feature Matrix Factorization Y Value
-            var c0 = feature_mf[x0 - 1][' NDCG']; // X-1 Y Value
-            var c1 = feature_mf[x0][' NDCG']; // Y Value
+            var c0 = feature_mf[x0 - 5][' NDCG']; // X-1 Y Value
+            var c1 = feature_mf[x0 - 4][' NDCG']; // Y Value
 
             // Torch Matrix Factorization Y Value
-            var e0 = torch_mf[x0 - 1][' NDCG']; // X-1 Y Value
-            var e1 = torch_mf[x0][' NDCG']; // Y Value
+            var e0 = torch_mf[x0 - 5][' NDCG']; // X-1 Y Value
+            var e1 = torch_mf[x0 - 4][' NDCG']; // Y Value
 
             var d = x0 - x0 - 1 > x0 - x0 ? d1 : d0;
             var c = x0 - x0 - 1 > x0 - x0 ? c1 : c0;

@@ -39,6 +39,9 @@ var server = http.createServer(function (req, res) {
         case '/css/images/equations/collabGIF.gif':
             sendFile(res, 'public/css/images/equations/collabGIF.gif', 'image/gif')
             break
+        case '/css/images/equations/matrix.png':
+            sendFile(res, 'public/css/images/equations/matrix.png', 'image/png')
+            break
         case '/css/images/equations/collab.svg':
             sendFile(res, 'public/css/images/equations/collab.svg', 'image/svg+xml')
             break

@@ -272,7 +272,7 @@ img.playButton {
   text-orientation: mixed;
 }
  
-.sidebar a.active {
+a.active {
   color: #4CAF50;
   text-decoration: bold;
   opacity: 1;
@@ -311,4 +311,13 @@ img.collabIMG {
   padding: 15px;
   border-radius: 25px;
   text-align: left;
+}
+
+.sidebar .active>a { 
+    color: white;
+}
+
+li.info {
+  margin-top: 10px;
+  /* font-size: 2.2vh; */
 }

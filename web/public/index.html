@@ -20,11 +20,11 @@
 <!-- Body -->
 <body data-gr-c-s-loaded='true' onload="start_up()">
 <div class="sidebar">
-  <a class="active" href="#basics">The Basics</a>
-  <a href="#state">State-of-the-Art</a>
-  <a href="#dataset">The Datatset</a>
-  <a href="#eval">Evaluations</a>
-  <a href="#conclusions">Conclusions</a>
+  <a class="ying" href="#basics">The Basics</a>
+  <a class="ying" href="#state">State-of-the-Art</a>
+  <a class="ying" href="#dataset">The Datatset</a>
+  <a class="ying" href="#eval">Evaluations</a>
+  <a class="ying" href="#conclusions">Conclusions</a>
 </div>
 
 
@@ -85,65 +85,84 @@
         <br>
 
 
-        <h1 id="state" class="header" align='center'>State-of-the-Art Approaches</h1>
-        <br>
+        <h1 id="state" class="header" align='center'>The Data</h1>
+        
         <table class="graphHolder">
             <tr>
                 <td class="fitty">
                     <h2 class="subHeader" align='center'><u>Collaborative Filtering</u></h2>
                         <br>
-                        <div>
+                        <div style="position: relative; text-align: center; align-content: center; width: 100%;" align="center">
                             <object class="collabEquation" data="/css/images/equations/collab.svg" type="image/svg+xml"></object>
-                            <br>
-                            <img class="collabIMG" src="/css/images/equations/collabGIF.gif"></img>
-                            <br>
+                            <!-- <div style="float: left; padding-left: 150px;">
+                                <br>
+                                 <img class="collabIMG" src="/css/images/equations/collabGIF.gif"></img> 
+                                <br>
+                            </div> -->
+                            <div style="float: left; overflow: auto; min-width: 300px;" align="center">
+                                <br>
+                                <br>
+                                <ul style="text-align: left;">
+                                    <li class="info">
+                                         Compares the opinions and tastes between User A and User B (playlists) to predict which items (songs) a User may prefer 
+                                    </li>
+                                    <li class="info">
+                                         Has the capacity to focus more heavily on either users (user-based CF) or items (item-based CF) 
+                                    </li>
+                                    <li class="info">
+                                         Works effectively with larger datasets 
+                                    </li>
+                                    <li class="info">
+                                         Less practical for our goal 
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                 </td>
                 <td class="fitty">
                     <h2 class="subHeader" align='center'><u>Matrix Factorization</u></h2>
                         <br>
-                        <div>
+                        <div style="position: relative; text-align: center; align-content: center; width: 100%;" align="center">
                             <object class="mfEquation" data="/css/images/equations/mf.svg" type="image/svg+xml"></object>
+                            <br>
+                             <!-- <div style="float: left; padding-left: 150px;">
+                                <br>
+                                 <img class="collabIMG" src="/css/images/equations/matrix.png"></img> 
+                                <br>
+                            </div>  -->
+                            <div style="float: left;" align="center">
+                                <br>
+                                <br>
+                                <ul style="text-align: left;">
+                                    
+                                    <li class="info">
+                                        Focuses on decomposing a standard user-item interaction matrix into the product of two lower-dimensional matrices
+                                    </li>
+                                    <li class="info">
+                                        Used to discover "latent features" - which represent hidden similarities between users and items that normal collaborative filtering would not be able to achieve
+                                    </li>
+                                    <li class="info">
+                                        Fast and efficient when dealing with very large datasets - no clustering necessary!
+                                    </li>
+                                    <li class="info">
+                                        More practical for our goal
+                                    </li>
+                                    
+                                </ul>
+                            </div>
                         </div>
+                    </div>     
                 </td>
             </tr>
-            <tr>
-                <br>
-                <td colspan="2">
-                    <h2 class="subHeader" align='center'>Our Approach</h2>
-                    <br>
-                </td>
-            </tr>
-
-        </table>
-        <br>
-        <br>
-        <br>
-
-        <h1 id="dataset" class="header" align='center'>The Data</h1>
-        <table class="graphHolder">
-            <tr>
-                <td class="fitty">
-                    <h2 class="subHeader" align='center'>MPD Dataset</h1>
-                </td>
-                <td class="fitty">
-                    <h2 class="subHeader" align='center'>Sample Playlist</h1>
-                </td>
-            </tr>
-        </table>
-        <br>
-        <br>
-        <table class="graphHolder">
-        <!-- First Radar Graph -->
-            <tr class="padding-fix">
-                <td class="bigCell" colspan="2">
-                    <div id="dataset_radar_chart"></div>
-                </td>
-            </tr>
+        
+         <br>
+         <br>
+            
         </table>
         
 
         <h1 id="eval" class="header" align='center'>Evaluation Results</h1>
+        <br>
                     <!-- Container Div for all visualizations -->
         <table class="graphHolder">
             <tr>
@@ -175,19 +194,42 @@
         <!-- START CONTENT FRAME -->
         <table class="graphHolder">
 
-            <!-- First Radar Graph -->
-            <tr class="padding-fix">
+             
+            <tr>
+                <td class="fitty" colspan="1">
+                    <h2 class="subHeader" align='center'>Song vs. Playlist</h1>
+                    <table>
+                        <tr class="padding-fix">
+                            <td class="bigCell" colspan="2">
+                                <div id="results_radar_chart"></div>
+                            </td>
+                        </tr>
+                    </table>
+                        
+                </td>
+                </td>
+                <td class="fitty" colspan="1">
+                    <h2 class="subHeader" align='center'>Playlist vs. Dataset</h1>
+                    <table>
+                        <tr class="padding-fix">
+                            <td class="bigCell" colspan="2">
+                                <div id="dataset_radar_chart"></div>
+                            </td>
+                    </tr>
+                    </table> 
+                </td>
+            </tr>
+       
+
+             <!-- First Radar Graph  -->
+            <!-- <tr class="padding-fix">
                 <td class="bigCell" colspan="2">
                     <div id="dataset_radar_chart"></div>
                 </td>
-            </tr>
+            </tr> -->
 
-            <!-- 2nd Radar Graph -->
-            <tr class="padding-fix">
-                <td class="bigCell" colspan="2">
-                    <div id="results_radar_chart"></div>
-                </td>
-            </tr>
+             <!-- 2nd Radar Graph  -->
+               
 
             <!-- playlist image table for 2nd radar graph -->
             <tr class="padding-fix">
@@ -366,6 +408,13 @@ function start_up(){
 </script>
 
 <script>
+    $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+});
+</script>
+
+<script>
 
 /* SONG VARIABLE DECLARATIONS */
 var xo = document.getElementById("X0");
@@ -397,6 +446,27 @@ function changeImage(song, pic) {
   }
 }
 
+
+// Get the container element
+var btnContainer = document.getElementById("sidebar");
+
+// Get all buttons with class="btn" inside the container
+var btns = btnContainer.getElementsByClassName("ying");
+
+// Loop through the buttons and add the active class to the current/clicked button
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("active");
+
+    // If there's no active class
+    if (current.length > 0) { 
+      current[0].className = current[0].className.replace(" active", "");
+    }
+
+    // Add the active class to the current/clicked button
+    this.className += " active";
+  });
+}
 
 </script>
 </html>
